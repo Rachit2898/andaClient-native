@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "anda-main",
-    "slug": "anda-main",
-    "version": "1.0.0",
+    "name": "Anda",
+    "slug": "anda-net",
+    "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -18,13 +18,21 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app uses the camera to scan barcodes on event tickets."
+      },
+      "bundleIdentifier": "com.rachitt28.andanet"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.rachitt28.andanet",
+      "blockedPermissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
