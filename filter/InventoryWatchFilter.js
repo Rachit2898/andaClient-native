@@ -14,7 +14,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { useDispatch, useSelector } from "react-redux";
 import Spinner from "../components/Spinner";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { urlsUpdateY, setSorting } from "../redux/features/authUser";
+import { updateIntventoryUrls, setSorting } from "../redux/features/authUser";
 import { inventoryWatch } from "../redux/features/productApi";
 
 const Filter = ({ modalVisible, setModalVisible }) => {
@@ -35,13 +35,13 @@ const Filter = ({ modalVisible, setModalVisible }) => {
       ...state.products,
     }));
 
-  var { urlY } = useSelector((state) => ({
+  var { inventoryWatchUrls } = useSelector((state) => ({
     ...state.auth,
   }));
   const onsortingOpen = useCallback(() => {
     setCompanyOpen(false);
   }, []);
-  let urlStructure = urlY?.map((url) => {
+  let urlStructure = inventoryWatchUrls?.map((url) => {
     return `${url?.fieldName}=${encodeURIComponent(url?.item)}&`;
   });
 
@@ -52,7 +52,7 @@ const Filter = ({ modalVisible, setModalVisible }) => {
       inventoryWatch({ value: url, currentPage: 1, sortValues: sortingValue })
     );
     dispatch(setSorting(sortingValue));
-  }, [urlY, sortingValue]);
+  }, [inventoryWatchUrls, sortingValue]);
 
   useEffect(() => {
     setResponse(inventoryWatchData);
@@ -102,7 +102,7 @@ const Filter = ({ modalVisible, setModalVisible }) => {
   const myCheckHandler = (label, labelValue) => {
     setValue(labelValue);
     setLoading(true);
-    dispatch(urlsUpdateY({ fieldName: label, item: labelValue }));
+    dispatch(updateIntventoryUrls({ fieldName: label, item: labelValue }));
   };
 
   const data = [

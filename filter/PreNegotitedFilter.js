@@ -15,10 +15,10 @@ import { useDispatch, useSelector } from "react-redux";
 import Spinner from "../components/Spinner";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import {
-  updateCustomerLikeYouUrls,
+  updatePreNegotiatedUrls,
   setSorting,
 } from "../redux/features/authUser";
-import { customerLikeYouSeeMore } from "../redux/features/productApi";
+import { preNegotiated } from "../redux/features/productApi";
 
 const Filter = ({ modalVisible, setModalVisible }) => {
   const [response, setResponse] = useState();
@@ -33,19 +33,18 @@ const Filter = ({ modalVisible, setModalVisible }) => {
   ]);
   const dispatch = useDispatch();
   const [values, setValue] = useState(-1);
-  const { paginationLoading, customerLikeYouSeeMoreData } = useSelector(
-    (state) => ({
+  const { preNegotiatedData, paginationLoading, customerLikeYouSeeMoreData } =
+    useSelector((state) => ({
       ...state.products,
-    })
-  );
+    }));
 
-  var { customerLikeYouUrls } = useSelector((state) => ({
+  var { preNegotiatedUrls } = useSelector((state) => ({
     ...state.auth,
   }));
   const onsortingOpen = useCallback(() => {
     setCompanyOpen(false);
   }, []);
-  let urlStructure = customerLikeYouUrls?.map((url) => {
+  let urlStructure = preNegotiatedUrls?.map((url) => {
     return `${url?.fieldName}=${encodeURIComponent(url?.item)}&`;
   });
 
@@ -53,19 +52,15 @@ const Filter = ({ modalVisible, setModalVisible }) => {
 
   useEffect(() => {
     dispatch(
-      customerLikeYouSeeMore({
-        value: url,
-        currentPage: 1,
-        sortValues: sortingValue,
-      })
+      preNegotiated({ value: url, currentPage: 1, sortValues: sortingValue })
     );
     dispatch(setSorting(sortingValue));
-  }, [customerLikeYouUrls, sortingValue]);
+  }, [preNegotiatedUrls, sortingValue]);
 
   useEffect(() => {
-    setResponse(customerLikeYouSeeMoreData);
+    setResponse(preNegotiatedData);
     setLoading(false);
-  }, [customerLikeYouSeeMoreData]);
+  }, [preNegotiatedData]);
 
   const filterValues = response?.searchFacets;
   var [currentFilter, setCurrentFilter] = useState();
@@ -110,7 +105,7 @@ const Filter = ({ modalVisible, setModalVisible }) => {
   const myCheckHandler = (label, labelValue) => {
     setValue(labelValue);
     setLoading(true);
-    dispatch(updateCustomerLikeYouUrls({ fieldName: label, item: labelValue }));
+    dispatch(updatePreNegotiatedUrls({ fieldName: label, item: labelValue }));
   };
 
   const data = [

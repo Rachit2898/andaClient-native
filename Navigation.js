@@ -15,8 +15,14 @@ import HomePage from "./components/Home";
 import SubmitCart from "./components/SubmitCart";
 import YourTopPurchase from "./components/YourTopPurchase";
 import CustomerLikeYou from "./components/CustomerLikeYou";
+import PreNegotiatedItems from "./components/PreNegotiatedItems";
+import Favorites from "./components/Favorites";
 import Account from "./components/Account";
-import MoreDetails from "./components/MoreDetails";
+import Inventory from "./components/InventoryWatchList";
+import Savings from "./components/Savings";
+import CloseOuts from "./components/CloseOuts";
+import PriceReduction from "./components/PriceReduction";
+import ShortDate from "./components/ShortDate";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Badge, withBadge } from "react-native-elements";
 import Dashboard from "./components/Dashboard";
@@ -95,7 +101,7 @@ function MyTabs() {
             </View>
           ),
         }}
-        component={MoreDetails}
+        component={AuthenticatedStack}
       />
     </Tab.Navigator>
   );
@@ -161,6 +167,55 @@ function AuthenticatedStack() {
           <Stack.Screen
             name="CustomerLikeYou"
             component={CustomerLikeYou}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="PreNegotiated"
+            component={PreNegotiatedItems}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="Favorites"
+            component={Favorites}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="Inventory"
+            component={Inventory}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="Savings"
+            component={Savings}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="CloseOuts"
+            component={CloseOuts}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="PriceReduction"
+            component={PriceReduction}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="ShortDate"
+            component={ShortDate}
             options={{
               headerShown: false,
             }}

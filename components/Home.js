@@ -49,6 +49,9 @@ export default function HomePage() {
   const CustomerLikeYouOpen = async () => {
     navigation.navigate("Auth", { screen: "CustomerLikeYou" });
   };
+  const preNegotiatedOpen = async () => {
+    navigation.navigate("Auth", { screen: "PreNegotiated" });
+  };
 
   useEffect(() => {
     if (userInfoData?.validations?.[0]?.level === "ERROR") {
@@ -571,7 +574,12 @@ export default function HomePage() {
                     Pre-Negotiated Items
                   </Text>
                 </View>
-                <View>
+                <Pressable
+                  android_ripple={{ color: "#ccc" }}
+                  onPress={() => {
+                    preNegotiatedOpen();
+                  }}
+                >
                   <Text
                     style={{
                       color: "#006ba6",
@@ -580,7 +588,7 @@ export default function HomePage() {
                   >
                     See More
                   </Text>
-                </View>
+                </Pressable>
               </View>
 
               <ScrollView

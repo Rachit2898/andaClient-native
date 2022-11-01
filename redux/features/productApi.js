@@ -11,7 +11,6 @@ import {
 } from "../../utils";
 
 export const addItem = createAsyncThunk("additems", async (body) => {
-  console.log(body);
   const result = await addItems(body);
   return result;
 });
@@ -171,6 +170,113 @@ export const checkOutConfirmation = createAsyncThunk(
   }
 );
 
+export const preNegotiated = createAsyncThunk(
+  "urls/preNegotiated",
+  async (body) => {
+    const token = await getToken();
+    var url = `https://staging.andanet.com/api/customer/upsell/Pre%20Negotiated%20Items?${body?.value}page=${body?.currentPage}&searchMode=STANDARD`;
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
+    const myData = await response.json();
+    return myData;
+  }
+);
+
+export const favoritesApi = createAsyncThunk("urls/favorites", async (body) => {
+  const token = await getToken();
+  var url = `https://staging.andanet.com/api/customer/product-list/180781/search?${body?.value}page=${body?.currentPage}&searchMode=STANDARD`;
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  });
+  const myData = await response.json();
+  return myData;
+});
+
+export const inventoryWatchList = createAsyncThunk(
+  "urls/backInStockSeeMore",
+  async (body) => {
+    const token = await getToken();
+    var url = `https://staging.andanet.com/api/customer/product-list/23164/search?${body?.value}page=${body?.currentPage}&searchMode=STANDARD`;
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
+    const myData = await response.json();
+    return myData;
+  }
+);
+
+export const savings = createAsyncThunk("urls/savings", async (body) => {
+  const token = await getToken();
+  var url = `https://staging.andanet.com/api/catalog/search?${body?.value}page=${body?.currentPage}&yourSavingsFilters=Price%20Specials&q=*&searchMode=STANDARD`;
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  });
+  const myData = await response.json();
+  return myData;
+});
+
+export const closeOut = createAsyncThunk("urls/closeOut", async (body) => {
+  const token = await getToken();
+  var url = `https://staging.andanet.com/api/catalog/search?${body?.value}page=${body?.currentPage}&yourSavingsFilters=Close%20Out&q=*&searchMode=STANDARD`;
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  });
+  const myData = await response.json();
+  return myData;
+});
+export const priceReductionItems = createAsyncThunk(
+  "urls/priceReduction",
+  async (body) => {
+    const token = await getToken();
+
+    var url = `https://staging.andanet.com/api/catalog/search?${body?.value}page=${body?.currentPage}&yourSavingsFilters=Price%20Reductions&q=*&searchMode=STANDARD`;
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
+    const myData = await response.json();
+
+    return myData;
+  }
+);
+export const shortDate = createAsyncThunk("urls/shortDate", async (body) => {
+  const token = await getToken();
+  var url = `https://staging.andanet.com/api/catalog/search?${body?.value}page=${body?.currentPage}&yourSavingsFilters=Short%20Date&q=*&searchMode=STANDARD`;
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  });
+  const myData = await response.json();
+  return myData;
+});
+
 const productSlice = createSlice({
   name: "products",
   initialState: {
@@ -190,6 +296,13 @@ const productSlice = createSlice({
     checkOutData: {},
     itemLength: {},
     deleteCart: {},
+    preNegotiatedData: {},
+    inventoryWatchListData: {},
+    favoritesData: {},
+    savingsData: {},
+    closeOutData: {},
+    priceReductionData: {},
+    shortDateData: {},
   },
   extraReducers: {
     [yourTopPurChase.pending]: (state, action) => {
@@ -233,6 +346,17 @@ const productSlice = createSlice({
       state.inventoryWatchData = action.payload;
     },
     [inventoryWatch.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [inventoryWatchList.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [inventoryWatchList.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.inventoryWatchListData = action.payload;
+    },
+    [inventoryWatchList.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
@@ -334,6 +458,72 @@ const productSlice = createSlice({
       state.customerLikeYouSeeMoreData = action.payload;
     },
     [customerLikeYouSeeMore.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [preNegotiated.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [preNegotiated.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.preNegotiatedData = action.payload;
+    },
+    [preNegotiated.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [favoritesApi.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [favoritesApi.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.favoritesData = action.payload;
+    },
+    [favoritesApi.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [savings.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [savings.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.savingsData = action.payload;
+    },
+    [savings.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [closeOut.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [closeOut.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.closeOutData = action.payload;
+    },
+    [closeOut.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [priceReductionItems.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [priceReductionItems.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.priceReductionData = action.payload;
+    },
+    [priceReductionItems.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [shortDate.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [shortDate.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.shortDateData = action.payload;
+    },
+    [shortDate.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },

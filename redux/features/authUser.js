@@ -22,7 +22,14 @@ export function containsObject(obj, list) {
 const initialState = {
   token: "",
   loading: false,
-  urlY: [],
+  inventoryWatchUrls: [],
+  customerLikeYouUrls: [],
+  preNegotiatedUrls: [],
+  favoritesUrls: [],
+  priceReductionUrls: [],
+  savingUrls: [],
+  closeOutUrls: [],
+  shortDateUrls: [],
   isAuthenticated: false,
   sortingUrl: "",
 };
@@ -40,11 +47,84 @@ const authReducer = createSlice({
       state.token = action.payload;
       state.isAuthenticated = true;
     },
-    urlsUpdateY: (state, action) => {
-      if (containsObject(action.payload, state.urlY)) {
-        _.pull(state.urlY, _.find(state.urlY, { item: action.payload.item }));
+    updateIntventoryUrls: (state, action) => {
+      if (containsObject(action.payload, state.inventoryWatchUrls)) {
+        _.pull(
+          state.inventoryWatchUrls,
+          _.find(state.inventoryWatchUrls, { item: action.payload.item })
+        );
       } else {
-        state.urlY.push(action.payload);
+        state.inventoryWatchUrls.push(action.payload);
+      }
+    },
+    updateCustomerLikeYouUrls: (state, action) => {
+      if (containsObject(action.payload, state.customerLikeYouUrls)) {
+        _.pull(
+          state.customerLikeYouUrls,
+          _.find(state.customerLikeYouUrls, { item: action.payload.item })
+        );
+      } else {
+        state.customerLikeYouUrls.push(action.payload);
+      }
+    },
+    updatePreNegotiatedUrls: (state, action) => {
+      if (containsObject(action.payload, state.preNegotiatedUrls)) {
+        _.pull(
+          state.preNegotiatedUrls,
+          _.find(state.preNegotiatedUrls, { item: action.payload.item })
+        );
+      } else {
+        state.preNegotiatedUrls.push(action.payload);
+      }
+    },
+    updateFavoriteUrls: (state, action) => {
+      if (containsObject(action.payload, state.favoritesUrls)) {
+        _.pull(
+          state.favoritesUrls,
+          _.find(state.favoritesUrls, { item: action.payload.item })
+        );
+      } else {
+        state.favoritesUrls.push(action.payload);
+      }
+    },
+    updatePriceReductionsUrls: (state, action) => {
+      if (containsObject(action.payload, state.priceReductionUrls)) {
+        _.pull(
+          state.priceReductionUrls,
+          _.find(state.priceReductionUrls, { item: action.payload.item })
+        );
+      } else {
+        state.priceReductionUrls.push(action.payload);
+      }
+    },
+    updateSavingUrls: (state, action) => {
+      if (containsObject(action.payload, state.savingUrls)) {
+        _.pull(
+          state.savingUrls,
+          _.find(state.savingUrls, { item: action.payload.item })
+        );
+      } else {
+        state.savingUrls.push(action.payload);
+      }
+    },
+    updateCloseOutUrls: (state, action) => {
+      if (containsObject(action.payload, state.closeOutUrls)) {
+        _.pull(
+          state.closeOutUrls,
+          _.find(state.closeOutUrls, { item: action.payload.item })
+        );
+      } else {
+        state.closeOutUrls.push(action.payload);
+      }
+    },
+    updateShortDateUrls: (state, action) => {
+      if (containsObject(action.payload, state.shortDateUrls)) {
+        _.pull(
+          state.shortDateUrls,
+          _.find(state.shortDateUrls, { item: action.payload.item })
+        );
+      } else {
+        state.shortDateUrls.push(action.payload);
       }
     },
     setSorting: (state, action) => {
@@ -66,6 +146,14 @@ const authReducer = createSlice({
   },
 });
 
-export const { logout, authenticate, urlsUpdateY, setSorting } =
-  authReducer.actions;
+export const {
+  logout,
+  authenticate,
+  updateIntventoryUrls,
+  updateCustomerLikeYouUrls,
+  updatePreNegotiatedUrls,
+  updateFavoriteUrls,
+  updatePriceReductionsUrls,
+  setSorting,
+} = authReducer.actions;
 export default authReducer.reducer;

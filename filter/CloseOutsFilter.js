@@ -14,11 +14,8 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { useDispatch, useSelector } from "react-redux";
 import Spinner from "../components/Spinner";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import {
-  updateCustomerLikeYouUrls,
-  setSorting,
-} from "../redux/features/authUser";
-import { customerLikeYouSeeMore } from "../redux/features/productApi";
+import { updateCloseOutUrls, setSorting } from "../redux/features/authUser";
+import { closeOut } from "../redux/features/productApi";
 
 const Filter = ({ modalVisible, setModalVisible }) => {
   const [response, setResponse] = useState();
@@ -33,19 +30,17 @@ const Filter = ({ modalVisible, setModalVisible }) => {
   ]);
   const dispatch = useDispatch();
   const [values, setValue] = useState(-1);
-  const { paginationLoading, customerLikeYouSeeMoreData } = useSelector(
-    (state) => ({
-      ...state.products,
-    })
-  );
+  const { closeOutData, paginationLoading } = useSelector((state) => ({
+    ...state.products,
+  }));
 
-  var { customerLikeYouUrls } = useSelector((state) => ({
+  var { closeOutUrls } = useSelector((state) => ({
     ...state.auth,
   }));
   const onsortingOpen = useCallback(() => {
     setCompanyOpen(false);
   }, []);
-  let urlStructure = customerLikeYouUrls?.map((url) => {
+  let urlStructure = closeOutUrls?.map((url) => {
     return `${url?.fieldName}=${encodeURIComponent(url?.item)}&`;
   });
 
@@ -53,19 +48,15 @@ const Filter = ({ modalVisible, setModalVisible }) => {
 
   useEffect(() => {
     dispatch(
-      customerLikeYouSeeMore({
-        value: url,
-        currentPage: 1,
-        sortValues: sortingValue,
-      })
+      closeOut({ value: url, currentPage: 1, sortValues: sortingValue })
     );
     dispatch(setSorting(sortingValue));
-  }, [customerLikeYouUrls, sortingValue]);
+  }, [closeOutUrls, sortingValue]);
 
   useEffect(() => {
-    setResponse(customerLikeYouSeeMoreData);
+    setResponse(closeOutData);
     setLoading(false);
-  }, [customerLikeYouSeeMoreData]);
+  }, [closeOutData]);
 
   const filterValues = response?.searchFacets;
   var [currentFilter, setCurrentFilter] = useState();
@@ -110,7 +101,7 @@ const Filter = ({ modalVisible, setModalVisible }) => {
   const myCheckHandler = (label, labelValue) => {
     setValue(labelValue);
     setLoading(true);
-    dispatch(updateCustomerLikeYouUrls({ fieldName: label, item: labelValue }));
+    dispatch(updateCloseOutUrls({ fieldName: label, item: labelValue }));
   };
 
   const data = [
