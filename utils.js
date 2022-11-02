@@ -109,6 +109,18 @@ export function addItems(body) {
   return addItem(credentials);
 }
 
+export function updateCartItems(body) {
+  const credentials = {
+    updateItemDtos: [
+      {
+        orderItemId: body.Id,
+        quantity: body.count,
+      },
+    ],
+  };
+  return updateItem(credentials);
+}
+
 export function deleteItems(body) {
   const credentials = {
     updateItemDtos: [

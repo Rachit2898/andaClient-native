@@ -25,6 +25,7 @@ import Navbar from "./Navbar";
 
 const Cart = () => {
   const dispatch = useDispatch();
+  const isFocused = useIsFocused();
   const navigation = useNavigation();
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [count, setCount] = useState(1);
@@ -62,7 +63,7 @@ const Cart = () => {
   }
   useEffect(() => {
     dispatch(cartInfo());
-  }, [cartLength]);
+  }, [cartLength, updateCart, isFocused]);
 
   return (
     <SafeAreaView style={{ backgroundColor: "#005185", flex: 1 }}>
@@ -128,6 +129,8 @@ const Cart = () => {
                         itemForm={item?.sku?.itemForm}
                         id={item?.id}
                         amount={item?.salePrice.amount}
+                        quantity={item?.quantity}
+                        skuId={item?.sku?.id}
                       />
                     </View>
                   );

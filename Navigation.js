@@ -23,6 +23,7 @@ import Savings from "./src/components/Savings";
 import CloseOuts from "./src/components/CloseOuts";
 import PriceReduction from "./src/components/PriceReduction";
 import ShortDate from "./src/components/ShortDate";
+import ProductDetails from "./src/components/ProductDetails";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Badge, withBadge } from "react-native-elements";
 import Dashboard from "./src/components/Dashboard";
@@ -101,7 +102,7 @@ function MyTabs() {
             </View>
           ),
         }}
-        component={AuthenticatedStack}
+        component={Dashboard}
       />
     </Tab.Navigator>
   );
@@ -216,6 +217,13 @@ function AuthenticatedStack() {
           <Stack.Screen
             name="ShortDate"
             component={ShortDate}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="ProductDetails"
+            component={ProductDetails}
             options={{
               headerShown: false,
             }}

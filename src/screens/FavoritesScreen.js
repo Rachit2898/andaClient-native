@@ -10,14 +10,17 @@ import React, { useState, useEffect, useRef } from "react";
 import Spinner from "../components/Spinner";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import {
   inventoryWatch,
   addItem,
   userInfo,
+  productDetails,
 } from "../../redux/features/productApi";
 
 const FavoritesScreen = (props) => {
   const scrollRef = useRef();
+  const navigation = useNavigation();
   const [itemValues, setItem] = useState([]);
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
@@ -76,6 +79,10 @@ const FavoritesScreen = (props) => {
       alert("Could not Update Product!!");
     }
   }
+  const productDetailHandler = async (Id) => {
+    navigation.navigate("Auth", { screen: "ProductDetails" });
+    dispatch(productDetails(Id));
+  };
 
   return (
     <View
@@ -129,9 +136,14 @@ const FavoritesScreen = (props) => {
             width: "70%",
           }}
         >
-          <View style={{ paddingVertical: 5 }}>
+          <Pressable
+            style={{ paddingVertical: 5 }}
+            onPress={() => {
+              productDetailHandler(props.id);
+            }}
+          >
             <Text style={{ color: "#005185" }}>{props?.name}</Text>
-          </View>
+          </Pressable>
           <View
             style={{
               flexDirection: "row",

@@ -78,7 +78,7 @@ const ShortDate = () => {
         >
           <View style={{ justifyContent: "center" }}>
             <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-              Price Reduction
+              Short Dates
             </Text>
           </View>
           {loading && <Spinner />}

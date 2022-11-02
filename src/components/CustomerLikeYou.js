@@ -13,7 +13,7 @@ import Navbar from "./Navbar";
 import Pagination from "./Pagination";
 import Spinner from "./Spinner";
 import Filter from "../filter/CustomerLikeYouFilter";
-import ProductScreen from "../screens/ProductScreen";
+import ProductScreen from "../screens/CustomerLikeYouScreen";
 import {
   customerLikeYouSeeMore,
   addItem,

@@ -8,9 +8,11 @@ import {
   cartValidate,
   checkOutCart,
   deleteItems,
+  updateCartItems,
 } from "../../utils";
 
 export const addItem = createAsyncThunk("additems", async (body) => {
+  console.log(body);
   const result = await addItems(body);
   return result;
 });
@@ -34,6 +36,14 @@ export const deleteItem = createAsyncThunk("deleteitems", async (body) => {
   const result = await deleteItems(body);
   return result;
 });
+export const updateCartValues = createAsyncThunk(
+  "updateCartValue",
+  async (body) => {
+    const result = await updateCartItems(body);
+
+    return result;
+  }
+);
 
 export const yourTopPurChase = createAsyncThunk(
   "urls/topPurchase",
@@ -277,6 +287,24 @@ export const shortDate = createAsyncThunk("urls/shortDate", async (body) => {
   return myData;
 });
 
+export const productDetails = createAsyncThunk(
+  "urls/productDetails",
+  async (id) => {
+    const token = await getToken();
+    var url = `https://staging.andanet.com/api/catalog/sku/${id}`;
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
+    const myData = await response.json();
+
+    return myData;
+  }
+);
+
 const productSlice = createSlice({
   name: "products",
   initialState: {
@@ -298,11 +326,13 @@ const productSlice = createSlice({
     deleteCart: {},
     preNegotiatedData: {},
     inventoryWatchListData: {},
+    productDetailsData: {},
     favoritesData: {},
     savingsData: {},
     closeOutData: {},
     priceReductionData: {},
     shortDateData: {},
+    updateCart: {},
   },
   extraReducers: {
     [yourTopPurChase.pending]: (state, action) => {
@@ -524,6 +554,28 @@ const productSlice = createSlice({
       state.shortDateData = action.payload;
     },
     [shortDate.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [updateCartValues.pending]: (state, action) => {
+      state.loadin = true;
+    },
+    [updateCartValues.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.updateCart = action.payload;
+    },
+    [updateCartValues.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [productDetails.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [productDetails.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.productDetailsData = action.payload;
+    },
+    [productDetails.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },

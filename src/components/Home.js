@@ -19,6 +19,7 @@ import {
   preNegotiatedItems,
   addItem,
   userInfo,
+  productDetails,
 } from "../../redux/features/productApi";
 import { logout, authenticate } from "../../redux/features/authUser";
 
@@ -52,6 +53,23 @@ export default function HomePage() {
   const preNegotiatedOpen = async () => {
     navigation.navigate("Auth", { screen: "PreNegotiated" });
   };
+  const favoritesOpen = async () => {
+    navigation.navigate("Auth", { screen: "Favorites" });
+  };
+  const closeOutsOpen = async () => {
+    navigation.navigate("Auth", { screen: "ShortDate" });
+  };
+  const customerLikeYouOpen = async () => {
+    navigation.navigate("Auth", { screen: "CustomerLikeYou" });
+  };
+  const inventoryWatchListOpen = async () => {
+    navigation.navigate("Auth", { screen: "Inventory" });
+  };
+  const productDetailHandler = async (Id) => {
+    console.log(Id);
+    navigation.navigate("Auth", { screen: "ProductDetails" });
+    dispatch(productDetails(Id));
+  };
 
   useEffect(() => {
     if (userInfoData?.validations?.[0]?.level === "ERROR") {
@@ -70,7 +88,7 @@ export default function HomePage() {
   }
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#005185", flex: 1 }}>
+    <SafeAreaView style={{ backgroundColor: "#ff", flex: 1 }}>
       <View style={{ backgroundColor: "#fff", marginBottom: 90 }}>
         <Navbar />
         <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
@@ -87,9 +105,9 @@ export default function HomePage() {
               showsHorizontalScrollIndicator={false}
             >
               <View style={{ flexDirection: "row", marginHorizontal: 10 }}>
-                <View
-                  style={{
-                    paddingHorizontal: 5,
+                <Pressable
+                  onPress={() => {
+                    inventoryWatchListOpen();
                   }}
                 >
                   <Image
@@ -104,18 +122,18 @@ export default function HomePage() {
                   <Text
                     style={{
                       flexWrap: "wrap",
-                      color: "#195E3A",
+                      color: "#006ba6",
                       fontWeight: "800",
-                      fontSize: 12,
+                      fontSize: 10,
                       width: 110,
                     }}
                   >
                     Anda contracted items
                   </Text>
-                </View>
-                <View
-                  style={{
-                    paddingHorizontal: 5,
+                </Pressable>
+                <Pressable
+                  onPress={() => {
+                    favoritesOpen();
                   }}
                 >
                   <Image
@@ -130,18 +148,18 @@ export default function HomePage() {
                   <Text
                     style={{
                       flexWrap: "wrap",
-                      color: "#195E3A",
+                      color: "#006ba6",
                       fontWeight: "800",
-                      fontSize: 12,
+                      fontSize: 10,
                       width: 110,
                     }}
                   >
                     Favorites
                   </Text>
-                </View>
-                <View
-                  style={{
-                    paddingHorizontal: 5,
+                </Pressable>
+                <Pressable
+                  onPress={() => {
+                    closeOutsOpen();
                   }}
                 >
                   <Image
@@ -156,18 +174,18 @@ export default function HomePage() {
                   <Text
                     style={{
                       flexWrap: "wrap",
-                      color: "#195E3A",
+                      color: "#006ba6",
                       fontWeight: "800",
-                      fontSize: 12,
+                      fontSize: 10,
                       width: 110,
                     }}
                   >
                     Short dates & close outs
                   </Text>
-                </View>
-                <View
-                  style={{
-                    paddingHorizontal: 5,
+                </Pressable>
+                <Pressable
+                  onPress={() => {
+                    customerLikeYouOpen();
                   }}
                 >
                   <Image
@@ -182,20 +200,16 @@ export default function HomePage() {
                   <Text
                     style={{
                       flexWrap: "wrap",
-                      color: "#195E3A",
+                      color: "#006ba6",
                       fontWeight: "800",
-                      fontSize: 12,
+                      fontSize: 10,
                       width: 110,
                     }}
                   >
                     Customer like you
                   </Text>
-                </View>
-                <View
-                  style={{
-                    paddingHorizontal: 5,
-                  }}
-                >
+                </Pressable>
+                <View>
                   <Image
                     style={{
                       height: 50,
@@ -208,9 +222,9 @@ export default function HomePage() {
                   <Text
                     style={{
                       flexWrap: "wrap",
-                      color: "#195E3A",
+                      color: "#006ba6",
                       fontWeight: "800",
-                      fontSize: 12,
+                      fontSize: 10,
                       width: 110,
                     }}
                   >
@@ -292,6 +306,9 @@ export default function HomePage() {
                           borderWidth: 4,
                           borderColor: "#ececec",
                           borderRadius: 7,
+                          width: 180,
+                          height: 220,
+                          marginHorizontal: 5,
                         }}
                       >
                         {item?.mediaMap?.primary?.url ? (
@@ -318,23 +335,30 @@ export default function HomePage() {
                               justifyContent: "center",
                               alignSelf: "center",
                             }}
-                            source={{
-                              uri: `https://staging.andanet.com${item?.mediaMap?.primary?.url}`,
-                            }}
+                            source={require("../../assets/camera.png")}
                           />
                         )}
-                        <View style={{ margin: 5 }}>
+                        <Pressable
+                          style={{
+                            margin: 5,
+                            height: 30,
+                          }}
+                          onPress={() => {
+                            productDetailHandler(item?.defaultSku?.id);
+                          }}
+                        >
                           <Text
                             style={{
                               color: "#006ba6",
                               fontWeight: "700",
                               fontSize: 10,
                               flexWrap: "wrap",
+                              width: "100%",
                             }}
                           >
                             {item.defaultSku.name}
                           </Text>
-                        </View>
+                        </Pressable>
                         <View style={{ margin: 5 }}>
                           <View style={{ flexDirection: "row" }}>
                             <Text style={{ fontWeight: "700", fontSize: 9 }}>
@@ -453,6 +477,9 @@ export default function HomePage() {
                           borderWidth: 4,
                           borderColor: "#ececec",
                           borderRadius: 7,
+                          width: 180,
+                          height: 220,
+                          marginHorizontal: 5,
                         }}
                       >
                         {item?.mediaMap?.primary?.url ? (
@@ -482,18 +509,27 @@ export default function HomePage() {
                             source={require("../../assets/camera.png")}
                           />
                         )}
-                        <View style={{ margin: 5 }}>
+                        <Pressable
+                          style={{
+                            margin: 5,
+                            height: 30,
+                          }}
+                          onPress={() => {
+                            productDetailHandler(item?.defaultSku?.id);
+                          }}
+                        >
                           <Text
                             style={{
                               color: "#006ba6",
                               fontWeight: "700",
                               fontSize: 10,
                               flexWrap: "wrap",
+                              width: "100%",
                             }}
                           >
                             {item.defaultSku.name}
                           </Text>
-                        </View>
+                        </Pressable>
                         <View style={{ margin: 5 }}>
                           <View style={{ flexDirection: "row" }}>
                             <Text style={{ fontWeight: "700", fontSize: 9 }}>
@@ -612,6 +648,9 @@ export default function HomePage() {
                           borderWidth: 4,
                           borderColor: "#ececec",
                           borderRadius: 7,
+                          width: 180,
+                          height: 220,
+                          marginHorizontal: 5,
                         }}
                       >
                         {item?.mediaMap?.primary?.url ? (
@@ -643,18 +682,27 @@ export default function HomePage() {
                             }}
                           />
                         )}
-                        <View style={{ margin: 5 }}>
+                        <Pressable
+                          style={{
+                            margin: 5,
+                            height: 30,
+                          }}
+                          onPress={() => {
+                            productDetailHandler(item?.defaultSku?.id);
+                          }}
+                        >
                           <Text
                             style={{
                               color: "#006ba6",
                               fontWeight: "700",
                               fontSize: 10,
                               flexWrap: "wrap",
+                              width: "100%",
                             }}
                           >
                             {item.defaultSku.name}
                           </Text>
-                        </View>
+                        </Pressable>
                         <View style={{ margin: 5 }}>
                           <View style={{ flexDirection: "row" }}>
                             <Text style={{ fontWeight: "700", fontSize: 9 }}>

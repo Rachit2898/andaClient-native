@@ -23,9 +23,11 @@ import {
 
 const CartScreen = (props) => {
   const dispatch = useDispatch();
+  const isFocused = useIsFocused();
   const navigation = useNavigation();
   const [currentIndex, setCurrentIndex] = useState(-1);
-  const [count, setCount] = useState(1);
+  const [count, setCount] = useState(props.quantity);
+  const [visible, setVisible] = useState(false);
 
   const {
     cartInfoData,
@@ -45,11 +47,13 @@ const CartScreen = (props) => {
   const addButton = (id) => {
     setCurrentIndex(id);
     setCount(count + 1);
+    setVisible(true);
   };
 
   const removeButton = (id) => {
     setCurrentIndex(id);
     setCount(count - 1);
+    setVisible(true);
   };
 
   async function emptyCart(id) {
@@ -76,6 +80,20 @@ const CartScreen = (props) => {
       Alert.alert("Could Not Delete");
     }
   };
+  const updateCartHandler = async (Id) => {
+    setCurrentIndex(Id);
+    try {
+      dispatch(updateCartValues({ Id, count }));
+    } catch (error) {
+      Alert.alert("Could Not Update");
+    }
+  };
+  const productDetailHandler = async (Id) => {
+    console.log(Id);
+    navigation.navigate("Auth", { screen: "ProductDetails" });
+    dispatch(productDetails(Id));
+  };
+
   return (
     <View>
       <View
@@ -129,9 +147,14 @@ const CartScreen = (props) => {
               width: "70%",
             }}
           >
-            <View style={{ paddingVertical: 5 }}>
-              <Text style={{ color: "#005185" }}> {props.name}</Text>
-            </View>
+            <Pressable
+              style={{ paddingVertical: 5 }}
+              onPress={() => {
+                productDetailHandler(props.skuId);
+              }}
+            >
+              <Text style={{ color: "#005185" }}>{props?.name}</Text>
+            </Pressable>
             <View
               style={{
                 flexDirection: "row",
@@ -243,6 +266,8 @@ const CartScreen = (props) => {
               justifyContent: "space-around",
               flexDirection: "row",
               paddingVertical: 10,
+              paddingLeft: "23%",
+              paddingRight: "10%",
             }}
           >
             <View
@@ -251,7 +276,6 @@ const CartScreen = (props) => {
                 width: 70,
                 height: 25,
                 borderRadius: 3,
-                marginLeft: "12%",
                 borderRadius: 4,
                 justifyContent: "space-between",
                 flexDirection: "row",
@@ -269,7 +293,7 @@ const CartScreen = (props) => {
                   backgroundColor: "#cfcccc",
                 }}
                 onPress={() => {
-                  removeButton();
+                  removeButton(props.id);
                 }}
                 disabled={count === 1}
               >
@@ -300,7 +324,7 @@ const CartScreen = (props) => {
                   backgroundColor: "#cfcccc",
                 }}
                 onPress={() => {
-                  addButton();
+                  addButton(props.id);
                 }}
                 disabled={count === 3}
               >
@@ -313,6 +337,40 @@ const CartScreen = (props) => {
                   +
                 </Text>
               </Pressable>
+            </View>
+            <View
+              style={{
+                width: 60,
+                height: 25,
+                borderRadius: 4,
+              }}
+            >
+              {currentIndex == props.id && visible && (
+                <Pressable
+                  style={{
+                    backgroundColor: "#c77500",
+                    width: 60,
+                    height: 25,
+                    borderRadius: 4,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                  android_ripple={{ color: "#ccc" }}
+                  onPress={() => updateCartHandler(props.id)}
+                >
+                  <View>
+                    <Text
+                      style={{
+                        color: "#fff",
+                        fontSize: 10,
+                        fontWeight: "bold",
+                      }}
+                    >
+                      UPDATE
+                    </Text>
+                  </View>
+                </Pressable>
+              )}
             </View>
             <Pressable
               style={{
