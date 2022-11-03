@@ -66,7 +66,7 @@ const Cart = () => {
   }, [cartLength, updateCart, isFocused]);
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#005185", flex: 1 }}>
+    <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
       <View
         style={{
           backgroundColor: "#fff",
@@ -131,6 +131,7 @@ const Cart = () => {
                         amount={item?.salePrice.amount}
                         quantity={item?.quantity}
                         skuId={item?.sku?.id}
+                        orderLimit={item?.sku?.dailyOrderLimit}
                       />
                     </View>
                   );

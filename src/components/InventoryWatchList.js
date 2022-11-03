@@ -26,11 +26,10 @@ const Inventory = () => {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const { inventoryWatchListData, userInfoData, loading } = useSelector(
-    (state) => ({
+  const { inventoryWatchListData, userInfoData, loading, addLoading } =
+    useSelector((state) => ({
       ...state.products,
-    })
-  );
+    }));
   const onPressTouch = () => {
     scrollRef?.current?.scrollTo({
       y: 0,
@@ -61,7 +60,7 @@ const Inventory = () => {
   };
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#005185", flex: 1 }}>
+    <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
       <Filter
         checkBoxHandler={checkBoxHandler}
         modalVisible={modalVisible}
@@ -107,7 +106,7 @@ const Inventory = () => {
           }}
         />
         <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
-          {result?.totalResults > 0 ? (
+          {result.totalResults > 0 ? (
             <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false}>
               <View>
                 {data?.map((item, i) => {
@@ -139,6 +138,7 @@ const Inventory = () => {
                         itemRating={item?.defaultSku?.itemRating}
                         rewardItem={item?.defaultSku?.rewardItem}
                         priceType={item?.defaultSku?.priceType}
+                        orderLimit={item?.defaultSku?.dailyOrderLimit}
                       />
                     </View>
                   );

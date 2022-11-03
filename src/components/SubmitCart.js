@@ -25,7 +25,7 @@ const SubmitCart = () => {
   };
   const cartCount = cartValidateInfo?.order?.itemCount;
   return (
-    <SafeAreaView style={{ backgroundColor: "#005185", flex: 1 }}>
+    <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
       <View
         style={{
           backgroundColor: "#fff",

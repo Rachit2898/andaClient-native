@@ -12,37 +12,43 @@ import { useDispatch, useSelector } from "react-redux";
 import Navbar from "./Navbar";
 import Pagination from "./Pagination";
 import Spinner from "./Spinner";
-import Filter from "../filter/CloseOutsFilter";
-import SavingsScreen from "../screens/CloseOutScreen";
-import { closeOut, addItem, userInfo } from "../../redux/features/productApi";
+import Filter from "../filter/SearchProductFilter";
+import PreNegotiatedScreen from "../screens/SearchProductScreen";
+import {
+  inventoryWatchList,
+  addItem,
+  userInfo,
+  searchProducts,
+} from "../../redux/features/productApi";
 
-const CloseOuts = () => {
+const SearchProduct = () => {
   const scrollRef = useRef();
   const [itemValues, setItem] = useState([]);
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const { closeOutData, userInfoData, loading } = useSelector((state) => ({
-    ...state.products,
-  }));
+  const { searchProducstsData, userInfoData, loading, addLoading } =
+    useSelector((state) => ({
+      ...state.products,
+    }));
   const onPressTouch = () => {
     scrollRef?.current?.scrollTo({
       y: 0,
       animated: true,
     });
   };
-  const data = closeOutData?.products;
+  const data = searchProducstsData?.products;
 
   useEffect(() => {
-    dispatch(closeOut({ value: "", currentPage }));
+    dispatch(searchProducts());
     dispatch(userInfo());
   }, []);
-  const result = closeOutData;
+  const result = searchProducstsData;
   const userData = userInfoData;
 
   const apiCall = async (currentPage) => {
     setCurrentPage(currentPage);
-    dispatch(closeOut({ value: "", currentPage }));
+    dispatch(searchProducts());
     onPressTouch();
   };
 
@@ -67,7 +73,6 @@ const CloseOuts = () => {
         }}
       >
         <Navbar />
-
         <View
           style={{
             flexDirection: "row",
@@ -76,7 +81,9 @@ const CloseOuts = () => {
           }}
         >
           <View style={{ justifyContent: "center" }}>
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>Close Outs</Text>
+            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+              Search Products
+            </Text>
           </View>
           {loading && <Spinner />}
           <Pressable
@@ -109,7 +116,7 @@ const CloseOuts = () => {
 
                   return (
                     <View>
-                      <SavingsScreen
+                      <PreNegotiatedScreen
                         url={item?.mediaMap?.primary?.url}
                         name={item?.defaultSku?.name}
                         externalId={item?.defaultSku?.externalId}
@@ -132,7 +139,6 @@ const CloseOuts = () => {
                         itemRating={item?.defaultSku?.itemRating}
                         rewardItem={item?.defaultSku?.rewardItem}
                         priceType={item?.defaultSku?.priceType}
-                        inventoryClassKey={item?.defaultSku?.inventoryClassKey}
                         orderLimit={item?.defaultSku?.dailyOrderLimit}
                       />
                     </View>
@@ -161,7 +167,7 @@ const CloseOuts = () => {
   );
 };
 
-export default CloseOuts;
+export default SearchProduct;
 
 const styles = StyleSheet.create({
   pagination: {

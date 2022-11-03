@@ -66,7 +66,6 @@ export default function HomePage() {
     navigation.navigate("Auth", { screen: "Inventory" });
   };
   const productDetailHandler = async (Id) => {
-    console.log(Id);
     navigation.navigate("Auth", { screen: "ProductDetails" });
     dispatch(productDetails(Id));
   };
@@ -88,13 +87,13 @@ export default function HomePage() {
   }
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#ff", flex: 1 }}>
+    <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
       <View style={{ backgroundColor: "#fff", marginBottom: 90 }}>
         <Navbar />
         <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={{ margin: 10 }}>
-              <Text style={{ fontWeight: "800" }}>
+              <Text style={{ fontWeight: "700", color: "#494c4c" }}>
                 Shop Categories & Resources
               </Text>
             </View>
@@ -236,14 +235,14 @@ export default function HomePage() {
             <View
               style={{
                 borderTopWidth: 4,
-                borderColor: "#ececec",
+                borderColor: "#fafafa",
                 marginVertical: 10,
               }}
             />
             <View
               style={{
                 marginHorizontal: 10,
-                backgroundColor: "#ececec",
+                backgroundColor: "#fafafa",
                 paddingVertical: 5,
               }}
             >
@@ -266,7 +265,9 @@ export default function HomePage() {
                 }}
               >
                 <View>
-                  <Text style={{ fontWeight: "700" }}>Your Top Purchases</Text>
+                  <Text style={{ fontWeight: "700", color: "#494c4c" }}>
+                    Your Top Purchases
+                  </Text>
                 </View>
                 <Pressable
                   android_ripple={{ color: "#ccc" }}
@@ -298,17 +299,20 @@ export default function HomePage() {
                 {topPurchaseProducts?.products?.map((item) => {
                   return (
                     <View
-                      style={{ justifyContent: "center" }}
+                      style={{
+                        justifyContent: "center",
+                      }}
                       key={item?.defaultSku?.id}
                     >
                       <View
                         style={{
-                          borderWidth: 4,
+                          borderWidth: 0.3,
                           borderColor: "#ececec",
                           borderRadius: 7,
+                          backgroundColor: "#fafafa",
                           width: 180,
                           height: 220,
-                          marginHorizontal: 5,
+                          marginHorizontal: 2,
                         }}
                       >
                         {item?.mediaMap?.primary?.url ? (
@@ -317,6 +321,7 @@ export default function HomePage() {
                               borderRadius: 3,
                               marginVertical: 5,
                               width: 80,
+                              borderRadius: 7,
                               height: 80,
                               justifyContent: "center",
                               alignSelf: "center",
@@ -332,6 +337,7 @@ export default function HomePage() {
                               marginVertical: 5,
                               width: 80,
                               height: 80,
+                              borderRadius: 7,
                               justifyContent: "center",
                               alignSelf: "center",
                             }}
@@ -426,7 +432,7 @@ export default function HomePage() {
                 })}
               </ScrollView>
             </View>
-            <View style={{ borderTopWidth: 4, borderColor: "#ececec" }} />
+            <View style={{ borderTopWidth: 4, borderColor: "#fafafa" }} />
             <View style={{ margin: 10, height: 250 }}>
               <View
                 style={{
@@ -435,7 +441,7 @@ export default function HomePage() {
                 }}
               >
                 <View>
-                  <Text style={{ fontWeight: "700" }}>
+                  <Text style={{ fontWeight: "700", color: "#494c4c" }}>
                     Purchased By Customers Like You
                   </Text>
                 </View>
@@ -474,12 +480,13 @@ export default function HomePage() {
                     >
                       <View
                         style={{
-                          borderWidth: 4,
+                          borderWidth: 0.3,
                           borderColor: "#ececec",
                           borderRadius: 7,
+                          backgroundColor: "#fafafa",
                           width: 180,
                           height: 220,
-                          marginHorizontal: 5,
+                          marginHorizontal: 2,
                         }}
                       >
                         {item?.mediaMap?.primary?.url ? (
@@ -489,6 +496,7 @@ export default function HomePage() {
                               marginVertical: 5,
                               width: 80,
                               height: 80,
+                              borderRadius: 7,
                               justifyContent: "center",
                               alignSelf: "center",
                             }}
@@ -503,6 +511,7 @@ export default function HomePage() {
                               marginVertical: 5,
                               width: 80,
                               height: 80,
+                              borderRadius: 7,
                               justifyContent: "center",
                               alignSelf: "center",
                             }}
@@ -597,7 +606,7 @@ export default function HomePage() {
                 })}
               </ScrollView>
             </View>
-            <View style={{ borderTopWidth: 4, borderColor: "#ececec" }} />
+            <View style={{ borderTopWidth: 4, borderColor: "#fafafa" }} />
             <View style={{ margin: 10, height: 250 }}>
               <View
                 style={{
@@ -606,7 +615,7 @@ export default function HomePage() {
                 }}
               >
                 <View>
-                  <Text style={{ fontWeight: "700" }}>
+                  <Text style={{ fontWeight: "700", color: "#494c4c" }}>
                     Pre-Negotiated Items
                   </Text>
                 </View>
@@ -645,12 +654,13 @@ export default function HomePage() {
                     >
                       <View
                         style={{
-                          borderWidth: 4,
+                          borderWidth: 0.3,
                           borderColor: "#ececec",
                           borderRadius: 7,
+                          backgroundColor: "#fafafa",
                           width: 180,
                           height: 220,
-                          marginHorizontal: 5,
+                          marginHorizontal: 2,
                         }}
                       >
                         {item?.mediaMap?.primary?.url ? (
@@ -659,6 +669,7 @@ export default function HomePage() {
                               borderRadius: 3,
                               marginVertical: 5,
                               width: 80,
+                              borderRadius: 7,
                               height: 80,
                               justifyContent: "center",
                               alignSelf: "center",
@@ -674,6 +685,7 @@ export default function HomePage() {
                               marginVertical: 5,
                               width: 80,
                               height: 80,
+                              borderRadius: 7,
                               justifyContent: "center",
                               alignSelf: "center",
                             }}
@@ -770,7 +782,7 @@ export default function HomePage() {
                 })}
               </ScrollView>
             </View>
-            <View style={{ borderTopWidth: 4, borderColor: "#ececec" }} />
+            <View style={{ borderTopWidth: 4, borderColor: "#fafafa" }} />
             <View
               style={{
                 backgroundColor: "#f51441",
@@ -824,7 +836,7 @@ export default function HomePage() {
             <View
               style={{
                 backgroundColor: "#7c8ae6",
-                margin: 10,
+                marginHorizontal: 10,
                 borderRadius: 6,
                 padding: 20,
               }}

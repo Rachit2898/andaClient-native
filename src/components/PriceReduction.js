@@ -62,7 +62,7 @@ const PriceReductionItems = () => {
   };
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#005185", flex: 1 }}>
+    <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
       <Filter
         checkBoxHandler={checkBoxHandler}
         modalVisible={modalVisible}
@@ -110,7 +110,7 @@ const PriceReductionItems = () => {
         />
         {!!data ? (
           <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
-            {result?.totalResults > 0 ? (
+            {result.totalResults > 0 ? (
               <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false}>
                 <View>
                   {data?.map((item) => {
@@ -145,6 +145,7 @@ const PriceReductionItems = () => {
                           rewardItem={item?.defaultSku?.rewardItem}
                           priceType={item?.defaultSku?.priceType}
                           priceReduced={item?.defaultSku?.priceReduced}
+                          orderLimit={item?.defaultSku?.dailyOrderLimit}
                         />
                       </View>
                     );

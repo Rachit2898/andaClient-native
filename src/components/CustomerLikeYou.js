@@ -63,7 +63,7 @@ const CustomerLikeYou = () => {
   };
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#005185", flex: 1 }}>
+    <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
       <Filter
         checkBoxHandler={checkBoxHandler}
         modalVisible={modalVisible}
@@ -110,7 +110,7 @@ const CustomerLikeYou = () => {
           }}
         />
         <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
-          {result?.totalResults > 0 ? (
+          {result.totalResults > 0 ? (
             <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false}>
               <View>
                 {data?.map((item, i) => {
@@ -142,6 +142,7 @@ const CustomerLikeYou = () => {
                         itemRating={item?.defaultSku?.itemRating}
                         rewardItem={item?.defaultSku?.rewardItem}
                         priceType={item?.defaultSku?.priceType}
+                        orderLimit={item?.defaultSku?.dailyOrderLimit}
                       />
                     </View>
                   );

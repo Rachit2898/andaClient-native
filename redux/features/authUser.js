@@ -30,6 +30,7 @@ const initialState = {
   savingUrls: [],
   closeOutUrls: [],
   shortDateUrls: [],
+  searchProductUrls: [],
   isAuthenticated: false,
   sortingUrl: "",
 };
@@ -127,6 +128,16 @@ const authReducer = createSlice({
         state.shortDateUrls.push(action.payload);
       }
     },
+    updateSearchProductUrls: (state, action) => {
+      if (containsObject(action.payload, state.searchProductUrls)) {
+        _.pull(
+          state.searchProductUrls,
+          _.find(state.searchProductUrls, { item: action.payload.item })
+        );
+      } else {
+        state.searchProductUrls.push(action.payload);
+      }
+    },
     setSorting: (state, action) => {
       state.sortingUrl = action.payload;
     },
@@ -155,5 +166,6 @@ export const {
   updateFavoriteUrls,
   updatePriceReductionsUrls,
   setSorting,
+  updateSearchProductUrls,
 } = authReducer.actions;
 export default authReducer.reducer;

@@ -24,6 +24,8 @@ import CloseOuts from "./src/components/CloseOuts";
 import PriceReduction from "./src/components/PriceReduction";
 import ShortDate from "./src/components/ShortDate";
 import ProductDetails from "./src/components/ProductDetails";
+import SearchProduct from "./src/components/SearchProduct";
+import Barcode from "./src/components/Barcode";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Badge, withBadge } from "react-native-elements";
 import Dashboard from "./src/components/Dashboard";
@@ -102,7 +104,7 @@ function MyTabs() {
             </View>
           ),
         }}
-        component={Dashboard}
+        component={AuthenticatedStack}
       />
     </Tab.Navigator>
   );
@@ -224,6 +226,20 @@ function AuthenticatedStack() {
           <Stack.Screen
             name="ProductDetails"
             component={ProductDetails}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="SearchProduct"
+            component={SearchProduct}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="Barcode"
+            component={Barcode}
             options={{
               headerShown: false,
             }}

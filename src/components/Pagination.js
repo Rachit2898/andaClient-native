@@ -97,8 +97,9 @@ const styles = StyleSheet.create({
   },
   paginationNumber: {
     fontWeight: "800",
-    color: "rgba(0, 0, 0, 0.87)",
+
     paddingHorizontal: 15,
     paddingVertical: 10,
+    color: "#494c4c",
   },
 });

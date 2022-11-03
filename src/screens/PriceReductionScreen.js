@@ -438,29 +438,54 @@ const PriceReductionScreen = (props) => {
               >
                 <Text style={{ color: "#005185" }}>{count}</Text>
               </View>
-              <Pressable
-                style={{
-                  borderLeftWidth: 1,
-                  borderColor: "#878787",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  paddingHorizontal: 5,
-                  backgroundColor: "#cfcccc",
-                }}
-                onPress={() => {
-                  addButton(props?.id);
-                }}
-                disabled={count === 3}
-              >
-                <Text
+              {!!props.orderLimit ? (
+                <Pressable
                   style={{
-                    fontWeight: "bold",
-                    fontSize: 15,
+                    borderLeftWidth: 1,
+                    borderColor: "#878787",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    paddingHorizontal: 5,
+                    backgroundColor: "#cfcccc",
+                  }}
+                  onPress={() => {
+                    addButton(props?.id);
+                  }}
+                  disabled={count === props.orderLimit}
+                >
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: 15,
+                    }}
+                  >
+                    +
+                  </Text>
+                </Pressable>
+              ) : (
+                <Pressable
+                  style={{
+                    borderLeftWidth: 1,
+                    borderColor: "#878787",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    paddingHorizontal: 5,
+                    backgroundColor: "#cfcccc",
+                  }}
+                  onPress={() => {
+                    addButton(props?.id);
                   }}
                 >
-                  +
-                </Text>
-              </Pressable>
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: 15,
+                    }}
+                  >
+                    +
+                  </Text>
+                </Pressable>
+              )}
             </View>
             <Pressable
               style={{
@@ -486,19 +511,21 @@ const PriceReductionScreen = (props) => {
             </Pressable>
           </View>
 
-          <View
-            style={{
-              height: 20,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            {count === 3 && currentIndex === props?.id && (
-              <Text style={{ fontSize: 12, color: "#bd1c1c" }}>
-                You Can Add Only 3 Items
-              </Text>
-            )}
-          </View>
+          {!!props.orderLimit && (
+            <View
+              style={{
+                height: 20,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {count === props.orderLimit && currentIndex === props?.id && (
+                <Text style={{ fontSize: 12, color: "#bd1c1c" }}>
+                  You Can Add Only {props.orderLimit} Items
+                </Text>
+              )}
+            </View>
+          )}
         </View>
       ) : (
         <View

@@ -12,7 +12,6 @@ import {
 } from "../../utils";
 
 export const addItem = createAsyncThunk("additems", async (body) => {
-  console.log(body);
   const result = await addItems(body);
   return result;
 });
@@ -304,6 +303,39 @@ export const productDetails = createAsyncThunk(
     return myData;
   }
 );
+export const searchItems = createAsyncThunk(
+  "urls/searchItem",
+  async (searchItem) => {
+    const token = await getToken();
+    var url = `https://staging.andanet.com/api/catalog/search/suggest?q=${searchItem}`;
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
+    const myData = await response.json();
+    return myData;
+  }
+);
+export const searchProducts = createAsyncThunk(
+  "urls/searchProducsts",
+  async (searchItem) => {
+    const token = await getToken();
+    var url = `https://staging.andanet.com/api/catalog/search?q=${searchItem}&suggesterUsed=true`;
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
+
+    const myData = await response.json();
+    return myData;
+  }
+);
 
 const productSlice = createSlice({
   name: "products",
@@ -316,7 +348,7 @@ const productSlice = createSlice({
     cartLength: {},
     userInfoData: {},
     loading: false,
-    loading: false,
+    addLoading: false,
     cartCheckOutInfo: false,
     cartInfoData: {},
     subtotal: {},
@@ -333,6 +365,8 @@ const productSlice = createSlice({
     priceReductionData: {},
     shortDateData: {},
     updateCart: {},
+    searchItem: [],
+    searchProducstsData: {},
   },
   extraReducers: {
     [yourTopPurChase.pending]: (state, action) => {
@@ -576,6 +610,28 @@ const productSlice = createSlice({
       state.productDetailsData = action.payload;
     },
     [productDetails.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [searchItems.pending]: (state, action) => {
+      state.loadingSearch = true;
+    },
+    [searchItems.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.searchItem = action.payload;
+    },
+    [searchItems.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [searchProducts.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [searchProducts.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.searchProducstsData = action.payload;
+    },
+    [searchProducts.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },

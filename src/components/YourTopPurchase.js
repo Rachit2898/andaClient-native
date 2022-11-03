@@ -63,7 +63,7 @@ const YourTopPurchase = () => {
   };
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#005185", flex: 1 }}>
+    <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
       <Filter
         checkBoxHandler={checkBoxHandler}
         modalVisible={modalVisible}
@@ -83,7 +83,9 @@ const YourTopPurchase = () => {
           }}
         >
           <View style={{ justifyContent: "center" }}>
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+            <Text
+              style={{ fontSize: 20, fontWeight: "bold", color: "#494c4c" }}
+            >
               Your Top Purchase
             </Text>
           </View>
@@ -104,12 +106,12 @@ const YourTopPurchase = () => {
         <View
           style={{
             borderTopWidth: 4,
-            borderColor: "#ececec",
+            borderColor: "#fafafa",
             marginVertical: 10,
           }}
         />
         <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
-          {result?.totalResults > 0 ? (
+          {result.totalResults > 0 ? (
             <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false}>
               <View>
                 {data?.map((item, i) => {
@@ -141,6 +143,7 @@ const YourTopPurchase = () => {
                         itemRating={item?.defaultSku?.itemRating}
                         rewardItem={item?.defaultSku?.rewardItem}
                         priceType={item?.defaultSku?.priceType}
+                        orderLimit={item?.defaultSku?.dailyOrderLimit}
                       />
                     </View>
                   );

@@ -9,7 +9,6 @@ import {
 import React, { useState, useEffect, useRef } from "react";
 import Spinner from "../components/Spinner";
 import { SafeAreaView } from "react-native-safe-area-context";
-import _ from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import {
@@ -19,7 +18,7 @@ import {
   productDetails,
 } from "../../redux/features/productApi";
 
-const ShortDateScreen = (props) => {
+const SearchProductScreen = (props) => {
   const scrollRef = useRef();
   const navigation = useNavigation();
   const [itemValues, setItem] = useState([]);
@@ -80,6 +79,7 @@ const ShortDateScreen = (props) => {
       alert("Could not Update Product!!");
     }
   }
+
   const productDetailHandler = async (Id) => {
     navigation.navigate("Auth", { screen: "ProductDetails" });
     dispatch(productDetails(Id));
@@ -104,21 +104,6 @@ const ShortDateScreen = (props) => {
             alignSelf: "center",
           }}
         >
-          {!_.isNil(props.shortOrCloseOutDate) &&
-            props.shortOrCloseOutDate !== "" &&
-            props.inventoryClassKey === "S" && (
-              <View
-                style={[
-                  styles.bannerComponent,
-                  {
-                    transform: [{ skewY: "-35deg" }],
-                  },
-                ]}
-              >
-                <Text style={styles.bannerText}>S/D</Text>
-              </View>
-            )}
-
           {props.url ? (
             <>
               <Image
@@ -546,24 +531,10 @@ const ShortDateScreen = (props) => {
   );
 };
 
-export default ShortDateScreen;
+export default SearchProductScreen;
 
 const styles = StyleSheet.create({
   pagination: {
     marginBottom: 100,
-  },
-  bannerComponent: {
-    backgroundColor: "#ed8b00",
-    width: 30,
-    zIndex: 1,
-    height: 20,
-    marginHorizontal: 10,
-  },
-  bannerText: {
-    color: "#fff",
-    fontSize: 12,
-    textAlign: "center",
-    paddingHorizontal: 5,
-    paddingVertical: 2,
   },
 });

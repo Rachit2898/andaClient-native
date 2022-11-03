@@ -80,7 +80,6 @@ const ProductScreen = (props) => {
     }
   }
   const productDetailHandler = async (Id) => {
-    console.log("caleed");
     navigation.navigate("Auth", { screen: "ProductDetails" });
     dispatch(productDetails(Id));
   };
@@ -90,7 +89,7 @@ const ProductScreen = (props) => {
       style={{
         borderTopWidth: 0.3,
         borderBottomWidth: 0.3,
-        borderColor: "#757474",
+        borderColor: "#ececec",
         paddingHorizontal: 10,
         paddingVertical: 20,
         width: "100%",
@@ -163,11 +162,14 @@ const ProductScreen = (props) => {
                   style={{
                     fontWeight: "700",
                     fontSize: 12,
+                    color: "#494c4c",
                   }}
                 >
                   NDC:
                 </Text>
-                <Text style={{ fontSize: 12 }}>{props?.nationalDrugCode}</Text>
+                <Text style={{ fontSize: 12, color: "#494c4c" }}>
+                  {props?.nationalDrugCode}
+                </Text>
               </View>
               <View
                 style={{
@@ -179,11 +181,14 @@ const ProductScreen = (props) => {
                   style={{
                     fontWeight: "700",
                     fontSize: 12,
+                    color: "#494c4c",
                   }}
                 >
                   ITEM:
                 </Text>
-                <Text style={{ fontSize: 12 }}>{props?.externalId}</Text>
+                <Text style={{ fontSize: 12, color: "#494c4c" }}>
+                  {props?.externalId}
+                </Text>
               </View>
               <View
                 style={{
@@ -191,12 +196,14 @@ const ProductScreen = (props) => {
                   flexWrap: "wrap",
                   flexDirection: "row",
                   flex: 1,
+                  color: "#494c4c",
                 }}
               >
                 <Text
                   style={{
                     fontWeight: "700",
                     fontSize: 12,
+                    color: "#494c4c",
                   }}
                 >
                   MFR:
@@ -205,7 +212,7 @@ const ProductScreen = (props) => {
                   style={{
                     fontSize: 12,
                     flexWrap: "wrap",
-
+                    color: "#494c4c",
                     flex: 1,
                   }}
                 >
@@ -225,11 +232,14 @@ const ProductScreen = (props) => {
                   fontSize: 12,
                   flexWrap: "wrap",
                   width: "100%",
+                  color: "#494c4c",
                 }}
               >
                 {props?.itemForm}
               </Text>
-              <Text style={{ fontSize: 12 }}>{props?.description}</Text>
+              <Text style={{ fontSize: 12, color: "#494c4c" }}>
+                {props?.description}
+              </Text>
               <View style={{ flexDirection: "row" }}>
                 {props.netPriceItem && (
                   <Image
@@ -369,7 +379,9 @@ const ProductScreen = (props) => {
             </View>
           </View>
           <View style={{}}>
-            <Text style={{ fontWeight: "700" }}>${props?.amount}</Text>
+            <Text style={{ fontWeight: "700", color: "#494c4c" }}>
+              ${props?.amount}
+            </Text>
           </View>
         </View>
       </View>
@@ -385,7 +397,6 @@ const ProductScreen = (props) => {
             <View
               style={{
                 backgroundColor: "#fff",
-                width: 70,
                 height: 25,
                 borderRadius: 3,
                 marginLeft: "12%",
@@ -422,34 +433,68 @@ const ProductScreen = (props) => {
               <View
                 style={{
                   alignSelf: "center",
-                  paddingHorizontal: 5,
+
+                  width: 30,
                 }}
-              >
-                <Text style={{ color: "#005185" }}>{count}</Text>
-              </View>
-              <Pressable
-                style={{
-                  borderLeftWidth: 1,
-                  borderColor: "#878787",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  paddingHorizontal: 5,
-                  backgroundColor: "#cfcccc",
-                }}
-                onPress={() => {
-                  addButton(props?.id);
-                }}
-                disabled={count === 3}
               >
                 <Text
                   style={{
-                    fontWeight: "bold",
-                    fontSize: 15,
+                    color: "#005185",
+                    alignSelf: "center",
+                    justifyContent: "center",
                   }}
                 >
-                  +
+                  {count}
                 </Text>
-              </Pressable>
+              </View>
+              {!!props.orderLimit ? (
+                <Pressable
+                  style={{
+                    borderLeftWidth: 1,
+                    borderColor: "#878787",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    paddingHorizontal: 5,
+                    backgroundColor: "#cfcccc",
+                  }}
+                  onPress={() => {
+                    addButton(props?.id);
+                  }}
+                  disabled={count === props.orderLimit}
+                >
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: 15,
+                    }}
+                  >
+                    +
+                  </Text>
+                </Pressable>
+              ) : (
+                <Pressable
+                  style={{
+                    borderLeftWidth: 1,
+                    borderColor: "#878787",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    paddingHorizontal: 5,
+                    backgroundColor: "#cfcccc",
+                  }}
+                  onPress={() => {
+                    addButton(props?.id);
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: 15,
+                    }}
+                  >
+                    +
+                  </Text>
+                </Pressable>
+              )}
             </View>
             <Pressable
               style={{
@@ -474,20 +519,21 @@ const ProductScreen = (props) => {
               </Text>
             </Pressable>
           </View>
-
-          <View
-            style={{
-              height: 20,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            {count === 3 && currentIndex === props?.id && (
-              <Text style={{ fontSize: 12, color: "#bd1c1c" }}>
-                You Can Add Only 3 Items
-              </Text>
-            )}
-          </View>
+          {!!props.orderLimit && (
+            <View
+              style={{
+                height: 20,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {count === props.orderLimit && currentIndex === props?.id && (
+                <Text style={{ fontSize: 12, color: "#bd1c1c" }}>
+                  You Can Add Only {props.orderLimit} Items
+                </Text>
+              )}
+            </View>
+          )}
         </View>
       ) : (
         <View
