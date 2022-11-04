@@ -19,7 +19,7 @@ function Root() {
   useEffect(() => {
     async function fetchToken() {
       const storedToken = await getToken();
-      console.log(storedToken);
+
       if (storedToken) {
         dispatch(authenticate(storedToken));
       }

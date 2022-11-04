@@ -322,7 +322,6 @@ export const searchItems = createAsyncThunk(
 export const searchProducts = createAsyncThunk(
   "urls/searchProducsts",
   async (searchItem) => {
-    console.log({ searchItem });
     const token = await getToken();
     var url = `https://staging.andanet.com/api/catalog/search?q=${searchItem}&suggesterUsed=true`;
     const response = await fetch(url, {
@@ -593,7 +592,7 @@ const productSlice = createSlice({
       state.error = action.payload;
     },
     [updateCartValues.pending]: (state, action) => {
-      state.loadin = true;
+      state.loading = true;
     },
     [updateCartValues.fulfilled]: (state, action) => {
       state.loading = false;

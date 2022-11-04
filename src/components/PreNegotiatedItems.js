@@ -155,9 +155,7 @@ const PreNegotiatedItems = () => {
               )}
             </ScrollView>
           ) : (
-            <View>
-              <Spinner />
-            </View>
+            <Spinner />
           )}
         </View>
       </View>

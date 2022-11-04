@@ -31,7 +31,6 @@ export default function Barcode() {
 
   const handleBarCodeScanned = async ({ type, data }) => {
     // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
-    console.log(data);
     try {
       const result = await dispatch(searchProducts(data));
       if (result?.meta?.requestStatus === "fulfilled") {
@@ -69,7 +68,6 @@ export default function Barcode() {
       <View
         style={{ flex: 1, flexDirection: "column", justifyContent: "center" }}
       >
-        {console.log({ scanned })}
         <BarCodeScanner
           onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
           style={{

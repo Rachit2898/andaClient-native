@@ -36,7 +36,7 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 function MyTabs() {
   const dispatch = useDispatch();
-  const [modalVisible, setModalVisible] = useState(false);
+  const [size, setSize] = useState();
   useEffect(() => {
     dispatch(cartInfo());
   }, [dispatch]);
@@ -90,21 +90,10 @@ function MyTabs() {
           headerShown: false,
           tabBarLabel: "More",
           tabBarIcon: ({ color, size }) => (
-            <View>
-              <Dashboard
-                modalVisible={modalVisible}
-                setModalVisible={setModalVisible}
-              />
-              <MaterialCommunityIcons
-                name="more"
-                color={color}
-                size={size}
-                onPress={() => setModalVisible(true)}
-              />
-            </View>
+            <MaterialCommunityIcons name="more" color={color} size={size} />
           ),
         }}
-        component={AuthenticatedStack}
+        component={Dashboard}
       />
     </Tab.Navigator>
   );

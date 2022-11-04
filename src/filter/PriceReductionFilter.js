@@ -59,7 +59,7 @@ const Filter = ({ modalVisible, setModalVisible }) => {
       })
     );
     dispatch(setSorting(sortingValue));
-  }, [urlY, sortingValue]);
+  }, [priceReductionUrls, sortingValue]);
 
   useEffect(() => {
     setResponse(priceReductionData);
