@@ -12,7 +12,7 @@ import {
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
-import { searchProducsts } from "../../redux/features/productApi";
+import { searchProducts } from "../../redux/features/productApi";
 
 export default function Barcode() {
   const navigation = useNavigation();
@@ -31,10 +31,11 @@ export default function Barcode() {
 
   const handleBarCodeScanned = async ({ type, data }) => {
     // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    console.log(data);
     try {
-      const result = await dispatch(searchProducsts(data));
+      const result = await dispatch(searchProducts(data));
       if (result?.meta?.requestStatus === "fulfilled") {
-        navigation.navigate("Auth", { screen: "searchProducts" });
+        navigation.navigate("Auth", { screen: "SearchProduct" });
         setScanned(true);
       }
       //

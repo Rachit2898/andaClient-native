@@ -51,9 +51,7 @@ const Filter = ({ modalVisible, setModalVisible }) => {
   const url = urlStructure.join("");
 
   useEffect(() => {
-    dispatch(
-      searchProducts({ value: url, currentPage: 1, sortValues: sortingValue })
-    );
+    dispatch(searchProducts());
     dispatch(setSorting(sortingValue));
   }, [inventoryWatchUrls, sortingValue]);
 

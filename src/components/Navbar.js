@@ -31,6 +31,7 @@ const Navbar = () => {
     ...state.products,
   }));
   const searchItemHandler = async (item) => {
+    console.log(item);
     setOpenSearch(true);
     dispatch(searchItems(item));
   };

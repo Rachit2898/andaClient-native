@@ -14,12 +14,7 @@ import Pagination from "./Pagination";
 import Spinner from "./Spinner";
 import Filter from "../filter/SearchProductFilter";
 import PreNegotiatedScreen from "../screens/SearchProductScreen";
-import {
-  inventoryWatchList,
-  addItem,
-  userInfo,
-  searchProducts,
-} from "../../redux/features/productApi";
+import { userInfo, searchProducts } from "../../redux/features/productApi";
 
 const SearchProduct = () => {
   const scrollRef = useRef();
@@ -40,7 +35,6 @@ const SearchProduct = () => {
   const data = searchProducstsData?.products;
 
   useEffect(() => {
-    dispatch(searchProducts());
     dispatch(userInfo());
   }, []);
   const result = searchProducstsData;
@@ -48,7 +42,7 @@ const SearchProduct = () => {
 
   const apiCall = async (currentPage) => {
     setCurrentPage(currentPage);
-    dispatch(searchProducts());
+
     onPressTouch();
   };
 
@@ -62,11 +56,6 @@ const SearchProduct = () => {
 
   return (
     <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
-      <Filter
-        checkBoxHandler={checkBoxHandler}
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-      />
       <View
         style={{
           backgroundColor: "#fff",
@@ -86,18 +75,6 @@ const SearchProduct = () => {
             </Text>
           </View>
           {loading && <Spinner />}
-          <Pressable
-            style={{
-              borderWidth: 1,
-              padding: 10,
-              paddingHorizontal: 30,
-              borderColor: "#c77500",
-              borderRadius: 3,
-            }}
-            onPress={() => setModalVisible(true)}
-          >
-            <Text style={{ fontWeight: "bold", color: "#c77500" }}>Filter</Text>
-          </Pressable>
         </View>
         <View
           style={{
