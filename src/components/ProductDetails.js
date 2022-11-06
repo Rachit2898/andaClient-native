@@ -59,7 +59,7 @@ const ProductDetails = () => {
       <Navbar />
       <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
         {loading && <Spinner />}
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{ height: 200, marginVertical: 20 }}>
             {items?.product?.mediaMap?.primary?.url ? (
               <>

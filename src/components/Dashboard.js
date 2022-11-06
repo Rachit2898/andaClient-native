@@ -20,7 +20,6 @@ const Dashboard = ({ size }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(!modalVisible);
-  console.log(modalVisible);
   const logoutHandler = () => {
     dispatch(logout(false));
   };
@@ -71,9 +70,6 @@ const Dashboard = ({ size }) => {
             source={require("../../assets/icon.png")}
             style={{ height: 40, width: 40 }}
           />
-          <View style={{ justifyContent: "center", alignSelf: "center" }}>
-            <Text style={{ fontSize: 18, fontWeight: "600" }}>Dashboard</Text>
-          </View>
         </View>
 
         <Pressable
@@ -139,7 +135,7 @@ const Dashboard = ({ size }) => {
           </View>
         </View>
       </View>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ marginBottom: 150 }}>
           <View>
             <View style={styles.prductListBlue}>
@@ -320,7 +316,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     flexDirection: "row",
     justifyContent: "space-between",
-    borderBottomWidth: 2,
+    borderBottomWidth: 0.3,
     borderColor: "#005185",
   },
   logoutBox: {

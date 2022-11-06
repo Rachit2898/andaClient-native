@@ -62,6 +62,7 @@ const SearchProduct = () => {
         }}
       >
         <Navbar />
+
         <View
           style={{
             flexDirection: "row",
@@ -74,17 +75,26 @@ const SearchProduct = () => {
               Search Products
             </Text>
           </View>
-          {loading && <Spinner />}
         </View>
+
         <View
           style={{
             borderTopWidth: 4,
-            borderColor: "#ececec",
+            borderColor: "#fafafa",
             marginVertical: 10,
           }}
         />
+        {result.totalResults === 0 && (
+          <View style={styles.emptyCart}>
+            <Text style={styles.emptyCartText}>
+              Oops!! Details are not available
+            </Text>
+          </View>
+        )}
+        {loading && <Spinner />}
         <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
-          {result.totalResults > 0 ? (
+          {console.log("Loading", result.totalResults >= 0)}
+          {result.totalResults >= 0 ? (
             <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false}>
               <View>
                 {data?.map((item, i) => {
@@ -152,4 +162,13 @@ const styles = StyleSheet.create({
   },
   mainBoxLoading: { opacity: 0.2 },
   mainBox: { backgroundColor: "#fff", marginBottom: 200 },
+  emptyCart: {
+    textAlign: "center",
+    alignItems: "center",
+    marginVertical: 60,
+  },
+  emptyCartText: {
+    fontWeight: "bold",
+    fontSize: 15,
+  },
 });

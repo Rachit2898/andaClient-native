@@ -99,7 +99,7 @@ const CartScreen = (props) => {
         style={{
           borderTopWidth: 0.3,
           borderBottomWidth: 0.3,
-          borderColor: "#757474",
+          borderColor: "#ececec",
           paddingHorizontal: 10,
           paddingVertical: 20,
           width: "100%",

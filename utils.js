@@ -17,6 +17,20 @@ async function authenticate(credentials) {
 
   return token;
 }
+export async function changePassword(credentials) {
+  const token = await getToken();
+  var url = "https://staging.andanet.com/api/customer/changePassword";
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+    body: JSON.stringify(credentials),
+  }).then((data) => data.json());
+  const data = response;
+  return data;
+}
 
 export async function cartValidate() {
   const token = await getToken();

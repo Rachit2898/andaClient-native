@@ -1,13 +1,24 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getToken } from "../../utils";
-import { login, firstLogin } from "../../utils";
+import { login, changePassword } from "../../utils";
 import _ from "lodash";
 
 export const signin = createAsyncThunk("signin", async (body) => {
   const result = await login(body);
   return result;
 });
+export const changeUserPassword = createAsyncThunk(
+  "changePassword",
+  async (body) => {
+    const credentials = {
+      currentPassword: body.currentPassword,
+      newPassword: body.newPassword,
+    };
+    const result = await changePassword(credentials);
+    return result;
+  }
+);
 export function containsObject(obj, list) {
   var i;
   for (i = 0; i < list.length; i++) {
@@ -33,6 +44,8 @@ const initialState = {
   searchProductUrls: [],
   isAuthenticated: false,
   sortingUrl: "",
+  changeUserPasswordData: {},
+  changePasswordValue: false,
 };
 
 const authReducer = createSlice({
@@ -152,6 +165,19 @@ const authReducer = createSlice({
     },
     [signin.rejected]: (state, action) => {
       state.loading = false;
+      state.error = action.payload;
+    },
+    [changeUserPassword.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [changeUserPassword.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.changeUserPasswordData = action.payload;
+      state.changePasswordValue = false;
+    },
+    [changeUserPassword.rejected]: (state, action) => {
+      state.loading = false;
+      state.changePasswordValue = true;
       state.error = action.payload;
     },
   },

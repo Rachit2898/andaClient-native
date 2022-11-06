@@ -59,6 +59,27 @@ const Inventory = () => {
     setItem(item);
   };
 
+  const currentFirst = (currentPage) => {
+    return (currentPage - 1) * result?.pageSize + 1;
+  };
+  const pageFirst = currentFirst(currentPage);
+  const currentLast = (currentPage) => {
+    if (currentPage == 1 && result?.totalResults >= result?.pageSize) {
+      const lastPageValue = pageFirst + result?.pageSize - 1;
+      return lastPageValue;
+    } else if (result?.totalResults <= result?.pageSize) {
+      return result?.totalResults;
+    } else if (result?.totalResults <= pageFirst + result?.pageSize) {
+      return result?.totalResults;
+    } else {
+      const lastPageValue = pageFirst + result?.pageSize - 1;
+      return lastPageValue;
+    }
+  };
+  const pageLast = currentLast(currentPage);
+
+  console.log("result", result?.totalResults);
+
   return (
     <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
       <Filter
@@ -80,7 +101,9 @@ const Inventory = () => {
           }}
         >
           <View style={{ justifyContent: "center" }}>
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+            <Text
+              style={{ fontSize: 20, fontWeight: "bold", color: "#494c4c" }}
+            >
               Inventory Watch List
             </Text>
           </View>
@@ -98,13 +121,18 @@ const Inventory = () => {
             <Text style={{ fontWeight: "bold", color: "#c77500" }}>Filter</Text>
           </Pressable>
         </View>
+
         <View
           style={{
             borderTopWidth: 4,
-            borderColor: "#ececec",
+            borderColor: "#fafafa",
             marginVertical: 10,
           }}
         />
+        <Text style={styles.pageText}>
+          Showing {pageFirst} - {pageLast} of{" "}
+          {inventoryWatchListData.totalResults} results
+        </Text>
         <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
           {result.totalResults > 0 ? (
             <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false}>
@@ -174,4 +202,10 @@ const styles = StyleSheet.create({
   },
   mainBoxLoading: { opacity: 0.2 },
   mainBox: { backgroundColor: "#fff", marginBottom: 200 },
+  pageText: {
+    color: "#494c4c",
+    fontWeight: "600",
+    fontSize: 18,
+    paddingHorizontal: 10,
+  },
 });

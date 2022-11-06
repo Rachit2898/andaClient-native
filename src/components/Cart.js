@@ -114,7 +114,7 @@ const Cart = () => {
               </Pressable>
             </View>
             {loading && <Spinner />}
-            <ScrollView>
+            <ScrollView showsVerticalScrollIndicator={false}>
               <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
                 {orderItems?.map((item) => {
                   return (

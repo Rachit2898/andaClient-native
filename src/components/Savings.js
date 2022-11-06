@@ -95,7 +95,7 @@ const SavingsItems = () => {
         <View
           style={{
             borderTopWidth: 4,
-            borderColor: "#ececec",
+            borderColor: "#fafafa",
             marginVertical: 10,
           }}
         />

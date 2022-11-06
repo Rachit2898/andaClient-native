@@ -11,6 +11,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import Spinner from "./Spinner";
 
 import {
   userInfo,
@@ -18,6 +19,7 @@ import {
   searchItems,
   searchProducsts,
 } from "../../redux/features/productApi";
+import { changeUserPassword, loading } from "../../redux/features/authUser";
 
 function MyCheckbox({
   checked,
@@ -48,6 +50,12 @@ const Account = () => {
   const dispatch = useDispatch();
   const [value, setValue] = useState(false);
   const [isChecked, setChecked] = useState(false);
+  const [show, setShow] = useState(true);
+  const [error, setError] = useState(false);
+  const [nullValue, setNullValue] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const {
     userInfoData,
     cartInfoData,
@@ -57,6 +65,11 @@ const Account = () => {
   } = useSelector((state) => ({
     ...state.products,
   }));
+  const { loading, changeUserPasswordData, changePasswordValue } = useSelector(
+    (state) => ({
+      ...state.auth,
+    })
+  );
   const userData = userInfoData;
   useEffect(() => {
     dispatch(userInfo());
@@ -74,9 +87,26 @@ const Account = () => {
     console.log("Captcha value:", value);
   }
 
+  const showPasswordHandler = (value) => {
+    setShow((pre) => !pre);
+  };
+  const updatePasswordHandler = (value) => {
+    if (!newPassword) {
+      setNullValue(true);
+      return;
+    }
+    if (newPassword != confirmPassword) {
+      setError(true);
+      return;
+    } else {
+      setError(false);
+      dispatch(changeUserPassword({ currentPassword, newPassword }));
+    }
+  };
+
   return (
     <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View
           style={{
             flexDirection: "row",
@@ -108,151 +138,382 @@ const Account = () => {
             {userData?.selectedAccount?.id} | {userData?.selectedAccount?.name}
           </Text>
         </View>
-        <View
-          style={{
-            borderTopWidth: 4,
-            borderColor: "#fafafa",
-            marginVertical: 10,
-          }}
-        />
-        <View style={{ paddingHorizontal: 10 }}>
-          <Text style={styles.labelContainer}>USERNAME*</Text>
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.TextInput}
-              placeholderTextColor="#003f5c"
-            />
-          </View>
-          <Text style={styles.labelContainer}>EMAIL ADDRESS*</Text>
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.TextInput}
-              placeholderTextColor="#003f5c"
-            />
-          </View>
-          <View style={{ flexDirection: "row" }}>
-            <MyCheckbox
-              style={styles.checkbox}
-              checked={isChecked}
-              onChange={checkHandler}
-              onPress={() => {
-                myCheckHandler("andanet");
-              }}
-              buttonStyle={styles.checkboxBase}
-              activeButtonStyle={[isChecked ? styles.checkboxChecked : ""]}
-            />
-            <View
+        {loading && <Spinner />}
+        <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
+          <View
+            style={{
+              borderTopWidth: 4,
+              borderColor: "#fafafa",
+              marginVertical: 10,
+            }}
+          />
+          <View style={{ paddingHorizontal: 10 }}>
+            <Text style={styles.labelContainer}>USERNAME*</Text>
+            <View style={styles.inputView}>
+              <TextInput
+                style={styles.TextInput}
+                placeholderTextColor="#003f5c"
+              />
+            </View>
+            <Text style={styles.labelContainer}>EMAIL ADDRESS*</Text>
+            <View style={styles.inputView}>
+              <TextInput
+                style={styles.TextInput}
+                placeholderTextColor="#003f5c"
+              />
+            </View>
+            <View style={{ flexDirection: "row" }}>
+              <MyCheckbox
+                style={styles.checkbox}
+                checked={isChecked}
+                onChange={checkHandler}
+                onPress={() => {
+                  myCheckHandler("andanet");
+                }}
+                buttonStyle={styles.checkboxBase}
+                activeButtonStyle={[isChecked ? styles.checkboxChecked : ""]}
+              />
+              <View
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginLeft: 10,
+                }}
+              >
+                <Text style={{ color: "#494c4c" }}>
+                  I would like to receive marketings emails
+                </Text>
+              </View>
+            </View>
+            <Pressable
               style={{
+                borderColor: "#006ba6",
+                borderWidth: 1,
+                width: 100,
+                height: 45,
+
                 justifyContent: "center",
                 alignItems: "center",
-                marginLeft: 10,
               }}
+              android_ripple={{ color: "#ccc" }}
             >
-              <Text style={{ color: "#494c4c" }}>
-                I would like to receive marketings emails
-              </Text>
-            </View>
+              <View>
+                <Text
+                  style={{ color: "#006ba6", fontSize: 12, fontWeight: "bold" }}
+                >
+                  UPDATE
+                </Text>
+              </View>
+            </Pressable>
           </View>
-          <Pressable
+          <View
             style={{
-              borderColor: "#006ba6",
-              borderWidth: 1,
-              width: 100,
-              height: 45,
-
-              justifyContent: "center",
-              alignItems: "center",
+              borderTopWidth: 4,
+              borderColor: "#fafafa",
+              marginVertical: 10,
             }}
-            android_ripple={{ color: "#ccc" }}
+          />
+          <View
+            style={{
+              padding: 10,
+              borderBottomWidth: 0.3,
+              borderColor: "#006ba6",
+            }}
           >
-            <View>
-              <Text
-                style={{ color: "#006ba6", fontSize: 12, fontWeight: "bold" }}
+            <Text style={{ fontSize: 15, fontWeight: "bold" }}>
+              Change Password
+            </Text>
+          </View>
+          <View style={{ padding: 10 }}>
+            <Text style={styles.labelContainer}>CURRENT PASSWORD*</Text>
+            <View style={styles.inputView}>
+              <TextInput
+                style={styles.TextInput}
+                placeholderTextColor="#003f5c"
+                secureTextEntry={show}
+                onChangeText={(password) => setCurrentPassword(password)}
+              />
+              <Pressable
+                style={{
+                  justifyContent: "center",
+                  margin: 10,
+                  paddingHorizontal: 10,
+                  backgroundColor: "#ccccc8",
+                  borderRadius: 3,
+                }}
+                onPress={() => showPasswordHandler(1)}
               >
-                UPDATE
-              </Text>
+                <Text style={{ color: "#4f4f4f" }}>Show</Text>
+              </Pressable>
             </View>
-          </Pressable>
-        </View>
-        <View
-          style={{
-            borderTopWidth: 4,
-            borderColor: "#fafafa",
-            marginVertical: 10,
-          }}
-        />
-        <View
-          style={{ padding: 10, borderBottomWidth: 1, borderColor: "#006ba6" }}
-        >
-          <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-            Change Password
-          </Text>
-        </View>
-        <View style={{ padding: 10 }}>
-          <Text style={styles.labelContainer}>CURRENT PASSWORD*</Text>
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.TextInput}
-              placeholderTextColor="#003f5c"
-            />
-          </View>
-          <Text style={styles.labelContainer}>NEW PASSWORD*</Text>
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.TextInput}
-              placeholderTextColor="#003f5c"
-            />
-          </View>
-          <Text style={styles.labelContainer}>CONFIRM PASSWORD*</Text>
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.TextInput}
-              placeholderTextColor="#003f5c"
-            />
-          </View>
-          <View style={{ flexDirection: "row" }}>
-            <MyCheckbox
-              style={styles.checkbox}
-              checked={isChecked}
-              onChange={checkHandler}
-              onPress={() => {
-                myCheckHandler("andanet");
-              }}
-              buttonStyle={styles.checkboxBase}
-              activeButtonStyle={[isChecked ? styles.checkboxChecked : ""]}
-            />
-            <View
+            {nullValue && (
+              <View style={styles.errorView}>
+                <Image
+                  style={{ height: 19, width: 18 }}
+                  source={require("../../assets/errorAlert.png")}
+                />
+                <Text style={{ color: "#990909", marginHorizontal: 10 }}>
+                  Fields Cannot Be Empty!!
+                </Text>
+              </View>
+            )}
+            <Text style={styles.labelContainer}>NEW PASSWORD*</Text>
+            <View style={styles.inputView}>
+              <TextInput
+                style={styles.TextInput}
+                placeholderTextColor="#003f5c"
+                secureTextEntry={show}
+                onChangeText={(password) => setNewPassword(password)}
+              />
+              <Pressable
+                style={{
+                  justifyContent: "center",
+                  margin: 10,
+                  paddingHorizontal: 10,
+                  backgroundColor: "#ccccc8",
+                  borderRadius: 3,
+                }}
+                onPress={() => showPasswordHandler(1)}
+              >
+                <Text style={{ color: "#4f4f4f" }}>Show</Text>
+              </Pressable>
+            </View>
+            {error && (
+              <View style={styles.errorView}>
+                <Image
+                  style={{ height: 19, width: 18 }}
+                  source={require("../../assets/errorAlert.png")}
+                />
+                <Text style={{ color: "#990909", marginHorizontal: 10 }}>
+                  password does not match
+                </Text>
+              </View>
+            )}
+            {nullValue && (
+              <View style={styles.errorView}>
+                <Image
+                  style={{ height: 19, width: 18 }}
+                  source={require("../../assets/errorAlert.png")}
+                />
+                <Text style={{ color: "#990909", marginHorizontal: 10 }}>
+                  Fields Cannot Be Empty!!
+                </Text>
+              </View>
+            )}
+            <Text style={styles.labelContainer}>CONFIRM PASSWORD*</Text>
+            <View style={styles.inputView}>
+              <TextInput
+                style={styles.TextInput}
+                placeholderTextColor="#003f5c"
+                secureTextEntry={show}
+                onChangeText={(password) => setConfirmPassword(password)}
+              />
+              <Pressable
+                style={{
+                  justifyContent: "center",
+                  margin: 10,
+                  paddingHorizontal: 10,
+                  backgroundColor: "#ccccc8",
+                  borderRadius: 3,
+                }}
+                onPress={() => showPasswordHandler(1)}
+              >
+                <Text style={{ color: "#4f4f4f" }}>Show</Text>
+              </Pressable>
+            </View>
+            {error && (
+              <View style={styles.errorView}>
+                <Image
+                  style={{ height: 19, width: 18 }}
+                  source={require("../../assets/errorAlert.png")}
+                />
+                <Text style={{ color: "#990909", marginHorizontal: 10 }}>
+                  password does not match
+                </Text>
+              </View>
+            )}
+            {nullValue && (
+              <View style={styles.errorView}>
+                <Image
+                  style={{ height: 19, width: 18 }}
+                  source={require("../../assets/errorAlert.png")}
+                />
+                <Text style={{ color: "#990909", marginHorizontal: 10 }}>
+                  Fields Cannot Be Empty!!
+                </Text>
+              </View>
+            )}
+            {changePasswordValue && (
+              <View style={styles.errorView}>
+                <Image
+                  style={{ height: 19, width: 18 }}
+                  source={require("../../assets/errorAlert.png")}
+                />
+                <Text style={{ color: "#990909", marginHorizontal: 10 }}>
+                  The password you entered does not match the existing password.
+                </Text>
+              </View>
+            )}
+            <Pressable
               style={{
+                borderColor: "#006ba6",
+                borderWidth: 1,
+                width: 100,
+                height: 45,
+                marginTop: 10,
                 justifyContent: "center",
                 alignItems: "center",
-                marginLeft: 10,
               }}
+              android_ripple={{ color: "#ccc" }}
+              onPress={() => updatePasswordHandler()}
             >
-              <Text style={{ color: "#494c4c" }}>
-                I would like to receive marketings emails
+              <View>
+                <Text
+                  style={{ color: "#006ba6", fontSize: 12, fontWeight: "bold" }}
+                >
+                  UPDATE
+                </Text>
+              </View>
+            </Pressable>
+            <View
+              style={{
+                borderTopWidth: 4,
+                borderColor: "#fafafa",
+                marginVertical: 10,
+              }}
+            />
+          </View>
+          <View
+            style={{
+              padding: 10,
+              borderBottomWidth: 0.3,
+              borderColor: "#006ba6",
+            }}
+          >
+            <Text style={{ fontSize: 15, fontWeight: "bold" }}>Account</Text>
+          </View>
+          <View style={{ padding: 10 }}>
+            <View style={{ flexDirection: "row" }}>
+              <Text>Account Number:</Text>
+              <Text style={{ marginLeft: 5 }}>101946</Text>
+            </View>
+            <View style={{ flexDirection: "row", marginTop: 5 }}>
+              <Text>Billing Account Number:</Text>
+              <Text style={{ marginLeft: 5 }}>101946</Text>
+            </View>
+            <View style={{ flexDirection: "row", marginTop: 5 }}>
+              <Text>DEA Number:</Text>
+              <Text style={{ marginLeft: 5 }}>101946</Text>
+            </View>
+            <View style={{ flexDirection: "row", marginTop: 5 }}>
+              <Text>DEA Expiration:</Text>
+              <Text style={{ marginLeft: 5 }}>101946</Text>
+            </View>
+            <View style={{ flexDirection: "row", marginTop: 5 }}>
+              <Text>State License</Text>
+              <Text style={{ marginLeft: 5 }}>101946</Text>
+            </View>
+            <View style={{ flexDirection: "row", marginTop: 5 }}>
+              <Text>State License Expiration:</Text>
+              <Text style={{ marginLeft: 5 }}>101946</Text>
+            </View>
+            <View style={{ flexDirection: "row", marginTop: 5 }}>
+              <Text>State Control License:</Text>
+              <Text style={{ marginLeft: 5 }}>101946</Text>
+            </View>
+            <View style={{ flexDirection: "row", marginTop: 5 }}>
+              <Text>State Control License Expiration:</Text>
+              <Text style={{ marginLeft: 5 }}>101946</Text>
+            </View>
+            <View style={{ flexDirection: "row", marginTop: 5 }}>
+              <Text>CMEA Certification Date:</Text>
+              <Text style={{ marginLeft: 5 }}>101946</Text>
+            </View>
+            <View style={{ flexDirection: "row", marginTop: 5 }}>
+              <Text>CMEA Certification Expiration:</Text>
+              <Text style={{ marginLeft: 5 }}>101946</Text>
+            </View>
+            <View style={{ flexDirection: "row", marginTop: 5 }}>
+              <Text>Sales Rep:</Text>
+              <Text style={{ marginLeft: 5 }}>101946</Text>
+            </View>
+            <View style={{ flexDirection: "row", marginTop: 5 }}>
+              <Text>Phone:</Text>
+              <Text style={{ marginLeft: 5, color: "#006ba6" }}>101946</Text>
+            </View>
+            <View style={{ flexDirection: "row", marginTop: 5 }}>
+              <Text>Sales Rep Email:</Text>
+              <Text style={{ marginLeft: 5, color: "#006ba6" }}>101946</Text>
+            </View>
+            <View style={{ flexDirection: "row", marginTop: 5 }}>
+              <Text style={{ fontSize: 10 }}>
+                For changes to your account information, please call your Sales
+                Rep
               </Text>
             </View>
           </View>
-          <Pressable
+          <View
             style={{
-              borderColor: "#006ba6",
-              borderWidth: 1,
-              width: 100,
-              height: 45,
-
-              justifyContent: "center",
-              alignItems: "center",
+              borderTopWidth: 4,
+              borderColor: "#fafafa",
+              marginVertical: 10,
             }}
-            android_ripple={{ color: "#ccc" }}
+          />
+          <View
+            style={{
+              padding: 10,
+              borderBottomWidth: 0.3,
+              borderColor: "#006ba6",
+            }}
           >
-            <View>
-              <Text
-                style={{ color: "#006ba6", fontSize: 12, fontWeight: "bold" }}
-              >
-                UPDATE
+            <Text style={{ fontSize: 15, fontWeight: "bold" }}>Location</Text>
+          </View>
+          <View style={{ padding: 10 }}>
+            <View style={{ flexDirection: "row", marginTop: 5 }}>
+              <Text>{userData?.selectedAccount.addresses[0]?.companyName}</Text>
+            </View>
+            <View style={{ flexDirection: "row", marginTop: 5 }}>
+              <Text>
+                {userData?.selectedAccount.addresses[0]?.addressLine1}
               </Text>
             </View>
-          </Pressable>
+            <View style={{ flexDirection: "row", marginTop: 5 }}>
+              <Text>
+                {userData?.selectedAccount.addresses[0]?.addressLine2}
+              </Text>
+            </View>
+            <View style={{ flexDirection: "row", marginTop: 5 }}>
+              <Text>
+                {userData?.selectedAccount.addresses[0]?.city},{" "}
+                {
+                  userData?.selectedAccount.addresses[0]?.countrySubdivision
+                    ?.abbreviation
+                }{" "}
+                {userData?.selectedAccount.addresses[0]?.postalCode}
+              </Text>
+            </View>
+            <View style={{ marginTop: 5 }}>
+              <View style={{ flexDirection: "row", marginTop: 5 }}>
+                <Text>Phone:</Text>
+                <Text style={{ marginLeft: 5 }}>
+                  {
+                    userData?.selectedAccount.addresses[0]?.phonePrimary
+                      ?.phoneNumber
+                  }
+                </Text>
+              </View>
+              <View style={{ flexDirection: "row", marginTop: 5 }}>
+                <Text>Phone:</Text>
+
+                <Text style={{ marginLeft: 5 }}>
+                  {
+                    userData?.selectedAccount.addresses[0]?.phoneFax
+                      ?.phoneNumber
+                  }
+                </Text>
+              </View>
+            </View>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -264,18 +525,21 @@ export default Account;
 const styles = StyleSheet.create({
   inputView: {
     backgroundColor: "#fff",
-    borderWidth: 0.4,
+    borderWidth: 0.3,
     borderColor: "#9d9b9b",
     width: "100%",
     height: 45,
+    flexDirection: "row",
     borderRadius: 3,
-    justifyContent: "center", //Centered horizontally
+    padding: 2,
+    justifyContent: "space-between", //Centered horizontally
   },
   TextInput: {
     paddingHorizontal: 10,
     fontSize: 16,
     color: "#494c4c",
     backgroundColor: "#fff",
+    width: "80%",
   },
   labelContainer: {
     marginVertical: 10,
@@ -301,4 +565,18 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
   },
+  errorView: {
+    backgroundColor: "#f9caca",
+    borderWidth: 0.4,
+    borderColor: "#990909",
+    width: "100%",
+    height: 45,
+    marginTop: 10,
+    borderRadius: 3,
+    justifyContent: "center",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  mainBoxLoading: { opacity: 0.2 },
+  mainBox: { backgroundColor: "#fff" },
 });
