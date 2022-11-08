@@ -14,14 +14,21 @@ import React, { useState, useEffect, useCallback } from "react";
 import { logout } from "../../redux/features/authUser";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import {
+  NavigationContainer,
+  useNavigation,
+  StackActions,
+} from "@react-navigation/native";
 
 const Dashboard = ({ size }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(!modalVisible);
   const logoutHandler = () => {
-    dispatch(logout(false));
+    navigation.navigate("Auth", { screen: "HomePage" });
+    setTimeout(() => {
+      dispatch(logout(false));
+    });
   };
   const favoritesOpen = async () => {
     navigation.navigate("Auth", { screen: "Favorites" });
@@ -312,7 +319,7 @@ const styles = StyleSheet.create({
   },
 
   closeButton: {
-    paddingVertical: 10,
+    paddingBottom: 10,
     paddingHorizontal: 10,
     flexDirection: "row",
     justifyContent: "space-between",

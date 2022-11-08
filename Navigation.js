@@ -44,7 +44,7 @@ function MyTabs() {
     ...state.products,
   }));
   return (
-    <Tab.Navigator>
+    <Tab.Navigator initialRouteName={"Auth"}>
       <Tab.Screen
         name="Auth"
         options={{
@@ -110,6 +110,7 @@ function AuthStack() {
       }}
     >
       <Stack.Screen
+        name="Login"
         screenOptions={{
           backgroundColor: "white",
         }}
@@ -126,7 +127,10 @@ function AuthStack() {
 function AuthenticatedStack() {
   return (
     <>
-      <Stack.Navigator screenOptions={{ animation: "none" }}>
+      <Stack.Navigator
+        initialRouteName={"HomePage"}
+        screenOptions={{ animation: "none" }}
+      >
         <>
           <Stack.Screen
             name="HomePage"

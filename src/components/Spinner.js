@@ -18,17 +18,14 @@ function Spinner() {
         onRequestClose={() => {}}
         propagateSwipe={true}
       >
-        {/* <Image
-            source={require("../assets/spinner.gif")}
-            style={{
-              height: 80,
-              width: 80,
-             
-              alignSelf: "center",
-              transparent: true,
-            }}
-          /> */}
-        <ActivityIndicator style={{ marginVertical: 308.7 }} size="large" />
+        <ActivityIndicator
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          size="large"
+        />
       </Modal>
     </View>
   );
@@ -36,14 +33,4 @@ function Spinner() {
 
 export default Spinner;
 
-const styles = StyleSheet.create({
-  rootContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 32,
-  },
-  message: {
-    fontSize: 16,
-    marginBottom: 12,
-  },
-});
+const styles = StyleSheet.create({});

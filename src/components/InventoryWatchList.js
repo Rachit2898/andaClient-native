@@ -129,10 +129,12 @@ const Inventory = () => {
             marginVertical: 10,
           }}
         />
-        <Text style={styles.pageText}>
-          Showing {pageFirst} - {pageLast} of{" "}
-          {inventoryWatchListData.totalResults} results
-        </Text>
+        {result.totalResults > 0 && (
+          <Text style={styles.pageText}>
+            Showing {pageFirst} - {pageLast} of{" "}
+            {inventoryWatchListData.totalResults} results
+          </Text>
+        )}
         <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
           {result.totalResults > 0 ? (
             <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false}>

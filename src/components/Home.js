@@ -71,10 +71,11 @@ export default function HomePage() {
   };
 
   useEffect(() => {
+    console.log(userInfoData?.validations?.[0]?.level);
     if (userInfoData?.validations?.[0]?.level === "ERROR") {
       dispatch(logout(false));
     }
-  }, []);
+  }, [userInfoData?.validations?.[0]?.level]);
 
   const userData = userInfoData;
   async function addItemIntoCart(skuId) {

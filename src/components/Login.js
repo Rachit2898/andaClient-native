@@ -198,11 +198,11 @@ export default function LoginScreen() {
                 )}
                 <View>
                   <View style={{ flexDirection: "row", marginTop: 20 }}>
-                    <TouchableOpacity style={styles.loginBtn}>
+                    <Pressable style={styles.loginBtn} onPress={submitHandler}>
                       <Text onPress={submitHandler} style={styles.loginText}>
                         SIGN IN
                       </Text>
-                    </TouchableOpacity>
+                    </Pressable>
                   </View>
                 </View>
               </View>

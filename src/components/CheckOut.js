@@ -24,9 +24,11 @@ const CheckOut = () => {
     dispatch(checkOutConfirmation(orderId));
   }, [dispatch]);
   const cartCount = cartValidateInfo?.order?.itemCount;
+
   return (
     <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
       <Navbar />
+      {console.log(cartCheckOutInfo)}
       {cartCheckOutInfo && (
         <View>
           <View style={styles.thankYouContainer}>
