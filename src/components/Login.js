@@ -59,6 +59,7 @@ export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [value, setValue] = useState(false);
+  const [show, setShow] = useState(true);
   const [isChecked, setChecked] = useState(false);
   const [credentialsError, setCredentialsError] = useState(false);
   const [loginError, setLoginError] = useState(false);
@@ -93,6 +94,11 @@ export default function LoginScreen() {
     // }
 
     const token = await Signin();
+    console.log(token.type === "signin/fulfilled");
+
+    if (token.type === "signin/fulfilled") {
+      setIsAuthenticating(false);
+    }
 
     if (token.type === "signin/rejected") {
       setLoginError(true);
@@ -104,6 +110,9 @@ export default function LoginScreen() {
 
   const checkHandler = () => {
     setChecked(!isChecked);
+  };
+  const showPasswordHandler = (value) => {
+    setShow((pre) => !pre);
   };
 
   return (
@@ -181,9 +190,30 @@ export default function LoginScreen() {
                   <TextInput
                     style={styles.TextInput}
                     placeholderTextColor="#003f5c"
-                    secureTextEntry={true}
+                    secureTextEntry={show}
                     onChangeText={(password) => setPassword(password)}
                   />
+                  <Pressable
+                    style={{
+                      justifyContent: "center",
+                      margin: 10,
+                      paddingHorizontal: 10,
+                      borderRadius: 3,
+                    }}
+                    onPress={() => showPasswordHandler(2)}
+                  >
+                    {show ? (
+                      <Image
+                        style={{ height: 15, width: 18 }}
+                        source={require("../../assets/closedEye.png")}
+                      />
+                    ) : (
+                      <Image
+                        style={{ height: 15, width: 18 }}
+                        source={require("../../assets/eye.png")}
+                      />
+                    )}
+                  </Pressable>
                 </View>
                 {loginError && (
                   <View style={styles.errorView}>
@@ -290,12 +320,14 @@ const styles = StyleSheet.create({
 
   inputView: {
     backgroundColor: "#fff",
-    borderWidth: 0.4,
+    borderWidth: 0.3,
     borderColor: "#9d9b9b",
     width: "100%",
     height: 45,
+    flexDirection: "row",
     borderRadius: 3,
-    justifyContent: "center", //Centered horizontally
+    padding: 2,
+    justifyContent: "space-between", //Centered horizontally
   },
 
   errorView: {
@@ -316,6 +348,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#494c4c",
     backgroundColor: "#fff",
+    width: "80%",
   },
 
   forgot_button: {

@@ -22,7 +22,6 @@ const SubmitCart = () => {
   };
   const editOrderNavigation = () => {
     navigation.navigate("Auth", { screen: "Cart" });
-    console.log("hello");
   };
   const cartCount = cartValidateInfo?.order?.itemCount;
   return (

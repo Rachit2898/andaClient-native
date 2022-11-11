@@ -78,8 +78,6 @@ const Inventory = () => {
   };
   const pageLast = currentLast(currentPage);
 
-  console.log("result", result?.totalResults);
-
   return (
     <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
       <Filter

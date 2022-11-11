@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Spinner from "./Spinner";
@@ -20,6 +21,58 @@ import {
   searchProducsts,
 } from "../../redux/features/productApi";
 import { changeUserPassword, loading } from "../../redux/features/authUser";
+
+const InputComponent = (props) => {
+  const [value, setValue] = useState(false);
+  const [isChecked, setChecked] = useState(false);
+  const isFocused = useIsFocused();
+  const [show, setShow] = useState(true);
+  const [error, setError] = useState(false);
+  const [nullValue, setNullValue] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(-1);
+
+  const showPasswordHandler = (value) => {
+    setShow((pre) => !pre);
+    setShowPassword(value);
+  };
+  console.log(props.onChangeText);
+  return (
+    <View>
+      <View style={styles.inputView}>
+        <TextInput
+          style={styles.TextInput}
+          placeholderTextColor="#003f5c"
+          secureTextEntry={show}
+          onChangeText={props.onChangeText}
+        />
+        <Pressable
+          style={{
+            justifyContent: "center",
+            margin: 10,
+            paddingHorizontal: 10,
+            borderRadius: 3,
+          }}
+          onPress={() => showPasswordHandler(2)}
+        >
+          {show ? (
+            <Image
+              style={{ height: 19, width: 18 }}
+              source={require("../../assets/eye.png")}
+            />
+          ) : (
+            <Image
+              style={{ height: 15, width: 18 }}
+              source={require("../../assets/closedEye.png")}
+            />
+          )}
+        </Pressable>
+      </View>
+    </View>
+  );
+};
 
 function MyCheckbox({
   checked,
@@ -50,12 +103,14 @@ const Account = () => {
   const dispatch = useDispatch();
   const [value, setValue] = useState(false);
   const [isChecked, setChecked] = useState(false);
+  const isFocused = useIsFocused();
   const [show, setShow] = useState(true);
   const [error, setError] = useState(false);
   const [nullValue, setNullValue] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(-1);
   const {
     userInfoData,
     cartInfoData,
@@ -70,11 +125,14 @@ const Account = () => {
       ...state.auth,
     })
   );
+  console.log({ newPassword });
   const userData = userInfoData;
   useEffect(() => {
     dispatch(userInfo());
     dispatch(cartInfo());
-  }, [dispatch]);
+
+    setShow(true);
+  }, [dispatch, isFocused]);
 
   const checkHandler = () => {
     setChecked(!isChecked);
@@ -89,9 +147,18 @@ const Account = () => {
 
   const showPasswordHandler = (value) => {
     setShow((pre) => !pre);
+    setShowPassword(value);
   };
   const updatePasswordHandler = (value) => {
     if (!newPassword) {
+      setNullValue(true);
+      return;
+    }
+    if (!currentPassword) {
+      setNullValue(true);
+      return;
+    }
+    if (!confirmPassword) {
       setNullValue(true);
       return;
     }
@@ -189,20 +256,16 @@ const Account = () => {
               style={{
                 borderColor: "#006ba6",
                 borderWidth: 1,
-                width: 100,
-                height: 45,
-
+                width: 60,
+                height: 25,
+                borderRadius: 4,
                 justifyContent: "center",
                 alignItems: "center",
               }}
               android_ripple={{ color: "#ccc" }}
             >
               <View>
-                <Text
-                  style={{ color: "#006ba6", fontSize: 12, fontWeight: "bold" }}
-                >
-                  UPDATE
-                </Text>
+                <Text style={styles.emptyText}>UPDATE</Text>
               </View>
             </Pressable>
           </View>
@@ -226,26 +289,20 @@ const Account = () => {
           </View>
           <View style={{ padding: 10 }}>
             <Text style={styles.labelContainer}>CURRENT PASSWORD*</Text>
-            <View style={styles.inputView}>
-              <TextInput
-                style={styles.TextInput}
-                placeholderTextColor="#003f5c"
-                secureTextEntry={show}
-                onChangeText={(password) => setCurrentPassword(password)}
-              />
-              <Pressable
-                style={{
-                  justifyContent: "center",
-                  margin: 10,
-                  paddingHorizontal: 10,
-                  backgroundColor: "#ccccc8",
-                  borderRadius: 3,
-                }}
-                onPress={() => showPasswordHandler(1)}
-              >
-                <Text style={{ color: "#4f4f4f" }}>Show</Text>
-              </Pressable>
-            </View>
+            <InputComponent
+              onChangeText={(password) => setCurrentPassword(password)}
+            />
+            {error && (
+              <View style={styles.errorView}>
+                <Image
+                  style={{ height: 19, width: 18 }}
+                  source={require("../../assets/errorAlert.png")}
+                />
+                <Text style={{ color: "#990909", marginHorizontal: 10 }}>
+                  password does not match
+                </Text>
+              </View>
+            )}
             {nullValue && (
               <View style={styles.errorView}>
                 <Image
@@ -258,26 +315,9 @@ const Account = () => {
               </View>
             )}
             <Text style={styles.labelContainer}>NEW PASSWORD*</Text>
-            <View style={styles.inputView}>
-              <TextInput
-                style={styles.TextInput}
-                placeholderTextColor="#003f5c"
-                secureTextEntry={show}
-                onChangeText={(password) => setNewPassword(password)}
-              />
-              <Pressable
-                style={{
-                  justifyContent: "center",
-                  margin: 10,
-                  paddingHorizontal: 10,
-                  backgroundColor: "#ccccc8",
-                  borderRadius: 3,
-                }}
-                onPress={() => showPasswordHandler(1)}
-              >
-                <Text style={{ color: "#4f4f4f" }}>Show</Text>
-              </Pressable>
-            </View>
+            <InputComponent
+              onChangeText={(password) => setNewPassword(password)}
+            />
             {error && (
               <View style={styles.errorView}>
                 <Image
@@ -301,26 +341,9 @@ const Account = () => {
               </View>
             )}
             <Text style={styles.labelContainer}>CONFIRM PASSWORD*</Text>
-            <View style={styles.inputView}>
-              <TextInput
-                style={styles.TextInput}
-                placeholderTextColor="#003f5c"
-                secureTextEntry={show}
-                onChangeText={(password) => setConfirmPassword(password)}
-              />
-              <Pressable
-                style={{
-                  justifyContent: "center",
-                  margin: 10,
-                  paddingHorizontal: 10,
-                  backgroundColor: "#ccccc8",
-                  borderRadius: 3,
-                }}
-                onPress={() => showPasswordHandler(1)}
-              >
-                <Text style={{ color: "#4f4f4f" }}>Show</Text>
-              </Pressable>
-            </View>
+            <InputComponent
+              onChangeText={(password) => setConfirmPassword(password)}
+            />
             {error && (
               <View style={styles.errorView}>
                 <Image
@@ -343,6 +366,18 @@ const Account = () => {
                 </Text>
               </View>
             )}
+            {error && (
+              <View style={styles.errorView}>
+                <Image
+                  style={{ height: 19, width: 18 }}
+                  source={require("../../assets/errorAlert.png")}
+                />
+                <Text style={{ color: "#990909", marginHorizontal: 10 }}>
+                  password does not match
+                </Text>
+              </View>
+            )}
+
             {changePasswordValue && (
               <View style={styles.errorView}>
                 <Image
@@ -358,9 +393,10 @@ const Account = () => {
               style={{
                 borderColor: "#006ba6",
                 borderWidth: 1,
-                width: 100,
-                height: 45,
+                width: 60,
+                height: 25,
                 marginTop: 10,
+                borderRadius: 4,
                 justifyContent: "center",
                 alignItems: "center",
               }}
@@ -368,11 +404,7 @@ const Account = () => {
               onPress={() => updatePasswordHandler()}
             >
               <View>
-                <Text
-                  style={{ color: "#006ba6", fontSize: 12, fontWeight: "bold" }}
-                >
-                  UPDATE
-                </Text>
+                <Text style={styles.emptyText}>UPDATE</Text>
               </View>
             </Pressable>
             <View
@@ -579,4 +611,9 @@ const styles = StyleSheet.create({
   },
   mainBoxLoading: { opacity: 0.2 },
   mainBox: { backgroundColor: "#fff" },
+  emptyText: {
+    color: "#006ba6",
+    fontSize: 10,
+    fontWeight: "bold",
+  },
 });

@@ -28,7 +28,6 @@ const CheckOut = () => {
   return (
     <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
       <Navbar />
-      {console.log(cartCheckOutInfo)}
       {cartCheckOutInfo && (
         <View>
           <View style={styles.thankYouContainer}>

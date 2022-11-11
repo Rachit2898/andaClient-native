@@ -322,7 +322,6 @@ export const searchItems = createAsyncThunk(
 export const searchProducts = createAsyncThunk(
   "urls/searchProducsts",
   async (searchItem) => {
-    console.log({ searchItem });
     const token = await getToken();
     var url = `https://staging.andanet.com/api/catalog/search?q=${searchItem}&suggesterUsed=true`;
     const response = await fetch(url, {

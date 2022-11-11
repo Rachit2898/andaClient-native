@@ -14,11 +14,17 @@ import Pagination from "./Pagination";
 import Spinner from "./Spinner";
 import Filter from "../filter/SearchProductFilter";
 import PreNegotiatedScreen from "../screens/SearchProductScreen";
-import { userInfo, searchProducts } from "../../redux/features/productApi";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import {
+  userInfo,
+  searchProducts,
+  productDetails,
+} from "../../redux/features/productApi";
 
 const SearchProduct = () => {
   const scrollRef = useRef();
   const [itemValues, setItem] = useState([]);
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -54,6 +60,17 @@ const SearchProduct = () => {
     setItem(item);
   };
 
+  const productDetailHandler = async (Id) => {
+    navigation.navigate("Auth", { screen: "ProductDetails" });
+    dispatch(productDetails(Id));
+  };
+
+  useEffect(() => {
+    if (searchProducstsData.totalResults === 1) {
+      productDetailHandler(searchProducstsData?.products[0]?.defaultSku?.id);
+    }
+  }, [searchProducstsData?.totalResults]);
+
   return (
     <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
       <View
@@ -86,15 +103,12 @@ const SearchProduct = () => {
         />
         {result.totalResults === 0 && (
           <View style={styles.emptyCart}>
-            <Text style={styles.emptyCartText}>
-              Oops!! Details are not available
-            </Text>
+            <Text style={styles.emptyCartText}>“No products found!”</Text>
           </View>
         )}
         {loading && <Spinner />}
         <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
-          {console.log("Loading", result.totalResults >= 0)}
-          {result.totalResults >= 0 ? (
+          {result.totalResults > 1 ? (
             <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false}>
               <View>
                 {data?.map((item, i) => {

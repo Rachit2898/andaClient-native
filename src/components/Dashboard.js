@@ -21,9 +21,13 @@ import {
 } from "@react-navigation/native";
 
 const Dashboard = ({ size }) => {
+  const { userInfoData } = useSelector((state) => ({
+    ...state.products,
+  }));
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(!modalVisible);
+  const userData = userInfoData;
   const logoutHandler = () => {
     navigation.navigate("Auth", { screen: "HomePage" });
     setTimeout(() => {
@@ -68,6 +72,21 @@ const Dashboard = ({ size }) => {
   };
   const closeButtonHandler = async () => {
     navigation.navigate("Auth");
+  };
+  const OrderingOptionsOpen = async () => {
+    navigation.navigate("Auth", { screen: "OrderingOptions" });
+  };
+  const OpeningAccountOpen = async () => {
+    navigation.navigate("Auth", { screen: "OpeningAccount" });
+  };
+  const PaymentOpen = async () => {
+    navigation.navigate("Auth", { screen: "Payment" });
+  };
+  const ReturnOpen = async () => {
+    navigation.navigate("Auth", { screen: "ReturnPolicy" });
+  };
+  const FaqOpen = async () => {
+    navigation.navigate("Auth", { screen: "Faq" });
   };
   return (
     <View style={styles.modalView}>
@@ -114,10 +133,10 @@ const Dashboard = ({ size }) => {
             />
           </View>
           <View style={{ marginHorizontal: 10 }}>
-            <Text style={{ fontSize: 15 }}>Account</Text>
+            <Text style={{ fontSize: 15 }}>{userData?.username}</Text>
           </View>
         </View>
-        <View
+        {/* <View
           style={{
             flexDirection: "row",
             alignItems: "center",
@@ -140,7 +159,7 @@ const Dashboard = ({ size }) => {
           <View style={{ marginHorizontal: 10 }}>
             <Text style={{ fontSize: 15 }}>Notifications</Text>
           </View>
-        </View>
+        </View> */}
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ marginBottom: 150 }}>
@@ -247,19 +266,49 @@ const Dashboard = ({ size }) => {
               <Text style={styles.productText}>Support</Text>
             </View>
             <View style={{ marginHorizontal: 10, paddingVertical: 5 }}>
-              <Text style={{ fontSize: 15, paddingVertical: 5 }}>
-                Ordering Options and Hours
-              </Text>
-              <Text style={{ fontSize: 15, paddingVertical: 5 }}>
-                Opening an Account
-              </Text>
-              <Text style={{ fontSize: 15, paddingVertical: 5 }}>
-                Payment Options
-              </Text>
-              <Text style={{ fontSize: 15, paddingVertical: 5 }}>
-                Return Policy
-              </Text>
-              <Text style={{ fontSize: 15, paddingVertical: 5 }}>FAQ'S</Text>
+              <Pressable
+                onPress={() => {
+                  OrderingOptionsOpen();
+                }}
+              >
+                <Text style={{ fontSize: 15, paddingVertical: 5 }}>
+                  Ordering Options and Hours
+                </Text>
+              </Pressable>
+              <Pressable
+                onPress={() => {
+                  OpeningAccountOpen();
+                }}
+              >
+                <Text style={{ fontSize: 15, paddingVertical: 5 }}>
+                  Opening an Account
+                </Text>
+              </Pressable>
+              <Pressable
+                onPress={() => {
+                  PaymentOpen();
+                }}
+              >
+                <Text style={{ fontSize: 15, paddingVertical: 5 }}>
+                  Payment Options
+                </Text>
+              </Pressable>
+              <Pressable
+                onPress={() => {
+                  ReturnOpen();
+                }}
+              >
+                <Text style={{ fontSize: 15, paddingVertical: 5 }}>
+                  Return Policy
+                </Text>
+              </Pressable>
+              <Pressable
+                onPress={() => {
+                  FaqOpen();
+                }}
+              >
+                <Text style={{ fontSize: 15, paddingVertical: 5 }}>FAQ'S</Text>
+              </Pressable>
               <Text style={{ fontSize: 15, paddingVertical: 5 }}>
                 Toll Free: 1-800-331-2632
               </Text>

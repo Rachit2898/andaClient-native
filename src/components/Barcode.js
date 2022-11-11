@@ -10,13 +10,14 @@ import {
   Alert,
 } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { searchProducts } from "../../redux/features/productApi";
 
 export default function Barcode() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const isFocused = useIsFocused();
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
 
@@ -27,7 +28,7 @@ export default function Barcode() {
     };
 
     getBarCodeScannerPermissions();
-  }, []);
+  }, [isFocused]);
 
   const handleBarCodeScanned = async ({ type, data }) => {
     // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
@@ -42,7 +43,6 @@ export default function Barcode() {
       Alert.alert(e.message);
       setScanned(true);
     }
-    // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
   };
 
   if (hasPermission === null) {

@@ -42,7 +42,7 @@ export default function HomePage() {
     dispatch(customerLikeYou());
     dispatch(preNegotiatedItems());
     dispatch(userInfo());
-  }, [dispatch]);
+  }, []);
 
   const inventoryOpen = async () => {
     navigation.navigate("Auth", { screen: "TopPurchase" });
@@ -71,7 +71,6 @@ export default function HomePage() {
   };
 
   useEffect(() => {
-    console.log(userInfoData?.validations?.[0]?.level);
     if (userInfoData?.validations?.[0]?.level === "ERROR") {
       dispatch(logout(false));
     }
@@ -209,7 +208,7 @@ export default function HomePage() {
                     Customer like you
                   </Text>
                 </Pressable>
-                <View>
+                {/* <View>
                   <Image
                     style={{
                       height: 50,
@@ -230,7 +229,7 @@ export default function HomePage() {
                   >
                     Customer resources
                   </Text>
-                </View>
+                </View> */}
               </View>
             </ScrollView>
             <View
@@ -824,12 +823,12 @@ export default function HomePage() {
                     style={{
                       borderRadius: 3,
                       marginVertical: 5,
-                      width: 100,
+                      width: 110,
                       height: 80,
                       justifyContent: "center",
                       alignSelf: "center",
                     }}
-                    source={require("../../assets/deliverycart.png")}
+                    source={require("../../assets/delivery.png")}
                   />
                 </View>
               </View>

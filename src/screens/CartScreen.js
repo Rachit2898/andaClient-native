@@ -84,6 +84,7 @@ const CartScreen = (props) => {
     setCurrentIndex(Id);
     try {
       dispatch(updateCartValues({ Id, count }));
+      setVisible(false);
     } catch (error) {
       Alert.alert("Could Not Update");
     }
@@ -92,6 +93,11 @@ const CartScreen = (props) => {
     navigation.navigate("Auth", { screen: "ProductDetails" });
     dispatch(productDetails(Id));
   };
+
+  useEffect(() => {
+    setVisible(false);
+    setCount(props.quantity);
+  }, [isFocused]);
 
   return (
     <View>

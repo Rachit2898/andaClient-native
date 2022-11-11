@@ -25,6 +25,11 @@ import PriceReduction from "./src/components/PriceReduction";
 import ShortDate from "./src/components/ShortDate";
 import ProductDetails from "./src/components/ProductDetails";
 import SearchProduct from "./src/components/SearchProduct";
+import OrderingOptions from "./src/screens/OrderingAndOptions.js";
+import OpeningAccount from "./src/screens/OpeningAccount.js";
+import PaymentOptions from "./src/screens/Payment.js";
+import ReturnPolicy from "./src/screens/ReturnPolicy.js";
+import Faq from "./src/screens/Faq.js";
 import Barcode from "./src/components/Barcode";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Badge, withBadge } from "react-native-elements";
@@ -233,6 +238,41 @@ function AuthenticatedStack() {
           <Stack.Screen
             name="Barcode"
             component={Barcode}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="OrderingOptions"
+            component={OrderingOptions}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="OpeningAccount"
+            component={OpeningAccount}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="Payment"
+            component={PaymentOptions}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="ReturnPolicy"
+            component={ReturnPolicy}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="Faq"
+            component={Faq}
             options={{
               headerShown: false,
             }}

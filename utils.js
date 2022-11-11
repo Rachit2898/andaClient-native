@@ -149,7 +149,7 @@ export function deleteItems(body) {
 
 export async function checkOutCart(orderId) {
   const token = await getToken();
-  var url = `https://staging.andanet.com/api/order/${orderId}/checkout?paymentType=invoice`;
+  var url = `https://staging.andanet.com/api/order/${orderId}/checkout?paymentType=invoice&source=web`;
   const response = await fetch(url, {
     method: "POST",
     headers: {
