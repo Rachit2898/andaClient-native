@@ -1,4 +1,12 @@
-import { StyleSheet, Text, View, ScrollView, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Image,
+  Linking,
+  Pressable,
+} from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Navbar from "../components/Navbar";
@@ -119,7 +127,12 @@ const OpeningAccount = () => {
               <Text style={{ fontWeight: "bold", fontSize: 12 }}>Step 5:</Text>
               <Text style={{ fontSize: 12 }}>Begin ordering!</Text>
             </View>
-            <View
+            <Pressable
+              onPress={() =>
+                Linking.openURL(
+                  "https://staging.andanet.com/cmsstatic/Anda-New-Customer-Packet-A01-60057-120921-v2.pdf"
+                )
+              }
               style={{
                 backgroundColor: "#006ba6",
                 justifyContent: "center",
@@ -132,7 +145,7 @@ const OpeningAccount = () => {
               <Text style={{ padding: 5, color: "#fff" }}>
                 Download Package
               </Text>
-            </View>
+            </Pressable>
           </View>
         </View>
         <Component

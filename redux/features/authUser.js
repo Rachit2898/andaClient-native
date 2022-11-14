@@ -33,6 +33,8 @@ export function containsObject(obj, list) {
 const initialState = {
   token: "",
   loading: false,
+  isFinger: false,
+  searchedValue: "",
   inventoryWatchUrls: [],
   customerLikeYouUrls: [],
   preNegotiatedUrls: [],
@@ -54,8 +56,15 @@ const authReducer = createSlice({
 
   reducers: {
     logout: (state, action) => {
-      state.isAuthenticated = action.payload;
       AsyncStorage.removeItem("token");
+      AsyncStorage.clear();
+      state.isAuthenticated = action.payload;
+    },
+    fingers: (state, action) => {
+      state.isFinger = action.payload;
+    },
+    searchValues: (state, action) => {
+      state.searchedValue = action.payload;
     },
     authenticate: (state, action) => {
       state.token = action.payload;
@@ -192,6 +201,8 @@ export const {
   updateFavoriteUrls,
   updatePriceReductionsUrls,
   setSorting,
+  searchValues,
+  fingers,
   updateSearchProductUrls,
 } = authReducer.actions;
 export default authReducer.reducer;

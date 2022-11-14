@@ -288,6 +288,7 @@ export const shortDate = createAsyncThunk("urls/shortDate", async (body) => {
 
 export const productDetails = createAsyncThunk(
   "urls/productDetails",
+
   async (id) => {
     const token = await getToken();
     var url = `https://staging.andanet.com/api/catalog/sku/${id}`;

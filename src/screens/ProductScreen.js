@@ -97,10 +97,13 @@ const ProductScreen = (props) => {
       }}
     >
       <View style={{ flexDirection: "row" }}>
-        <View
+        <Pressable
           style={{
             justifyContent: "center",
             alignSelf: "center",
+          }}
+          onPress={() => {
+            productDetailHandler(props.id);
           }}
         >
           {props.url ? (
@@ -128,7 +131,7 @@ const ProductScreen = (props) => {
               source={require("../../assets/camera.png")}
             />
           )}
-        </View>
+        </Pressable>
         <View
           style={{
             marginHorizontal: 10,

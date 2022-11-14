@@ -105,21 +105,27 @@ const YourTopPurchase = () => {
             <Text
               style={{ fontSize: 20, fontWeight: "bold", color: "#494c4c" }}
             >
-              Your Top Purchase
+              Your Top Purchases
             </Text>
           </View>
           {loading && <Spinner />}
           <Pressable
             style={{
               borderWidth: 1,
-              padding: 10,
-              paddingHorizontal: 30,
+              width: 60,
+              height: 25,
               borderColor: "#c77500",
               borderRadius: 3,
+              alignItems: "center",
+              justifyContent: "center",
             }}
             onPress={() => setModalVisible(true)}
           >
-            <Text style={{ fontWeight: "bold", color: "#c77500" }}>Filter</Text>
+            <Text
+              style={{ fontWeight: "bold", color: "#c77500", fontSize: 12 }}
+            >
+              Filter
+            </Text>
           </Pressable>
         </View>
         <View

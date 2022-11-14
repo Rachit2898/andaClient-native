@@ -88,6 +88,9 @@ const Dashboard = ({ size }) => {
   const FaqOpen = async () => {
     navigation.navigate("Auth", { screen: "Faq" });
   };
+  const SettingOpen = async () => {
+    navigation.navigate("Auth", { screen: "Settings" });
+  };
   return (
     <View style={styles.modalView}>
       <View style={styles.closeButton}>
@@ -115,11 +118,9 @@ const Dashboard = ({ size }) => {
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <View
             style={{
-              backgroundColor: "#006ba6",
               width: 25,
               justifyContent: "center",
               alignItems: "center",
-              borderRadius: 50,
               height: 25,
             }}
           >
@@ -128,7 +129,6 @@ const Dashboard = ({ size }) => {
               style={{
                 height: 20,
                 width: 20,
-                borderRadius: 50,
               }}
             />
           </View>
@@ -173,7 +173,13 @@ const Dashboard = ({ size }) => {
                   favoritesOpen();
                 }}
               >
-                <Text style={{ fontSize: 15, paddingVertical: 5 }}>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    paddingVertical: 5,
+                    textDecorationLine: "underline",
+                  }}
+                >
                   Favorites
                 </Text>
               </Pressable>
@@ -182,7 +188,13 @@ const Dashboard = ({ size }) => {
                   inventoryOpen();
                 }}
               >
-                <Text style={{ fontSize: 15, paddingVertical: 5 }}>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    paddingVertical: 5,
+                    textDecorationLine: "underline",
+                  }}
+                >
                   Inventory Watch List
                 </Text>
               </Pressable>
@@ -191,7 +203,13 @@ const Dashboard = ({ size }) => {
                   topPurchseOpen();
                 }}
               >
-                <Text style={{ fontSize: 15, paddingVertical: 5 }}>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    paddingVertical: 5,
+                    textDecorationLine: "underline",
+                  }}
+                >
                   Your Top Purchases
                 </Text>
               </Pressable>
@@ -200,7 +218,13 @@ const Dashboard = ({ size }) => {
                   preNegotiatedOpen();
                 }}
               >
-                <Text style={{ fontSize: 15, paddingVertical: 5 }}>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    paddingVertical: 5,
+                    textDecorationLine: "underline",
+                  }}
+                >
                   Pre-Negotiated items
                 </Text>
               </Pressable>
@@ -209,8 +233,14 @@ const Dashboard = ({ size }) => {
                   customerLikeYouOpen();
                 }}
               >
-                <Text style={{ fontSize: 15, paddingVertical: 5 }}>
-                  Customer Like You
+                <Text
+                  style={{
+                    fontSize: 15,
+                    paddingVertical: 5,
+                    textDecorationLine: "underline",
+                  }}
+                >
+                  Customers Like You
                 </Text>
               </Pressable>
             </View>
@@ -225,7 +255,13 @@ const Dashboard = ({ size }) => {
                   savingsOpen();
                 }}
               >
-                <Text style={{ fontSize: 15, paddingVertical: 5 }}>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    paddingVertical: 5,
+                    textDecorationLine: "underline",
+                  }}
+                >
                   Savings
                 </Text>
               </Pressable>
@@ -234,7 +270,13 @@ const Dashboard = ({ size }) => {
                   closeOutsOpen();
                 }}
               >
-                <Text style={{ fontSize: 15, paddingVertical: 5 }}>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    paddingVertical: 5,
+                    textDecorationLine: "underline",
+                  }}
+                >
                   Close Outs
                 </Text>
               </Pressable>
@@ -243,7 +285,13 @@ const Dashboard = ({ size }) => {
                   priceReductionOpen();
                 }}
               >
-                <Text style={{ fontSize: 15, paddingVertical: 5 }}>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    paddingVertical: 5,
+                    textDecorationLine: "underline",
+                  }}
+                >
                   Price Reductions
                 </Text>
               </Pressable>
@@ -252,13 +300,16 @@ const Dashboard = ({ size }) => {
                   shortDateOpen();
                 }}
               >
-                <Text style={{ fontSize: 15, paddingVertical: 5 }}>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    paddingVertical: 5,
+                    textDecorationLine: "underline",
+                  }}
+                >
                   Short Dates
                 </Text>
               </Pressable>
-              <Text style={{ fontSize: 15, paddingVertical: 5 }}>
-                Volume Discounts
-              </Text>
             </View>
           </View>
           <View style={{ marginVertical: 10 }}>
@@ -271,7 +322,13 @@ const Dashboard = ({ size }) => {
                   OrderingOptionsOpen();
                 }}
               >
-                <Text style={{ fontSize: 15, paddingVertical: 5 }}>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    paddingVertical: 5,
+                    textDecorationLine: "underline",
+                  }}
+                >
                   Ordering Options and Hours
                 </Text>
               </Pressable>
@@ -280,7 +337,13 @@ const Dashboard = ({ size }) => {
                   OpeningAccountOpen();
                 }}
               >
-                <Text style={{ fontSize: 15, paddingVertical: 5 }}>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    paddingVertical: 5,
+                    textDecorationLine: "underline",
+                  }}
+                >
                   Opening an Account
                 </Text>
               </Pressable>
@@ -289,7 +352,13 @@ const Dashboard = ({ size }) => {
                   PaymentOpen();
                 }}
               >
-                <Text style={{ fontSize: 15, paddingVertical: 5 }}>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    paddingVertical: 5,
+                    textDecorationLine: "underline",
+                  }}
+                >
                   Payment Options
                 </Text>
               </Pressable>
@@ -298,7 +367,13 @@ const Dashboard = ({ size }) => {
                   ReturnOpen();
                 }}
               >
-                <Text style={{ fontSize: 15, paddingVertical: 5 }}>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    paddingVertical: 5,
+                    textDecorationLine: "underline",
+                  }}
+                >
                   Return Policy
                 </Text>
               </Pressable>
@@ -307,7 +382,30 @@ const Dashboard = ({ size }) => {
                   FaqOpen();
                 }}
               >
-                <Text style={{ fontSize: 15, paddingVertical: 5 }}>FAQ'S</Text>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    paddingVertical: 5,
+                    textDecorationLine: "underline",
+                  }}
+                >
+                  FAQs
+                </Text>
+              </Pressable>
+              <Pressable
+                onPress={() => {
+                  SettingOpen();
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 15,
+                    paddingVertical: 5,
+                    textDecorationLine: "underline",
+                  }}
+                >
+                  Settings
+                </Text>
               </Pressable>
               <Text style={{ fontSize: 15, paddingVertical: 5 }}>
                 Toll Free: 1-800-331-2632

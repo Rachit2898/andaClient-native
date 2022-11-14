@@ -115,8 +115,26 @@ const CloseOutScreen = (props) => {
               <Text style={styles.bannerText}>C/O</Text>
             </View>
           )}
-          {props.url ? (
-            <>
+          <Pressable
+            onPress={() => {
+              productDetailHandler(props.id);
+            }}
+          >
+            {props.url ? (
+              <>
+                <Image
+                  style={{
+                    borderRadius: 3,
+                    marginVertical: 5,
+                    width: 80,
+                    height: 80,
+                  }}
+                  source={{
+                    uri: `https://staging.andanet.com${props?.url}`,
+                  }}
+                />
+              </>
+            ) : (
               <Image
                 style={{
                   borderRadius: 3,
@@ -124,22 +142,10 @@ const CloseOutScreen = (props) => {
                   width: 80,
                   height: 80,
                 }}
-                source={{
-                  uri: `https://staging.andanet.com${props?.url}`,
-                }}
+                source={require("../../assets/camera.png")}
               />
-            </>
-          ) : (
-            <Image
-              style={{
-                borderRadius: 3,
-                marginVertical: 5,
-                width: 80,
-                height: 80,
-              }}
-              source={require("../../assets/camera.png")}
-            />
-          )}
+            )}
+          </Pressable>
         </View>
         <View
           style={{

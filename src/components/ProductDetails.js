@@ -6,6 +6,7 @@ import {
   Pressable,
   TextInput,
   ScrollView,
+  BackHandler,
   Alert,
 } from "react-native";
 import React, { useState, useEffect } from "react";
@@ -31,6 +32,10 @@ const ProductDetails = () => {
     useSelector((state) => ({
       ...state.products,
     }));
+
+  const { searchedValue } = useSelector((state) => ({
+    ...state.auth,
+  }));
   const userData = userInfoData;
   const items = productDetailsData;
 
@@ -39,6 +44,7 @@ const ProductDetails = () => {
   };
   useEffect(() => {
     dispatch(userInfo());
+    setCount(1);
   }, [isFocused]);
 
   const removeButton = () => {
@@ -56,9 +62,13 @@ const ProductDetails = () => {
 
   return (
     <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
-      <Navbar />
       <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
         {loading && <Spinner />}
+        {!!searchedValue && (
+          <Text style={styles.pageText}>
+            Showing results for "{searchedValue}"
+          </Text>
+        )}
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{ height: 200, marginVertical: 20 }}>
             {items?.product?.mediaMap?.primary?.url ? (
@@ -112,7 +122,7 @@ const ProductDetails = () => {
           </View>
           <View
             style={{
-              borderTopWidth: 0.5,
+              borderTopWidth: 0.3,
               borderColor: "#ececec",
               marginTop: 20,
             }}
@@ -120,7 +130,7 @@ const ProductDetails = () => {
             <View
               style={{
                 flexDirection: "row",
-                borderWidth: 0.4,
+                borderWidth: 0.3,
                 justifyContent: "center",
                 margin: 10,
               }}
@@ -226,34 +236,68 @@ const ProductDetails = () => {
                 <View
                   style={{
                     alignSelf: "center",
-                    paddingHorizontal: 5,
+
+                    width: 30,
                   }}
-                >
-                  <Text style={{ color: "#005185" }}>{count}</Text>
-                </View>
-                <Pressable
-                  style={{
-                    borderLeftWidth: 1,
-                    borderColor: "#878787",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    paddingHorizontal: 5,
-                    backgroundColor: "#cfcccc",
-                  }}
-                  onPress={() => {
-                    addButton();
-                  }}
-                  disabled={count === 3}
                 >
                   <Text
                     style={{
-                      fontWeight: "bold",
-                      fontSize: 15,
+                      color: "#005185",
+                      alignSelf: "center",
+                      justifyContent: "center",
                     }}
                   >
-                    +
+                    {count}
                   </Text>
-                </Pressable>
+                </View>
+                {!!items.dailyOrderLimit ? (
+                  <Pressable
+                    style={{
+                      borderLeftWidth: 1,
+                      borderColor: "#878787",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      paddingHorizontal: 5,
+                      backgroundColor: "#cfcccc",
+                    }}
+                    onPress={() => {
+                      addButton();
+                    }}
+                    disabled={count === items.dailyOrderLimit}
+                  >
+                    <Text
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: 15,
+                      }}
+                    >
+                      +
+                    </Text>
+                  </Pressable>
+                ) : (
+                  <Pressable
+                    style={{
+                      borderLeftWidth: 1,
+                      borderColor: "#878787",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      paddingHorizontal: 5,
+                      backgroundColor: "#cfcccc",
+                    }}
+                    onPress={() => {
+                      addButton();
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: 15,
+                      }}
+                    >
+                      +
+                    </Text>
+                  </Pressable>
+                )}
               </View>
               <Pressable
                 style={{
@@ -279,6 +323,21 @@ const ProductDetails = () => {
                 </Text>
               </Pressable>
             </View>
+            {!!items.dailyOrderLimit && (
+              <View
+                style={{
+                  height: 20,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                {count === items.dailyOrderLimit && (
+                  <Text style={{ fontSize: 12, color: "#bd1c1c" }}>
+                    You Can Add Only {items.dailyOrderLimit} Items
+                  </Text>
+                )}
+              </View>
+            )}
           </View>
           <View>
             <View
@@ -340,7 +399,6 @@ const ProductDetails = () => {
                   style={{
                     fontSize: 12,
                     flexWrap: "wrap",
-
                     flex: 1,
                   }}
                 >
@@ -441,4 +499,12 @@ export default ProductDetails;
 const styles = StyleSheet.create({
   mainBoxLoading: { flex: 1, opacity: 0.2 },
   mainBox: { flex: 1, backgroundColor: "#fff" },
+  pageText: {
+    color: "#494c4c",
+    fontWeight: "600",
+    fontSize: 18,
+    paddingHorizontal: 10,
+    alignSelf: "center",
+    justifyContent: "center",
+  },
 });

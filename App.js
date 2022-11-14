@@ -16,10 +16,13 @@ function Root() {
   // const navigation = useNavigation();
   const [isTryingLogin, setIsTryingLogin] = useState(true);
   const dispatch = useDispatch();
+  const { isAuthenticated } = useSelector((state) => ({
+    ...state.auth,
+  }));
+
   useEffect(() => {
     async function fetchToken() {
       const storedToken = await getToken();
-
       if (storedToken) {
         dispatch(authenticate(storedToken));
       }
@@ -27,7 +30,7 @@ function Root() {
     }
 
     fetchToken();
-  }, []);
+  }, [isAuthenticated]);
   if (isTryingLogin) {
     return <View />;
   }

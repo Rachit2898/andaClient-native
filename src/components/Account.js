@@ -13,6 +13,7 @@ import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Spinner from "./Spinner";
+import Moment from "moment";
 
 import {
   userInfo,
@@ -25,6 +26,7 @@ import { changeUserPassword, loading } from "../../redux/features/authUser";
 const InputComponent = (props) => {
   const [value, setValue] = useState(false);
   const [isChecked, setChecked] = useState(false);
+
   const isFocused = useIsFocused();
   const [show, setShow] = useState(true);
   const [error, setError] = useState(false);
@@ -38,7 +40,6 @@ const InputComponent = (props) => {
     setShow((pre) => !pre);
     setShowPassword(value);
   };
-  console.log(props.onChangeText);
   return (
     <View>
       <View style={styles.inputView}>
@@ -59,7 +60,7 @@ const InputComponent = (props) => {
         >
           {show ? (
             <Image
-              style={{ height: 19, width: 18 }}
+              style={{ height: 15, width: 18 }}
               source={require("../../assets/eye.png")}
             />
           ) : (
@@ -104,6 +105,8 @@ const Account = () => {
   const [value, setValue] = useState(false);
   const [isChecked, setChecked] = useState(false);
   const isFocused = useIsFocused();
+  const [cmeaDate, setCmeaDate] = useState();
+  const [cmeaCertificationDate, setCmeaCertificationDate] = useState();
   const [show, setShow] = useState(true);
   const [error, setError] = useState(false);
   const [nullValue, setNullValue] = useState(false);
@@ -125,7 +128,6 @@ const Account = () => {
       ...state.auth,
     })
   );
-  console.log({ newPassword });
   const userData = userInfoData;
   useEffect(() => {
     dispatch(userInfo());
@@ -171,6 +173,14 @@ const Account = () => {
     }
   };
 
+  useEffect(() => {
+    setCmeaDate(
+      Moment(userData?.selectedAccount?.cmeaCertificationExpiration).format(
+        "MM/DD/YYYY hh:mmA"
+      )
+    );
+  }, [userData]);
+
   return (
     <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -183,11 +193,10 @@ const Account = () => {
         >
           <View
             style={{
-              backgroundColor: "#006ba6",
               width: 25,
               justifyContent: "center",
               alignItems: "center",
-              borderRadius: 50,
+
               height: 25,
               paddingHorizontal: 10,
             }}
@@ -197,7 +206,6 @@ const Account = () => {
               style={{
                 height: 20,
                 width: 20,
-                borderRadius: 50,
               }}
             />
           </View>
@@ -427,55 +435,98 @@ const Account = () => {
           <View style={{ padding: 10 }}>
             <View style={{ flexDirection: "row" }}>
               <Text>Account Number:</Text>
-              <Text style={{ marginLeft: 5 }}>101946</Text>
+              <Text style={{ marginLeft: 5 }}>
+                {userData?.selectedAccount?.id}
+              </Text>
             </View>
             <View style={{ flexDirection: "row", marginTop: 5 }}>
               <Text>Billing Account Number:</Text>
-              <Text style={{ marginLeft: 5 }}>101946</Text>
+              <Text style={{ marginLeft: 5 }}>
+                {userData?.selectedAccount?.jdeNumber}
+              </Text>
             </View>
             <View style={{ flexDirection: "row", marginTop: 5 }}>
               <Text>DEA Number:</Text>
-              <Text style={{ marginLeft: 5 }}>101946</Text>
+              <Text style={{ marginLeft: 5 }}>
+                {userData?.selectedAccount?.deaNumber}
+              </Text>
             </View>
             <View style={{ flexDirection: "row", marginTop: 5 }}>
               <Text>DEA Expiration:</Text>
-              <Text style={{ marginLeft: 5 }}>101946</Text>
+              <Text style={{ marginLeft: 5 }}>
+                {Moment(userData?.selectedAccount?.deaExpiration).format(
+                  "MM/DD/YYYY hh:mmA"
+                )}
+              </Text>
             </View>
             <View style={{ flexDirection: "row", marginTop: 5 }}>
               <Text>State License</Text>
-              <Text style={{ marginLeft: 5 }}>101946</Text>
+              <Text style={{ marginLeft: 5 }}>
+                {userData?.selectedAccount?.accountDetail?.stateLicense}
+              </Text>
             </View>
             <View style={{ flexDirection: "row", marginTop: 5 }}>
               <Text>State License Expiration:</Text>
-              <Text style={{ marginLeft: 5 }}>101946</Text>
+              <Text style={{ marginLeft: 5 }}>
+                {Moment(
+                  userData?.selectedAccount?.accountDetail
+                    ?.stateLicenseExpiration
+                ).format("MM/DD/YYYY hh:mmA")}
+              </Text>
             </View>
             <View style={{ flexDirection: "row", marginTop: 5 }}>
               <Text>State Control License:</Text>
-              <Text style={{ marginLeft: 5 }}>101946</Text>
+              <Text style={{ marginLeft: 5 }}>
+                {userData?.selectedAccount?.accountDetail?.stateControlLicense}
+              </Text>
             </View>
             <View style={{ flexDirection: "row", marginTop: 5 }}>
               <Text>State Control License Expiration:</Text>
-              <Text style={{ marginLeft: 5 }}>101946</Text>
+              <Text style={{ marginLeft: 5 }}>
+                {Moment(
+                  userData?.selectedAccount?.accountDetail
+                    ?.stateControlLicenseExpiration
+                ).format("MM/DD/YYYY hh:mmA")}
+              </Text>
             </View>
             <View style={{ flexDirection: "row", marginTop: 5 }}>
               <Text>CMEA Certification Date:</Text>
-              <Text style={{ marginLeft: 5 }}>101946</Text>
+              <Text style={{ marginLeft: 5 }}>
+                {Moment(
+                  userData?.selectedAccount?.cmeaCertificationDate
+                ).format("MM/DD/YYYY")}
+              </Text>
             </View>
             <View style={{ flexDirection: "row", marginTop: 5 }}>
               <Text>CMEA Certification Expiration:</Text>
-              <Text style={{ marginLeft: 5 }}>101946</Text>
+              <Text style={{ marginLeft: 5 }}>
+                {Moment(
+                  userData?.selectedAccount?.cmeaCertificationExpiration
+                ).format("MM/DD/YYYY hh:mmA")}
+              </Text>
             </View>
             <View style={{ flexDirection: "row", marginTop: 5 }}>
               <Text>Sales Rep:</Text>
-              <Text style={{ marginLeft: 5 }}>101946</Text>
+              <Text style={{ marginLeft: 5 }}>
+                {userData?.selectedAccount?.accountDetail?.accountRep.name}
+              </Text>
             </View>
             <View style={{ flexDirection: "row", marginTop: 5 }}>
               <Text>Phone:</Text>
-              <Text style={{ marginLeft: 5, color: "#006ba6" }}>101946</Text>
+              <Text style={{ marginLeft: 5, color: "#006ba6" }}>
+                {userData?.selectedAccount?.accountDetail?.accountRep.number}
+                <Text> EXT: </Text>
+                {userData?.selectedAccount?.accountDetail?.accountRep.extension}
+              </Text>
             </View>
             <View style={{ flexDirection: "row", marginTop: 5 }}>
               <Text>Sales Rep Email:</Text>
-              <Text style={{ marginLeft: 5, color: "#006ba6" }}>101946</Text>
+              <Text style={{ marginLeft: 5, color: "#006ba6" }}>
+                {
+                  userData?.selectedAccount?.accountDetail?.accountRep
+                    .salesRepEmail
+                }
+              </Text>
             </View>
             <View style={{ flexDirection: "row", marginTop: 5 }}>
               <Text style={{ fontSize: 10 }}>

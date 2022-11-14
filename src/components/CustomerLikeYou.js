@@ -110,15 +110,20 @@ const CustomerLikeYou = () => {
           <Pressable
             style={{
               borderWidth: 1,
-              alignItems: "center",
-              justifyContent: "center",
-              paddingHorizontal: 30,
+              width: 60,
+              height: 25,
               borderColor: "#c77500",
               borderRadius: 3,
+              alignItems: "center",
+              justifyContent: "center",
             }}
             onPress={() => setModalVisible(true)}
           >
-            <Text style={{ fontWeight: "bold", color: "#c77500" }}>Filter</Text>
+            <Text
+              style={{ fontWeight: "bold", color: "#c77500", fontSize: 12 }}
+            >
+              Filter
+            </Text>
           </Pressable>
         </View>
         <View

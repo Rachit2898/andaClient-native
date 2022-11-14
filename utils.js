@@ -163,6 +163,12 @@ export async function checkOutCart(orderId) {
   return data;
 }
 
+export const getBioMatricsDetails = async () => {
+  const bioMatrics = JSON.parse(await AsyncStorage.getItem("bioMatrics"));
+
+  return bioMatrics;
+};
+
 const range = (start, end) => {
   let length = end - start + 1;
   /*

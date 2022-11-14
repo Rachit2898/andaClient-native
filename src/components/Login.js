@@ -1,3 +1,4 @@
+"use strict";
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect, useContext } from "react";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
@@ -6,9 +7,7 @@ import { signin, authenticate } from "../../redux/features/authUser";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
 import Spinner from "./Spinner";
-
 import {
   StyleSheet,
   Text,
@@ -19,6 +18,7 @@ import {
   Alert,
   Pressable,
   TouchableOpacity,
+  KeyboardAvoidingView,
 } from "react-native";
 
 function MyCheckbox({
@@ -94,7 +94,6 @@ export default function LoginScreen() {
     // }
 
     const token = await Signin();
-    console.log(token.type === "signin/fulfilled");
 
     if (token.type === "signin/fulfilled") {
       setIsAuthenticating(false);
@@ -122,10 +121,12 @@ export default function LoginScreen() {
           style={{
             backgroundColor: "white",
             flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           {!isAuthenticating ? (
-            <View style={styles.container}>
+            <KeyboardAvoidingView style={styles.container}>
               <Image
                 style={styles.image}
                 source={require("../../assets/logo.png")}
@@ -209,7 +210,7 @@ export default function LoginScreen() {
                       />
                     ) : (
                       <Image
-                        style={{ height: 15, width: 18 }}
+                        style={{ height: 20, width: 18 }}
                         source={require("../../assets/eye.png")}
                       />
                     )}
@@ -282,7 +283,7 @@ export default function LoginScreen() {
                   </Text>
                 </View>
               </View>
-            </View>
+            </KeyboardAvoidingView>
           ) : (
             <View>
               <Spinner />
@@ -316,6 +317,7 @@ const styles = StyleSheet.create({
     width: 150,
     height: 80,
     alignSelf: "center",
+    justifyContent: "center",
   },
 
   inputView: {

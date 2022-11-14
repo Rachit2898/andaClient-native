@@ -97,7 +97,7 @@ const CartScreen = (props) => {
   useEffect(() => {
     setVisible(false);
     setCount(props.quantity);
-  }, [isFocused]);
+  }, [isFocused, props.quantity]);
 
   return (
     <View>

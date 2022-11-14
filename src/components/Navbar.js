@@ -16,6 +16,7 @@ import {
   searchItems,
   searchProducts,
 } from "../../redux/features/productApi";
+import { searchValues } from "../../redux/features/authUser.js";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -37,6 +38,7 @@ const Navbar = () => {
   const searchProductHandler = async (item) => {
     try {
       dispatch(searchProducts(item));
+      dispatch(searchValues(item));
       navigation.navigate("Auth", { screen: "SearchProduct" });
       setOpenSearch(false);
     } catch (e) {

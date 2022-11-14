@@ -22,10 +22,13 @@ import {
   productDetails,
 } from "../../redux/features/productApi";
 import { logout, authenticate } from "../../redux/features/authUser";
+import dataSlider from "./DataSlider.js";
+import ImageSlider from "./ImageSlide.js";
 
 export default function HomePage() {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const [slideIndex, setSlideIndex] = useState(1);
   const {
     topPurchaseProducts,
     customerLikeYouProducts,
@@ -85,6 +88,28 @@ export default function HomePage() {
       Alert.alert("Could not Update Product!!");
     }
   }
+
+  const nextSlide = () => {
+    if (slideIndex !== dataSlider.length) {
+      setSlideIndex(slideIndex + 1);
+    } else if (slideIndex === dataSlider.length) {
+      setSlideIndex(1);
+    }
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      nextSlide();
+    }, 2500);
+  }, [slideIndex]);
+
+  const moveDot = (index) => {
+    setSlideIndex(index);
+  };
+
+  const img1 = require("../../assets/image1.jpeg");
+  const img2 = require("../../assets/image2.jpeg");
+  const img3 = require("../../assets/image3.jpeg");
 
   return (
     <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
@@ -205,7 +230,7 @@ export default function HomePage() {
                       width: 110,
                     }}
                   >
-                    Customer like you
+                    Customers like you
                   </Text>
                 </Pressable>
                 {/* <View>
@@ -239,22 +264,22 @@ export default function HomePage() {
                 marginVertical: 10,
               }}
             />
+
             <View
               style={{
-                marginHorizontal: 10,
+                paddingHorizontal: 10,
                 backgroundColor: "#fafafa",
                 paddingVertical: 5,
+                borderRadius: 3,
               }}
             >
-              <Image
+              <View
                 style={{
-                  borderRadius: 3,
-                  marginVertical: 5,
-                  justifyContent: "center",
-                  alignSelf: "center",
+                  marginHorizontal: "auto",
                 }}
-                source={require("../../assets/medicines.jpeg")}
-              />
+              >
+                <ImageSlider />
+              </View>
             </View>
 
             <View style={{ margin: 10, height: 250 }}>
@@ -315,35 +340,41 @@ export default function HomePage() {
                           marginHorizontal: 2,
                         }}
                       >
-                        {item?.mediaMap?.primary?.url ? (
-                          <Image
-                            style={{
-                              borderRadius: 3,
-                              marginVertical: 5,
-                              width: 80,
-                              borderRadius: 7,
-                              height: 80,
-                              justifyContent: "center",
-                              alignSelf: "center",
-                            }}
-                            source={{
-                              uri: `https://staging.andanet.com${item?.mediaMap?.primary?.url}`,
-                            }}
-                          />
-                        ) : (
-                          <Image
-                            style={{
-                              borderRadius: 3,
-                              marginVertical: 5,
-                              width: 80,
-                              height: 80,
-                              borderRadius: 7,
-                              justifyContent: "center",
-                              alignSelf: "center",
-                            }}
-                            source={require("../../assets/camera.png")}
-                          />
-                        )}
+                        <Pressable
+                          onPress={() => {
+                            productDetailHandler(item?.defaultSku?.id);
+                          }}
+                        >
+                          {item?.mediaMap?.primary?.url ? (
+                            <Image
+                              style={{
+                                borderRadius: 3,
+                                marginVertical: 5,
+                                width: 80,
+                                borderRadius: 7,
+                                height: 80,
+                                justifyContent: "center",
+                                alignSelf: "center",
+                              }}
+                              source={{
+                                uri: `https://staging.andanet.com${item?.mediaMap?.primary?.url}`,
+                              }}
+                            />
+                          ) : (
+                            <Image
+                              style={{
+                                borderRadius: 3,
+                                marginVertical: 5,
+                                width: 80,
+                                height: 80,
+                                borderRadius: 7,
+                                justifyContent: "center",
+                                alignSelf: "center",
+                              }}
+                              source={require("../../assets/camera.png")}
+                            />
+                          )}
+                        </Pressable>
                         <Pressable
                           style={{
                             margin: 5,
@@ -489,35 +520,41 @@ export default function HomePage() {
                           marginHorizontal: 2,
                         }}
                       >
-                        {item?.mediaMap?.primary?.url ? (
-                          <Image
-                            style={{
-                              borderRadius: 3,
-                              marginVertical: 5,
-                              width: 80,
-                              height: 80,
-                              borderRadius: 7,
-                              justifyContent: "center",
-                              alignSelf: "center",
-                            }}
-                            source={{
-                              uri: `https://staging.andanet.com${item?.mediaMap?.primary?.url}`,
-                            }}
-                          />
-                        ) : (
-                          <Image
-                            style={{
-                              borderRadius: 3,
-                              marginVertical: 5,
-                              width: 80,
-                              height: 80,
-                              borderRadius: 7,
-                              justifyContent: "center",
-                              alignSelf: "center",
-                            }}
-                            source={require("../../assets/camera.png")}
-                          />
-                        )}
+                        <Pressable
+                          onPress={() => {
+                            productDetailHandler(item?.defaultSku?.id);
+                          }}
+                        >
+                          {item?.mediaMap?.primary?.url ? (
+                            <Image
+                              style={{
+                                borderRadius: 3,
+                                marginVertical: 5,
+                                width: 80,
+                                height: 80,
+                                borderRadius: 7,
+                                justifyContent: "center",
+                                alignSelf: "center",
+                              }}
+                              source={{
+                                uri: `https://staging.andanet.com${item?.mediaMap?.primary?.url}`,
+                              }}
+                            />
+                          ) : (
+                            <Image
+                              style={{
+                                borderRadius: 3,
+                                marginVertical: 5,
+                                width: 80,
+                                height: 80,
+                                borderRadius: 7,
+                                justifyContent: "center",
+                                alignSelf: "center",
+                              }}
+                              source={require("../../assets/camera.png")}
+                            />
+                          )}
+                        </Pressable>
                         <Pressable
                           style={{
                             margin: 5,
@@ -663,37 +700,43 @@ export default function HomePage() {
                           marginHorizontal: 2,
                         }}
                       >
-                        {item?.mediaMap?.primary?.url ? (
-                          <Image
-                            style={{
-                              borderRadius: 3,
-                              marginVertical: 5,
-                              width: 80,
-                              borderRadius: 7,
-                              height: 80,
-                              justifyContent: "center",
-                              alignSelf: "center",
-                            }}
-                            source={{
-                              uri: `https://staging.andanet.com${item?.mediaMap?.primary?.url}`,
-                            }}
-                          />
-                        ) : (
-                          <Image
-                            style={{
-                              borderRadius: 3,
-                              marginVertical: 5,
-                              width: 80,
-                              height: 80,
-                              borderRadius: 7,
-                              justifyContent: "center",
-                              alignSelf: "center",
-                            }}
-                            source={{
-                              uri: `https://staging.andanet.com${item?.mediaMap?.primary?.url}`,
-                            }}
-                          />
-                        )}
+                        <Pressable
+                          onPress={() => {
+                            productDetailHandler(item?.defaultSku?.id);
+                          }}
+                        >
+                          {item?.mediaMap?.primary?.url ? (
+                            <Image
+                              style={{
+                                borderRadius: 3,
+                                marginVertical: 5,
+                                width: 80,
+                                borderRadius: 7,
+                                height: 80,
+                                justifyContent: "center",
+                                alignSelf: "center",
+                              }}
+                              source={{
+                                uri: `https://staging.andanet.com${item?.mediaMap?.primary?.url}`,
+                              }}
+                            />
+                          ) : (
+                            <Image
+                              style={{
+                                borderRadius: 3,
+                                marginVertical: 5,
+                                width: 80,
+                                height: 80,
+                                borderRadius: 7,
+                                justifyContent: "center",
+                                alignSelf: "center",
+                              }}
+                              source={{
+                                uri: `https://staging.andanet.com${item?.mediaMap?.primary?.url}`,
+                              }}
+                            />
+                          )}
+                        </Pressable>
                         <Pressable
                           style={{
                             margin: 5,
@@ -892,4 +935,28 @@ export default function HomePage() {
 const styles = StyleSheet.create({
   mainBoxLoading: { opacity: 0.2, backgroundColor: "#fff" },
   mainBox: { backgroundColor: "#fff" },
+  slide: {
+    marginHorizontal: 10,
+    paddingVertical: 10,
+  },
+  slideAnim: {
+    marginHorizontal: 10,
+    backgroundColor: "#006ba6",
+    paddingVertical: 10,
+    opacity: 1,
+  },
+
+  // dot: {
+  //   width: 20,
+  //   height: 20,
+  //   borderRadius: "50%",
+  //   borderWidth: 3,
+  //   margin: 5,
+  //   backgroundColor: "black",
+  //   flexDirection: "row",
+  // },
+  // dotActive: {
+  //   backgroundColor: "red",
+  //   flexDirection: "row",
+  // },
 });
