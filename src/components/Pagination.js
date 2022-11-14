@@ -39,19 +39,23 @@ const Pagination = (props) => {
           style={{ width: 20, height: 20, marginTop: 10 }}
         />
       </Pressable>
-      {paginationRange?.map((pageNumber) => {
+      {paginationRange?.map((pageNumber, i) => {
         const myValue = pageNumber === currentPage;
 
         if (pageNumber === DOTS) {
           return (
-            <View>
-              <Text>&#8230;</Text>
+            <View key={i}>
+              {console.log(pageNumber, i)}
+              <View>
+                <Text>&#8230;</Text>
+              </View>
             </View>
           );
         }
 
         return (
           <Pressable
+            key={i + "A"}
             style={
               myValue
                 ? {
@@ -69,7 +73,9 @@ const Pagination = (props) => {
             onPress={() => onPageChange(pageNumber)}
             selected={pageNumber === currentPage}
           >
-            <Text style={styles.paginationNumber}>{pageNumber}</Text>
+            <Text key={i + 5} style={styles.paginationNumber}>
+              {pageNumber}
+            </Text>
           </Pressable>
         );
       })}

@@ -164,7 +164,7 @@ const Filter = ({ modalVisible, setModalVisible }) => {
                 </View>
                 {filterValues?.map((item) => {
                   return (
-                    <View>
+                    <View key={item?.label}>
                       <View style={styles.headingAvailability}>
                         <Text style={styles.headingAvalText}>
                           {item?.label}
@@ -180,7 +180,7 @@ const Filter = ({ modalVisible, setModalVisible }) => {
                           <View>
                             {item?.values?.map((value) => {
                               return (
-                                <View>
+                                <View key={value?.quantity}>
                                   {value?.quantity ? (
                                     <View
                                       style={{

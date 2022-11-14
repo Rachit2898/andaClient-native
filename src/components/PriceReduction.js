@@ -147,7 +147,7 @@ const PriceReductionItems = () => {
                       item?.defaultSku?.availabilityDetail?.quantityAvailable;
 
                     return (
-                      <View>
+                      <View key={item?.defaultSku?.id}>
                         <PriceReductionScreen
                           url={item?.mediaMap?.primary?.url}
                           name={item?.defaultSku?.name}

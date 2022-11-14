@@ -320,6 +320,8 @@ export const searchItems = createAsyncThunk(
     return myData;
   }
 );
+
+//https://staging.andanet.com/api/catalog/search?page=1&characteristicFacet=Anda%20Contract&q=*
 export const searchProducts = createAsyncThunk(
   "urls/searchProducsts",
   async (searchItem) => {
@@ -335,6 +337,23 @@ export const searchProducts = createAsyncThunk(
 
     const myData = await response.json();
 
+    return myData;
+  }
+);
+
+export const andaContractItems = createAsyncThunk(
+  "urls/shortDate",
+  async (body) => {
+    const token = await getToken();
+    var url = `https://staging.andanet.com/api/catalog/search?page=1&characteristicFacet=Anda%20Contract&q=*`;
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
+    const myData = await response.json();
     return myData;
   }
 );
@@ -369,6 +388,7 @@ const productSlice = createSlice({
     updateCart: {},
     searchItem: [],
     searchProducstsData: {},
+    andaContractItemsData: {},
   },
   extraReducers: {
     [yourTopPurChase.pending]: (state, action) => {
@@ -634,6 +654,17 @@ const productSlice = createSlice({
       state.searchProducstsData = action.payload;
     },
     [searchProducts.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [andaContractItems.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [andaContractItems.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.andaContractItemsData = action.payload;
+    },
+    [andaContractItems.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },

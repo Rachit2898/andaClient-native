@@ -118,7 +118,7 @@ const Cart = () => {
               <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
                 {orderItems?.map((item) => {
                   return (
-                    <View>
+                    <View key={item.id}>
                       <CartScreen
                         url={item?.primaryMedia?.url}
                         name={item?.sku?.name}

@@ -147,7 +147,7 @@ const CustomerLikeYou = () => {
                     item?.defaultSku?.availabilityDetail?.quantityAvailable;
 
                   return (
-                    <View>
+                    <View key={item?.defaultSku?.id}>
                       <ProductScreen
                         url={item?.mediaMap?.primary?.url}
                         name={item?.defaultSku?.name}

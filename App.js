@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { View, Platform } from "react-native";
+import { enableFreeze } from "react-native-screens";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -20,20 +21,17 @@ function Root() {
     ...state.auth,
   }));
 
-  useEffect(() => {
-    async function fetchToken() {
-      const storedToken = await getToken();
-      if (storedToken) {
-        dispatch(authenticate(storedToken));
-      }
-      setIsTryingLogin(false);
+  async function fetchToken() {
+    const storedToken = await getToken();
+    console.log({ storedToken });
+    if (storedToken) {
+      dispatch(authenticate(storedToken));
     }
-
+  }
+  useEffect(() => {
     fetchToken();
   }, [isAuthenticated]);
-  if (isTryingLogin) {
-    return <View />;
-  }
+
   return <Navigation />;
 }
 

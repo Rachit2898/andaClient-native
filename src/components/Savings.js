@@ -114,7 +114,7 @@ const SavingsItems = () => {
                     item?.defaultSku?.availabilityDetail?.quantityAvailable;
 
                   return (
-                    <View>
+                    <View key={item?.defaultSku?.id}>
                       <SavingsScreen
                         url={item?.mediaMap?.primary?.url}
                         name={item?.defaultSku?.name}

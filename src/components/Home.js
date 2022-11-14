@@ -12,6 +12,7 @@ import React, { useState, useEffect } from "react";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import Navbar from "./Navbar";
 import Spinner from "./Spinner";
+import TabBar from "./TabBar";
 import { useDispatch, useSelector } from "react-redux";
 import {
   yourTopPurChase,
@@ -925,6 +926,7 @@ export default function HomePage() {
                 </View>
               </View>
             </View>
+            <TabBar />
           </ScrollView>
         </View>
       </View>

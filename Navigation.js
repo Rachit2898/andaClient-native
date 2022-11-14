@@ -31,6 +31,8 @@ import PaymentOptions from "./src/screens/Payment.js";
 import ReturnPolicy from "./src/screens/ReturnPolicy.js";
 import Settings from "./src/screens/Settings";
 import FingerPrint from "./src/screens/FingerPrints";
+import Spinner from "./src/components/Spinner";
+import TabBar from "./src/components/TabBar";
 import Faq from "./src/screens/Faq.js";
 import Barcode from "./src/components/Barcode";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -61,6 +63,7 @@ function MyTabs() {
   const { cartLength } = useSelector((state) => ({
     ...state.products,
   }));
+
   return (
     <Tab.Navigator
       screenOptions={() => ({
@@ -172,6 +175,13 @@ function AuthenticatedStack() {
         screenOptions={{ animation: "none" }}
       >
         <>
+          <Stack.Screen
+            name="Spinner"
+            component={Spinner}
+            options={{
+              headerShown: false,
+            }}
+          />
           <Stack.Screen
             name="HomePage"
             component={HomePage}
@@ -323,6 +333,20 @@ function AuthenticatedStack() {
           <Stack.Screen
             name="Settings"
             component={Settings}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="TabBar"
+            component={TabBar}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="Dashboard"
+            component={Dashboard}
             options={{
               headerShown: false,
             }}

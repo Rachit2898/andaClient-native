@@ -12,21 +12,17 @@ import { useDispatch, useSelector } from "react-redux";
 import Navbar from "./Navbar";
 import Pagination from "./Pagination";
 import Spinner from "./Spinner";
-import Filter from "../filter/FavoritesFilter";
-import PreNegotiatedScreen from "../screens/FavoritesScreen";
-import {
-  favoritesApi,
-  addItem,
-  userInfo,
-} from "../../redux/features/productApi";
+import Filter from "../filter/CloseOutsFilter";
+import SavingsScreen from "../screens/CloseOutScreen";
+import { closeOut, addItem, userInfo } from "../../redux/features/productApi";
 
-const Favorites = () => {
+const AndaContractItems = () => {
   const scrollRef = useRef();
   const [itemValues, setItem] = useState([]);
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const { favoritesData, userInfoData, loading } = useSelector((state) => ({
+  const { closeOutData, userInfoData, loading } = useSelector((state) => ({
     ...state.products,
   }));
   const onPressTouch = () => {
@@ -35,18 +31,18 @@ const Favorites = () => {
       animated: true,
     });
   };
-  const data = favoritesData?.products;
+  const data = closeOutData?.products;
 
   useEffect(() => {
-    dispatch(favoritesApi, { value: "", currentPage });
+    dispatch(closeOut({ value: "", currentPage }));
     dispatch(userInfo());
   }, []);
-  const result = favoritesData;
+  const result = closeOutData;
   const userData = userInfoData;
 
   const apiCall = async (currentPage) => {
     setCurrentPage(currentPage);
-    dispatch(favoritesApi({ value: "", currentPage }));
+    dispatch(closeOut({ value: "", currentPage }));
     onPressTouch();
   };
 
@@ -57,24 +53,6 @@ const Favorites = () => {
   const checkBoxHandler = (item) => {
     setItem(item);
   };
-  const currentFirst = (currentPage) => {
-    return (currentPage - 1) * result?.pageSize + 1;
-  };
-  const pageFirst = currentFirst(currentPage);
-  const currentLast = (currentPage) => {
-    if (currentPage == 1 && result?.totalResults >= result?.pageSize) {
-      const lastPageValue = pageFirst + result?.pageSize - 1;
-      return lastPageValue;
-    } else if (result?.totalResults <= result?.pageSize) {
-      return result?.totalResults;
-    } else if (result?.totalResults <= pageFirst + result?.pageSize) {
-      return result?.totalResults;
-    } else {
-      const lastPageValue = pageFirst + result?.pageSize - 1;
-      return lastPageValue;
-    }
-  };
-  const pageLast = currentLast(currentPage);
 
   return (
     <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
@@ -89,6 +67,7 @@ const Favorites = () => {
         }}
       >
         <Navbar />
+
         <View
           style={{
             flexDirection: "row",
@@ -97,7 +76,7 @@ const Favorites = () => {
           }}
         >
           <View style={{ justifyContent: "center" }}>
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>Favorites</Text>
+            <Text style={{ fontSize: 20, fontWeight: "bold" }}>Close Outs</Text>
           </View>
           {loading && <Spinner />}
           <Pressable
@@ -126,11 +105,6 @@ const Favorites = () => {
             marginVertical: 10,
           }}
         />
-        {result.totalResults > 0 && (
-          <Text style={styles.pageText}>
-            Showing {pageFirst} - {pageLast} of {result.totalResults} results
-          </Text>
-        )}
         <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
           {result.totalResults > 0 ? (
             <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false}>
@@ -140,8 +114,8 @@ const Favorites = () => {
                     item?.defaultSku?.availabilityDetail?.quantityAvailable;
 
                   return (
-                    <View key={item?.defaultSku?.id}>
-                      <PreNegotiatedScreen
+                    <View>
+                      <SavingsScreen
                         url={item?.mediaMap?.primary?.url}
                         name={item?.defaultSku?.name}
                         externalId={item?.defaultSku?.externalId}
@@ -164,6 +138,7 @@ const Favorites = () => {
                         itemRating={item?.defaultSku?.itemRating}
                         rewardItem={item?.defaultSku?.rewardItem}
                         priceType={item?.defaultSku?.priceType}
+                        inventoryClassKey={item?.defaultSku?.inventoryClassKey}
                         orderLimit={item?.defaultSku?.dailyOrderLimit}
                       />
                     </View>
@@ -192,7 +167,7 @@ const Favorites = () => {
   );
 };
 
-export default Favorites;
+export default AndaContractItems;
 
 const styles = StyleSheet.create({
   pagination: {
@@ -200,10 +175,4 @@ const styles = StyleSheet.create({
   },
   mainBoxLoading: { opacity: 0.2 },
   mainBox: { backgroundColor: "#fff", marginBottom: 200 },
-  pageText: {
-    color: "#494c4c",
-    fontWeight: "600",
-    fontSize: 18,
-    paddingHorizontal: 10,
-  },
 });

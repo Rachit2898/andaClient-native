@@ -74,7 +74,7 @@ const Navbar = () => {
         <View style={{ borderBottomWidth: 0.3, borderColor: "#9b9b9b" }}>
           {searchItem?.map((item) => {
             return (
-              <>
+              <View key={item}>
                 <Pressable
                   style={styles.searchItemList}
                   android_ripple={{ color: "#ccc" }}
@@ -82,7 +82,7 @@ const Navbar = () => {
                 >
                   <Text style={styles.search}>{item}</Text>
                 </Pressable>
-              </>
+              </View>
             );
           })}
         </View>

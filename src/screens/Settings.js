@@ -66,7 +66,7 @@ const Settings = () => {
         }}
       >
         <View style={{ justifyContent: "center" }}>
-          <Text style={{ fontSize: 20, fontWeight: "bold" }}>Savings</Text>
+          <Text style={{ fontSize: 20, fontWeight: "bold" }}>Settings</Text>
         </View>
       </View>
       <View style={{ flexDirection: "row", marginLeft: 10 }}>

@@ -143,7 +143,7 @@ const PreNegotiatedItems = () => {
                     item?.defaultSku?.availabilityDetail?.quantityAvailable;
 
                   return (
-                    <View>
+                    <View key={item?.defaultSku?.id}>
                       <PreNegotiatedScreen
                         url={item?.mediaMap?.primary?.url}
                         name={item?.defaultSku?.name}
