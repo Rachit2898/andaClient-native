@@ -49,28 +49,28 @@ export default function HomePage() {
   }, []);
 
   const inventoryOpen = async () => {
-    navigation.navigate("Auth", { screen: "TopPurchase" });
+    navigation.navigate("TopPurchase");
   };
   const CustomerLikeYouOpen = async () => {
-    navigation.navigate("Auth", { screen: "CustomerLikeYou" });
+    navigation.navigate("CustomerLikeYou");
   };
   const preNegotiatedOpen = async () => {
-    navigation.navigate("Auth", { screen: "PreNegotiated" });
+    navigation.navigate("PreNegotiated");
   };
   const favoritesOpen = async () => {
-    navigation.navigate("Auth", { screen: "Favorites" });
+    navigation.navigate("Favorites");
   };
   const closeOutsOpen = async () => {
-    navigation.navigate("Auth", { screen: "ShortDate" });
+    navigation.navigate("ShortDate");
   };
   const customerLikeYouOpen = async () => {
-    navigation.navigate("Auth", { screen: "CustomerLikeYou" });
+    navigation.navigate("CustomerLikeYou");
   };
   const inventoryWatchListOpen = async () => {
-    navigation.navigate("Auth", { screen: "Inventory" });
+    navigation.navigate("Inventory");
   };
   const productDetailHandler = async (Id) => {
-    navigation.navigate("Auth", { screen: "ProductDetails" });
+    navigation.navigate("ProductDetails");
     dispatch(productDetails(Id));
   };
 
@@ -113,8 +113,11 @@ export default function HomePage() {
   const img3 = require("../../assets/image3.jpeg");
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
-      <View style={{ backgroundColor: "#fff", marginBottom: 90 }}>
+    <SafeAreaView
+      style={{ backgroundColor: "#fff", flex: 1 }}
+      edges={["right", "left", "top"]}
+    >
+      <View style={{ backgroundColor: "#fff", flex: 1 }}>
         <Navbar />
         <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
           <ScrollView showsVerticalScrollIndicator={false}>
@@ -926,8 +929,10 @@ export default function HomePage() {
                 </View>
               </View>
             </View>
-            <TabBar />
           </ScrollView>
+        </View>
+        <View style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+          <TabBar />
         </View>
       </View>
     </SafeAreaView>

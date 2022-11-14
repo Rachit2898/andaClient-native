@@ -45,7 +45,6 @@ const Pagination = (props) => {
         if (pageNumber === DOTS) {
           return (
             <View key={i}>
-              {console.log(pageNumber, i)}
               <View>
                 <Text>&#8230;</Text>
               </View>

@@ -29,67 +29,67 @@ const Dashboard = ({ size }) => {
   const [modalVisible, setModalVisible] = useState(!modalVisible);
   const userData = userInfoData;
   const logoutHandler = () => {
-    navigation.navigate("Auth", { screen: "HomePage" });
+    navigation.navigate("HomePage");
     setTimeout(() => {
       dispatch(logout(false));
     });
   };
   const favoritesOpen = async () => {
-    navigation.navigate("Auth", { screen: "Favorites" });
+    navigation.navigate("Favorites");
     setModalVisible(!modalVisible);
   };
   const topPurchseOpen = async () => {
-    navigation.navigate("Auth", { screen: "TopPurchase" });
+    navigation.navigate("TopPurchase");
     setModalVisible(!modalVisible);
   };
   const customerLikeYouOpen = async () => {
-    navigation.navigate("Auth", { screen: "CustomerLikeYou" });
+    navigation.navigate("CustomerLikeYou");
     setModalVisible(!modalVisible);
   };
   const preNegotiatedOpen = async () => {
-    navigation.navigate("Auth", { screen: "PreNegotiated" });
+    navigation.navigate("PreNegotiated");
     setModalVisible(!modalVisible);
   };
   const inventoryOpen = async () => {
-    navigation.navigate("Auth", { screen: "Inventory" });
+    navigation.navigate("Inventory");
     setModalVisible(!modalVisible);
   };
   const savingsOpen = async () => {
-    navigation.navigate("Auth", { screen: "Savings" });
+    navigation.navigate("Savings");
     setModalVisible(!modalVisible);
   };
   const closeOutsOpen = async () => {
-    navigation.navigate("Auth", { screen: "CloseOuts" });
+    navigation.navigate("CloseOuts");
     setModalVisible(!modalVisible);
   };
   const priceReductionOpen = async () => {
-    navigation.navigate("Auth", { screen: "PriceReduction" });
+    navigation.navigate("PriceReduction");
     setModalVisible(!modalVisible);
   };
   const shortDateOpen = async () => {
-    navigation.navigate("Auth", { screen: "ShortDate" });
+    navigation.navigate("ShortDate");
     setModalVisible(!modalVisible);
   };
   const closeButtonHandler = async () => {
-    navigation.navigate("Auth");
+    navigation.goBack();
   };
   const OrderingOptionsOpen = async () => {
-    navigation.navigate("Auth", { screen: "OrderingOptions" });
+    navigation.navigate("OrderingOptions");
   };
   const OpeningAccountOpen = async () => {
-    navigation.navigate("Auth", { screen: "OpeningAccount" });
+    navigation.navigate("OpeningAccount");
   };
   const PaymentOpen = async () => {
-    navigation.navigate("Auth", { screen: "Payment" });
+    navigation.navigate("Payment");
   };
   const ReturnOpen = async () => {
-    navigation.navigate("Auth", { screen: "ReturnPolicy" });
+    navigation.navigate("ReturnPolicy");
   };
   const FaqOpen = async () => {
-    navigation.navigate("Auth", { screen: "Faq" });
+    navigation.navigate("Faq");
   };
   const SettingOpen = async () => {
-    navigation.navigate("Auth", { screen: "Settings" });
+    navigation.navigate("Settings");
   };
   return (
     <View style={styles.modalView}>

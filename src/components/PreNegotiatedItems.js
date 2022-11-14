@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Navbar from "./Navbar";
 import Pagination from "./Pagination";
 import Spinner from "./Spinner";
+import TabBar from "./TabBar";
 import Filter from "../filter/PreNegotitedFilter";
 import PreNegotiatedScreen from "../screens/PreNegotiatedScreen";
 import {
@@ -78,7 +79,10 @@ const PreNegotiatedItems = () => {
   const pageLast = currentLast(currentPage);
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
+    <SafeAreaView
+      style={{ backgroundColor: "#fff", flex: 1 }}
+      edges={["right", "left", "top"]}
+    >
       <Filter
         checkBoxHandler={checkBoxHandler}
         modalVisible={modalVisible}
@@ -87,6 +91,7 @@ const PreNegotiatedItems = () => {
       <View
         style={{
           backgroundColor: "#fff",
+          flex: 1,
         }}
       >
         <Navbar />
@@ -102,7 +107,7 @@ const PreNegotiatedItems = () => {
               Pre-Negotiated Items
             </Text>
           </View>
-          {loading && <Spinner />}
+
           <Pressable
             style={{
               borderWidth: 1,
@@ -187,6 +192,9 @@ const PreNegotiatedItems = () => {
           ) : (
             <Spinner />
           )}
+        </View>
+        <View style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+          <TabBar />
         </View>
       </View>
     </SafeAreaView>

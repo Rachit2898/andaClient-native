@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Navbar from "./Navbar";
 import Pagination from "./Pagination";
 import Spinner from "./Spinner";
+import TabBar from "./TabBar";
 import Filter from "../filter/FavoritesFilter";
 import PreNegotiatedScreen from "../screens/FavoritesScreen";
 import {
@@ -77,7 +78,10 @@ const Favorites = () => {
   const pageLast = currentLast(currentPage);
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
+    <SafeAreaView
+      style={{ backgroundColor: "#fff", flex: 1 }}
+      edges={["right", "left", "top"]}
+    >
       <Filter
         checkBoxHandler={checkBoxHandler}
         modalVisible={modalVisible}
@@ -86,6 +90,7 @@ const Favorites = () => {
       <View
         style={{
           backgroundColor: "#fff",
+          flex: 1,
         }}
       >
         <Navbar />
@@ -99,7 +104,7 @@ const Favorites = () => {
           <View style={{ justifyContent: "center" }}>
             <Text style={{ fontSize: 20, fontWeight: "bold" }}>Favorites</Text>
           </View>
-          {loading && <Spinner />}
+          {/* {loading && <Spinner />} */}
           <Pressable
             style={{
               borderWidth: 1,
@@ -131,7 +136,7 @@ const Favorites = () => {
             Showing {pageFirst} - {pageLast} of {result.totalResults} results
           </Text>
         )}
-        <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
+        <View style={styles.mainBox}>
           {result.totalResults > 0 ? (
             <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false}>
               <View>
@@ -187,6 +192,9 @@ const Favorites = () => {
             </View>
           )}
         </View>
+        <View style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+          <TabBar />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -196,7 +204,7 @@ export default Favorites;
 
 const styles = StyleSheet.create({
   pagination: {
-    marginBottom: 100,
+    marginBottom: 10,
   },
   mainBoxLoading: { opacity: 0.2 },
   mainBox: { backgroundColor: "#fff", marginBottom: 200 },

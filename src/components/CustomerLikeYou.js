@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Navbar from "./Navbar";
 import Pagination from "./Pagination";
 import Spinner from "./Spinner";
+import TabBar from "./TabBar";
 import Filter from "../filter/CustomerLikeYouFilter";
 import ProductScreen from "../screens/CustomerLikeYouScreen";
 import {
@@ -82,7 +83,10 @@ const CustomerLikeYou = () => {
   const pageLast = currentLast(currentPage);
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
+    <SafeAreaView
+      style={{ backgroundColor: "#fff", flex: 1 }}
+      edges={["right", "left", "top"]}
+    >
       <Filter
         checkBoxHandler={checkBoxHandler}
         modalVisible={modalVisible}
@@ -91,6 +95,7 @@ const CustomerLikeYou = () => {
       <View
         style={{
           backgroundColor: "#fff",
+          flex: 1,
         }}
       >
         <Navbar />
@@ -106,7 +111,7 @@ const CustomerLikeYou = () => {
               Purchased By Customers Like You
             </Text>
           </View>
-          {loading && <Spinner />}
+
           <Pressable
             style={{
               borderWidth: 1,
@@ -193,6 +198,9 @@ const CustomerLikeYou = () => {
               <Spinner />
             </View>
           )}
+        </View>
+        <View style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+          <TabBar />
         </View>
       </View>
     </SafeAreaView>

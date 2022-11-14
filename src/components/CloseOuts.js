@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Navbar from "./Navbar";
 import Pagination from "./Pagination";
 import Spinner from "./Spinner";
+import TabBar from "./TabBar";
 import Filter from "../filter/CloseOutsFilter";
 import SavingsScreen from "../screens/CloseOutScreen";
 import { closeOut, addItem, userInfo } from "../../redux/features/productApi";
@@ -55,7 +56,10 @@ const CloseOuts = () => {
   };
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
+    <SafeAreaView
+      style={{ backgroundColor: "#fff", flex: 1 }}
+      edges={["right", "left", "top"]}
+    >
       <Filter
         checkBoxHandler={checkBoxHandler}
         modalVisible={modalVisible}
@@ -64,6 +68,7 @@ const CloseOuts = () => {
       <View
         style={{
           backgroundColor: "#fff",
+          flex: 1,
         }}
       >
         <Navbar />
@@ -78,7 +83,7 @@ const CloseOuts = () => {
           <View style={{ justifyContent: "center" }}>
             <Text style={{ fontSize: 20, fontWeight: "bold" }}>Close Outs</Text>
           </View>
-          {loading && <Spinner />}
+
           <Pressable
             style={{
               borderWidth: 1,
@@ -161,6 +166,9 @@ const CloseOuts = () => {
               <Spinner />
             </View>
           )}
+        </View>
+        <View style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+          <TabBar />
         </View>
       </View>
     </SafeAreaView>

@@ -15,13 +15,13 @@ const SubmitCart = () => {
   const checkOutHandler = async (orderId) => {
     try {
       dispatch(cartCheckOut(orderId));
-      navigation.navigate("Auth", { screen: "CheckOut" });
+      navigation.navigate("CheckOut");
     } catch (error) {
       Alert.alert("Error");
     }
   };
   const editOrderNavigation = () => {
-    navigation.navigate("Auth", { screen: "Cart" });
+    navigation.navigate("Cart");
   };
   const cartCount = cartValidateInfo?.order?.itemCount;
   return (

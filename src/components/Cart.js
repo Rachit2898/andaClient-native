@@ -22,6 +22,7 @@ import {
   productDetails,
 } from "../../redux/features/productApi";
 import Navbar from "./Navbar";
+import TabBar from "./TabBar";
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -56,7 +57,7 @@ const Cart = () => {
   async function SubmitCart() {
     try {
       dispatch(cartValidating());
-      navigation.navigate("Auth", { screen: "SubmitCart" });
+      navigation.navigate("SubmitCart");
     } catch (error) {
       Alert.alert("Could Not Empty Cart!!");
     }
@@ -66,11 +67,14 @@ const Cart = () => {
   }, [cartLength, updateCart, isFocused]);
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
+    <SafeAreaView
+      style={{ backgroundColor: "#fff", flex: 1 }}
+      edges={["right", "left", "top"]}
+    >
       <View
         style={{
           backgroundColor: "#fff",
-          marginBottom: 150,
+          flex: 1,
         }}
       >
         <Navbar />
@@ -144,6 +148,9 @@ const Cart = () => {
             <Text style={styles.emptyCartText}>Your cart is empty</Text>
           </View>
         )}
+        <View style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+          <TabBar />
+        </View>
       </View>
     </SafeAreaView>
   );

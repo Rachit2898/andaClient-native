@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Navbar from "./Navbar";
 import Pagination from "./Pagination";
 import Spinner from "./Spinner";
+import TabBar from "./TabBar";
 import Filter from "../filter/SearchProductFilter";
 import PreNegotiatedScreen from "../screens/SearchProductScreen";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
@@ -61,7 +62,7 @@ const SearchProduct = () => {
   };
 
   const productDetailHandler = async (Id) => {
-    navigation.navigate("Auth", { screen: "ProductDetails" });
+    navigation.navigate("ProductDetails");
     dispatch(productDetails(Id));
   };
 
@@ -72,10 +73,14 @@ const SearchProduct = () => {
   }, [searchProducstsData?.totalResults]);
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
+    <SafeAreaView
+      style={{ backgroundColor: "#fff", flex: 1 }}
+      edges={["right", "left", "top"]}
+    >
       <View
         style={{
           backgroundColor: "#fff",
+          flex: 1,
         }}
       >
         <Navbar />
@@ -162,6 +167,9 @@ const SearchProduct = () => {
               <Spinner />
             </View>
           )}
+        </View>
+        <View style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+          <TabBar />
         </View>
       </View>
     </SafeAreaView>

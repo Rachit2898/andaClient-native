@@ -27,7 +27,7 @@ const ProductScreen = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [count, setCount] = useState(1);
   const [currentIndex, setCurrentIndex] = useState(-1);
-  const { inventoryWatchData, userInfoData, addLoading } = useSelector(
+  const { inventoryWatchData, userInfoData, addLoading, loading } = useSelector(
     (state) => ({
       ...state.products,
     })
@@ -80,22 +80,13 @@ const ProductScreen = (props) => {
     }
   }
   const productDetailHandler = async (Id) => {
-    navigation.navigate("Auth", { screen: "ProductDetails" });
+    navigation.navigate("ProductDetails");
     dispatch(productDetails(Id));
   };
 
   return (
-    <View
-      style={{
-        borderTopWidth: 0.3,
-        borderBottomWidth: 0.3,
-        borderColor: "#ececec",
-        paddingHorizontal: 10,
-        paddingVertical: 20,
-        width: "100%",
-        justifyContent: "space-between",
-      }}
-    >
+    <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
+      {loading && <Spinner />}
       <View style={{ flexDirection: "row" }}>
         <Pressable
           style={{
@@ -558,5 +549,24 @@ export default ProductScreen;
 const styles = StyleSheet.create({
   pagination: {
     marginBottom: 100,
+  },
+  mainBox: {
+    borderTopWidth: 0.3,
+    borderBottomWidth: 0.3,
+    borderColor: "#ececec",
+    paddingHorizontal: 10,
+    paddingVertical: 20,
+    width: "100%",
+    justifyContent: "space-between",
+  },
+  mainBoxLoading: {
+    borderTopWidth: 0.3,
+    borderBottomWidth: 0.3,
+    borderColor: "#ececec",
+    paddingHorizontal: 10,
+    paddingVertical: 20,
+    width: "100%",
+    justifyContent: "space-between",
+    opacity: 0.2,
   },
 });

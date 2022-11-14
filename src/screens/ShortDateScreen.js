@@ -28,7 +28,7 @@ const ShortDateScreen = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [count, setCount] = useState(1);
   const [currentIndex, setCurrentIndex] = useState(-1);
-  const { inventoryWatchData, userInfoData, addLoading } = useSelector(
+  const { inventoryWatchData, userInfoData, addLoading, loading } = useSelector(
     (state) => ({
       ...state.products,
     })
@@ -81,7 +81,7 @@ const ShortDateScreen = (props) => {
     }
   }
   const productDetailHandler = async (Id) => {
-    navigation.navigate("Auth", { screen: "ProductDetails" });
+    navigation.navigate("ProductDetails");
     dispatch(productDetails(Id));
   };
 
@@ -97,6 +97,7 @@ const ShortDateScreen = (props) => {
         justifyContent: "space-between",
       }}
     >
+      {loading && <Spinner />}
       <View style={{ flexDirection: "row" }}>
         <View
           style={{

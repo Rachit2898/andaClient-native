@@ -23,15 +23,17 @@ function Root() {
 
   async function fetchToken() {
     const storedToken = await getToken();
-    console.log({ storedToken });
     if (storedToken) {
       dispatch(authenticate(storedToken));
     }
+    setIsTryingLogin(false);
   }
   useEffect(() => {
     fetchToken();
   }, [isAuthenticated]);
-
+  if (isTryingLogin) {
+    return <View />;
+  }
   return <Navigation />;
 }
 

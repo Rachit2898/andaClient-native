@@ -37,7 +37,7 @@ export default function Barcode() {
       const result = await dispatch(searchProducts(data));
       dispatch(searchValues(data));
       if (result?.meta?.requestStatus === "fulfilled") {
-        navigation.navigate("Auth", { screen: "SearchProduct" });
+        navigation.navigate("SearchProduct");
         setScanned(true);
       }
       //
@@ -58,7 +58,7 @@ export default function Barcode() {
     <SafeAreaView style={styles.container}>
       <Pressable
         onPress={() => {
-          navigation.navigate("Auth", { screen: "HomePage" });
+          navigation.goBack();
         }}
         style={{ marginLeft: "auto", marginTop: "5%", marginRight: "5%" }}
       >

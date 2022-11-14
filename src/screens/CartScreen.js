@@ -67,7 +67,7 @@ const CartScreen = (props) => {
   async function SubmitCart() {
     try {
       dispatch(cartValidating());
-      navigation.navigate("Auth", { screen: "SubmitCart" });
+      navigation.navigate("SubmitCart");
     } catch (error) {
       Alert.alert("Could Not Empty Cart!!");
     }
@@ -90,7 +90,7 @@ const CartScreen = (props) => {
     }
   };
   const productDetailHandler = async (Id) => {
-    navigation.navigate("Auth", { screen: "ProductDetails" });
+    navigation.navigate("ProductDetails");
     dispatch(productDetails(Id));
   };
 

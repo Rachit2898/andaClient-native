@@ -81,7 +81,7 @@ const SearchProductScreen = (props) => {
   }
 
   const productDetailHandler = async (Id) => {
-    navigation.navigate("Auth", { screen: "ProductDetails" });
+    navigation.navigate("ProductDetails");
     dispatch(productDetails(Id));
   };
 

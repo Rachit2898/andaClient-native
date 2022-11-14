@@ -18,7 +18,7 @@ import {
   productDetails,
 } from "../../redux/features/productApi";
 
-const PreNegotiatedScreen = (props) => {
+const SavingsScreen = (props) => {
   const scrollRef = useRef();
   const navigation = useNavigation();
   const [itemValues, setItem] = useState([]);
@@ -27,7 +27,7 @@ const PreNegotiatedScreen = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [count, setCount] = useState(1);
   const [currentIndex, setCurrentIndex] = useState(-1);
-  const { inventoryWatchData, userInfoData, addLoading } = useSelector(
+  const { inventoryWatchData, userInfoData, addLoading, loading } = useSelector(
     (state) => ({
       ...state.products,
     })
@@ -80,7 +80,7 @@ const PreNegotiatedScreen = (props) => {
     }
   }
   const productDetailHandler = async (Id) => {
-    navigation.navigate("Auth", { screen: "ProductDetails" });
+    navigation.navigate("ProductDetails");
     dispatch(productDetails(Id));
   };
 
@@ -96,6 +96,7 @@ const PreNegotiatedScreen = (props) => {
         justifyContent: "space-between",
       }}
     >
+      {loading && <Spinner />}
       <View style={{ flexDirection: "row" }}>
         <Pressable
           style={{
@@ -533,7 +534,7 @@ const PreNegotiatedScreen = (props) => {
   );
 };
 
-export default PreNegotiatedScreen;
+export default SavingsScreen;
 
 const styles = StyleSheet.create({
   pagination: {

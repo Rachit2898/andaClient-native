@@ -45,103 +45,6 @@ import { getBioMatricsDetails } from "./utils";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-function MyTabs() {
-  const dispatch = useDispatch();
-  const navigation = useNavigation();
-  const [size, setSize] = useState();
-  const [finger, setFinger] = useState(false);
-
-  const bioMatrics = async () => {
-    const bioMatrics = await getBioMatricsDetails();
-    setFinger(bioMatrics);
-  };
-
-  useEffect(() => {
-    dispatch(cartInfo());
-    bioMatrics();
-  }, [dispatch, finger]);
-  const { cartLength } = useSelector((state) => ({
-    ...state.products,
-  }));
-
-  return (
-    <Tab.Navigator
-      screenOptions={() => ({
-        style: {
-          borderRadius: 15,
-          tabBarHideOnKeyboard: true,
-        },
-      })}
-    >
-      <Tab.Screen
-        name="Auth"
-        options={{
-          headerShown: false,
-          tabBarLabel: "Home",
-          tabBarIcon: ({ color, size }) => (
-            <Pressable
-              onPress={() => {
-                navigation.navigate("HomePage");
-              }}
-            >
-              <Image
-                style={{ height: 30, width: 30 }}
-                source={require("./assets/icon.png")}
-              />
-            </Pressable>
-          ),
-        }}
-        component={AuthenticatedStack}
-      />
-      <Tab.Screen
-        name="Cart"
-        options={{
-          headerShown: false,
-          tabBarLabel: "Cart",
-          tabBarIcon: ({ color, size }) => (
-            <View style={{ flexDirection: "row" }}>
-              <Image
-                style={{ height: 20, width: 20 }}
-                source={require("./assets/cartLogo.png")}
-              />
-              {cartLength > 0 && <Badge value={cartLength} />}
-            </View>
-          ),
-        }}
-        component={Cart}
-      />
-      <Tab.Screen
-        name="Account"
-        options={{
-          headerShown: false,
-          tabBarLabel: "Account",
-          tabBarIcon: ({ color, size }) => (
-            <Image
-              style={{ height: 20, width: 20 }}
-              source={require("./assets/account.png")}
-            />
-          ),
-        }}
-        component={Account}
-      />
-      <Tab.Screen
-        name="Menu"
-        options={{
-          headerShown: false,
-          tabBarLabel: "Menu",
-          tabBarIcon: ({ color, size }) => (
-            <Image
-              style={{ height: 20, width: 20 }}
-              source={require("./assets/more.png")}
-            />
-          ),
-        }}
-        component={Dashboard}
-      />
-    </Tab.Navigator>
-  );
-}
-
 function AuthStack() {
   return (
     <Stack.Navigator
@@ -351,6 +254,13 @@ function AuthenticatedStack() {
               headerShown: false,
             }}
           />
+          <Stack.Screen
+            name="Account"
+            component={Account}
+            options={{
+              headerShown: false,
+            }}
+          />
         </>
       </Stack.Navigator>
     </>
@@ -369,14 +279,14 @@ function BiometricsAuth() {
   const { cartLength } = useSelector((state) => ({
     ...state.products,
   }));
-  return <>{finger ? <MyAuth /> : <MyTabs />}</>;
+  return <>{finger ? <MyAuth /> : <AuthenticatedStack />}</>;
 }
 
 function MyAuth() {
   const { isFinger } = useSelector((state) => ({
     ...state.auth,
   }));
-  return <>{isFinger ? <MyTabs /> : <FingerPrint />}</>;
+  return <>{isFinger ? <AuthenticatedStack /> : <FingerPrint />}</>;
 }
 
 export default function Navigation() {

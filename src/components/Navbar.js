@@ -39,14 +39,14 @@ const Navbar = () => {
     try {
       dispatch(searchProducts(item));
       dispatch(searchValues(item));
-      navigation.navigate("Auth", { screen: "SearchProduct" });
+      navigation.navigate("SearchProduct");
       setOpenSearch(false);
     } catch (e) {
       Alert.alert(e.message);
     }
   };
   const BarCodeHandler = () => {
-    navigation.navigate("Auth", { screen: "Barcode" });
+    navigation.navigate("Barcode");
   };
   return (
     <View>
