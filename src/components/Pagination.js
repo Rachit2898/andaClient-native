@@ -33,10 +33,17 @@ const Pagination = (props) => {
 
   return (
     <View style={styles.paginationComponent}>
-      <Pressable onPress={() => onPrevious()} disabled={currentPage === 1}>
+      <Pressable
+        onPress={() => onPrevious()}
+        disabled={currentPage === 1}
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <Image
           source={require("../../assets/back.png")}
-          style={{ width: 20, height: 20, marginTop: 10 }}
+          style={{ width: 15, height: 15 }}
         />
       </Pressable>
       {paginationRange?.map((pageNumber, i) => {
@@ -82,10 +89,17 @@ const Pagination = (props) => {
         android_ripple={{ color: "#ccc" }}
         onPress={() => onNext()}
         disabled={currentPage === paginationRange.slice(-1)[0]}
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+        }}
       >
         <Image
           source={require("../../assets/forward.png")}
-          style={{ width: 20, height: 20, marginTop: 10 }}
+          style={{
+            width: 15,
+            height: 15,
+          }}
         />
       </Pressable>
     </View>
@@ -97,14 +111,13 @@ const styles = StyleSheet.create({
   paginationComponent: {
     flexDirection: "row",
     alignSelf: "center",
-    marginTop: 20,
     marginBottom: 20,
+    justifyContent: "center",
   },
   paginationNumber: {
     fontWeight: "800",
-
-    paddingHorizontal: 15,
-    paddingVertical: 10,
     color: "#494c4c",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
   },
 });

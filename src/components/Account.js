@@ -62,12 +62,12 @@ const InputComponent = (props) => {
           {show ? (
             <Image
               style={{ height: 15, width: 18 }}
-              source={require("../../assets/eye.png")}
+              source={require("../../assets/eye-open.png")}
             />
           ) : (
             <Image
               style={{ height: 15, width: 18 }}
-              source={require("../../assets/closedEye.png")}
+              source={require("../../assets/eye-close.png")}
             />
           )}
         </Pressable>
@@ -194,6 +194,7 @@ const Account = () => {
               flexDirection: "row",
               alignItems: "center",
               paddingHorizontal: 10,
+              flex: 1,
             }}
           >
             <View
@@ -201,7 +202,6 @@ const Account = () => {
                 width: 25,
                 justifyContent: "center",
                 alignItems: "center",
-
                 height: 25,
                 paddingHorizontal: 10,
               }}
@@ -602,7 +602,12 @@ const Account = () => {
                     }
                   </Text>
                 </View>
-                <View style={{ flexDirection: "row", marginTop: 5 }}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    marginTop: 5,
+                  }}
+                >
                   <Text>Phone:</Text>
 
                   <Text style={{ marginLeft: 5 }}>
@@ -616,7 +621,7 @@ const Account = () => {
             </View>
           </View>
         </ScrollView>
-        <View style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+        <View style={{ left: 0, right: 0, bottom: 0 }}>
           <TabBar />
         </View>
       </View>

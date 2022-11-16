@@ -12,9 +12,14 @@ import { useDispatch, useSelector } from "react-redux";
 import Navbar from "./Navbar";
 import Pagination from "./Pagination";
 import Spinner from "./Spinner";
-import Filter from "../filter/CloseOutsFilter";
-import SavingsScreen from "../screens/CloseOutScreen";
-import { closeOut, addItem, userInfo } from "../../redux/features/productApi";
+import TabBar from "./TabBar";
+import Filter from "../filter/AndaContractFilter";
+import SavingsScreen from "../screens/AndaContractItemsScreen";
+import {
+  andaContractItems,
+  addItem,
+  userInfo,
+} from "../../redux/features/productApi";
 
 const AndaContractItems = () => {
   const scrollRef = useRef();
@@ -22,27 +27,29 @@ const AndaContractItems = () => {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const { closeOutData, userInfoData, loading } = useSelector((state) => ({
-    ...state.products,
-  }));
+  const { andaContractItemsData, userInfoData, loading } = useSelector(
+    (state) => ({
+      ...state.products,
+    })
+  );
   const onPressTouch = () => {
     scrollRef?.current?.scrollTo({
       y: 0,
       animated: true,
     });
   };
-  const data = closeOutData?.products;
+  const data = andaContractItemsData?.products;
 
   useEffect(() => {
-    dispatch(closeOut({ value: "", currentPage }));
+    dispatch(andaContractItems({ value: "", currentPage }));
     dispatch(userInfo());
   }, []);
-  const result = closeOutData;
+  const result = andaContractItemsData;
   const userData = userInfoData;
 
   const apiCall = async (currentPage) => {
     setCurrentPage(currentPage);
-    dispatch(closeOut({ value: "", currentPage }));
+    dispatch(andaContractItems({ value: "", currentPage }));
     onPressTouch();
   };
 
@@ -55,7 +62,10 @@ const AndaContractItems = () => {
   };
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
+    <SafeAreaView
+      style={{ backgroundColor: "#fff", flex: 1 }}
+      edges={["right", "left", "top"]}
+    >
       <Filter
         checkBoxHandler={checkBoxHandler}
         modalVisible={modalVisible}
@@ -64,6 +74,7 @@ const AndaContractItems = () => {
       <View
         style={{
           backgroundColor: "#fff",
+          flex: 1,
         }}
       >
         <Navbar />
@@ -76,7 +87,9 @@ const AndaContractItems = () => {
           }}
         >
           <View style={{ justifyContent: "center" }}>
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>Close Outs</Text>
+            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+              Anda Contract Items
+            </Text>
           </View>
           {loading && <Spinner />}
           <Pressable
@@ -140,6 +153,7 @@ const AndaContractItems = () => {
                         priceType={item?.defaultSku?.priceType}
                         inventoryClassKey={item?.defaultSku?.inventoryClassKey}
                         orderLimit={item?.defaultSku?.dailyOrderLimit}
+                        accountId={userData?.selectedAccount?.id}
                       />
                     </View>
                   );
@@ -162,6 +176,9 @@ const AndaContractItems = () => {
             </View>
           )}
         </View>
+        <View style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+          <TabBar />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -171,7 +188,7 @@ export default AndaContractItems;
 
 const styles = StyleSheet.create({
   pagination: {
-    marginBottom: 100,
+    margin: 10,
   },
   mainBoxLoading: { opacity: 0.2 },
   mainBox: { backgroundColor: "#fff", marginBottom: 200 },

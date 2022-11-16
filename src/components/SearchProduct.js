@@ -29,10 +29,20 @@ const SearchProduct = () => {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const { searchProducstsData, userInfoData, loading, addLoading } =
-    useSelector((state) => ({
-      ...state.products,
-    }));
+  const {
+    searchProducstsData,
+    userInfoData,
+    loading,
+    addLoading,
+    favResponse,
+    searchloading,
+    productDetailsData,
+  } = useSelector((state) => ({
+    ...state.products,
+  }));
+  const { searchedValue } = useSelector((state) => ({
+    ...state.auth,
+  }));
   const onPressTouch = () => {
     scrollRef?.current?.scrollTo({
       y: 0,
@@ -41,11 +51,25 @@ const SearchProduct = () => {
   };
   const data = searchProducstsData?.products;
 
+  const productDetailHandler = async (Id) => {
+    navigation.navigate("ProductDetails");
+    dispatch(productDetails(Id));
+  };
+
   useEffect(() => {
     dispatch(userInfo());
-  }, []);
+    if (searchProducstsData.totalResults === 1) {
+      productDetailHandler(searchProducstsData?.products[0]?.defaultSku?.id);
+    }
+  }, [favResponse, productDetailsData]);
   const result = searchProducstsData;
   const userData = userInfoData;
+
+  useEffect(() => {
+    if (searchProducstsData.totalResults === 1) {
+      productDetailHandler(searchProducstsData?.products[0]?.defaultSku?.id);
+    }
+  }, [searchProducstsData.totalResults]);
 
   const apiCall = async (currentPage) => {
     setCurrentPage(currentPage);
@@ -61,16 +85,49 @@ const SearchProduct = () => {
     setItem(item);
   };
 
-  const productDetailHandler = async (Id) => {
-    navigation.navigate("ProductDetails");
-    dispatch(productDetails(Id));
-  };
+  if (result.totalResults === 0)
+    return (
+      <SafeAreaView
+        style={{ backgroundColor: "#fff", flex: 1 }}
+        edges={["right", "left", "top"]}
+      >
+        <View
+          style={{
+            backgroundColor: "#fff",
+            flex: 1,
+          }}
+        >
+          <Navbar />
 
-  useEffect(() => {
-    if (searchProducstsData.totalResults === 1) {
-      productDetailHandler(searchProducstsData?.products[0]?.defaultSku?.id);
-    }
-  }, [searchProducstsData?.totalResults]);
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              padding: 10,
+            }}
+          >
+            <View style={{ justifyContent: "center" }}>
+              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                Search Products
+              </Text>
+            </View>
+          </View>
+
+          <View
+            style={{
+              borderTopWidth: 4,
+              borderColor: "#fafafa",
+              marginVertical: 10,
+            }}
+          />
+          <View style={styles.emptyCart}>
+            <Text style={styles.emptyCartText}>
+              No products found for "{searchedValue}"
+            </Text>
+          </View>
+        </View>
+      </SafeAreaView>
+    );
 
   return (
     <SafeAreaView
@@ -106,12 +163,7 @@ const SearchProduct = () => {
             marginVertical: 10,
           }}
         />
-        {result.totalResults === 0 && (
-          <View style={styles.emptyCart}>
-            <Text style={styles.emptyCartText}>“No products found!”</Text>
-          </View>
-        )}
-        {loading && <Spinner />}
+
         <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
           {result.totalResults > 1 ? (
             <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false}>
@@ -146,6 +198,8 @@ const SearchProduct = () => {
                         rewardItem={item?.defaultSku?.rewardItem}
                         priceType={item?.defaultSku?.priceType}
                         orderLimit={item?.defaultSku?.dailyOrderLimit}
+                        accountId={userData?.selectedAccount?.id}
+                        type={item?.defaultSku?.productLists[0]?.type}
                       />
                     </View>
                   );

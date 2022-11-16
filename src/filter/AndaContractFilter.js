@@ -14,8 +14,11 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { useDispatch, useSelector } from "react-redux";
 import Spinner from "../components/Spinner";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { updateCloseOutUrls, setSorting } from "../../redux/features/authUser";
-import { closeOut } from "../../redux/features/productApi";
+import {
+  updateAndaContractItemsUrls,
+  setSorting,
+} from "../../redux/features/authUser";
+import { andaContractItems } from "../../redux/features/productApi";
 
 const Filter = ({ modalVisible, setModalVisible }) => {
   const [response, setResponse] = useState();
@@ -30,17 +33,17 @@ const Filter = ({ modalVisible, setModalVisible }) => {
   ]);
   const dispatch = useDispatch();
   const [values, setValue] = useState(-1);
-  const { closeOutData, paginationLoading } = useSelector((state) => ({
+  const { andaContractItemsData, paginationLoading } = useSelector((state) => ({
     ...state.products,
   }));
 
-  var { closeOutUrls } = useSelector((state) => ({
+  var { andaContractItemsUrls } = useSelector((state) => ({
     ...state.auth,
   }));
   const onsortingOpen = useCallback(() => {
     setCompanyOpen(false);
   }, []);
-  let urlStructure = closeOutUrls?.map((url) => {
+  let urlStructure = andaContractItemsUrls?.map((url) => {
     return `${url?.fieldName}=${encodeURIComponent(url?.item)}&`;
   });
 
@@ -48,15 +51,19 @@ const Filter = ({ modalVisible, setModalVisible }) => {
 
   useEffect(() => {
     dispatch(
-      closeOut({ value: url, currentPage: 1, sortValues: sortingValue })
+      andaContractItems({
+        value: url,
+        currentPage: 1,
+        sortValues: sortingValue,
+      })
     );
     dispatch(setSorting(sortingValue));
-  }, [closeOutUrls, sortingValue]);
+  }, [andaContractItemsUrls, sortingValue]);
 
   useEffect(() => {
-    setResponse(closeOutData);
+    setResponse(andaContractItemsData);
     setLoading(false);
-  }, [closeOutData]);
+  }, [andaContractItemsData]);
 
   const filterValues = response?.searchFacets;
   var [currentFilter, setCurrentFilter] = useState();
@@ -101,7 +108,9 @@ const Filter = ({ modalVisible, setModalVisible }) => {
   const myCheckHandler = (label, labelValue) => {
     setValue(labelValue);
     setLoading(true);
-    dispatch(updateCloseOutUrls({ fieldName: label, item: labelValue }));
+    dispatch(
+      updateAndaContractItemsUrls({ fieldName: label, item: labelValue })
+    );
   };
 
   const data = [

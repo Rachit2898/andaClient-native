@@ -44,10 +44,12 @@ const initialState = {
   closeOutUrls: [],
   shortDateUrls: [],
   searchProductUrls: [],
+  andaContractItemsUrls: [],
   isAuthenticated: false,
   sortingUrl: "",
   changeUserPasswordData: {},
   changePasswordValue: false,
+  cartName: "Home",
 };
 
 const authReducer = createSlice({
@@ -160,8 +162,21 @@ const authReducer = createSlice({
         state.searchProductUrls.push(action.payload);
       }
     },
+    updateAndaContractItemsUrls: (state, action) => {
+      if (containsObject(action.payload, state.andaContractItemsUrls)) {
+        _.pull(
+          state.andaContractItemsUrls,
+          _.find(state.andaContractItemsUrls, { item: action.payload.item })
+        );
+      } else {
+        state.andaContractItemsUrls.push(action.payload);
+      }
+    },
     setSorting: (state, action) => {
       state.sortingUrl = action.payload;
+    },
+    cartColor: (state, action) => {
+      state.cartName = action.payload;
     },
   },
   extraReducers: {
@@ -203,6 +218,8 @@ export const {
   setSorting,
   searchValues,
   fingers,
+  cartColor,
+  updateAndaContractItemsUrls,
   updateSearchProductUrls,
 } = authReducer.actions;
 export default authReducer.reducer;

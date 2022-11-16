@@ -29,11 +29,10 @@ const CustomerLikeYou = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [count, setCount] = useState(1);
   const [currentIndex, setCurrentIndex] = useState(-1);
-  const { customerLikeYouSeeMoreData, userInfoData, loading } = useSelector(
-    (state) => ({
+  const { customerLikeYouSeeMoreData, userInfoData, loading, favResponse } =
+    useSelector((state) => ({
       ...state.products,
-    })
-  );
+    }));
   const onPressTouch = () => {
     scrollRef?.current?.scrollTo({
       y: 0,
@@ -45,7 +44,7 @@ const CustomerLikeYou = () => {
   useEffect(() => {
     dispatch(customerLikeYouSeeMore({ value: "", currentPage }));
     dispatch(userInfo());
-  }, []);
+  }, [favResponse]);
   const result = customerLikeYouSeeMoreData;
   const userData = userInfoData;
 
@@ -177,6 +176,8 @@ const CustomerLikeYou = () => {
                         rewardItem={item?.defaultSku?.rewardItem}
                         priceType={item?.defaultSku?.priceType}
                         orderLimit={item?.defaultSku?.dailyOrderLimit}
+                        accountId={userData?.selectedAccount?.id}
+                        type={item?.defaultSku?.productLists[0]?.type}
                       />
                     </View>
                   );

@@ -23,9 +23,11 @@ const CloseOuts = () => {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const { closeOutData, userInfoData, loading } = useSelector((state) => ({
-    ...state.products,
-  }));
+  const { closeOutData, userInfoData, loading, favResponse } = useSelector(
+    (state) => ({
+      ...state.products,
+    })
+  );
   const onPressTouch = () => {
     scrollRef?.current?.scrollTo({
       y: 0,
@@ -37,7 +39,7 @@ const CloseOuts = () => {
   useEffect(() => {
     dispatch(closeOut({ value: "", currentPage }));
     dispatch(userInfo());
-  }, []);
+  }, [favResponse]);
   const result = closeOutData;
   const userData = userInfoData;
 
@@ -145,6 +147,8 @@ const CloseOuts = () => {
                         priceType={item?.defaultSku?.priceType}
                         inventoryClassKey={item?.defaultSku?.inventoryClassKey}
                         orderLimit={item?.defaultSku?.dailyOrderLimit}
+                        accountId={userData?.selectedAccount?.id}
+                        type={item?.defaultSku?.productLists[0]?.type}
                       />
                     </View>
                   );

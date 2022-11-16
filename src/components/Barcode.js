@@ -27,7 +27,6 @@ export default function Barcode() {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === "granted");
     };
-
     getBarCodeScannerPermissions();
   }, [isFocused]);
 

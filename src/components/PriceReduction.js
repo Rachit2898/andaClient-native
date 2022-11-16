@@ -27,11 +27,10 @@ const PriceReductionItems = () => {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const { priceReductionData, userInfoData, loading } = useSelector(
-    (state) => ({
+  const { priceReductionData, userInfoData, loading, favResponse } =
+    useSelector((state) => ({
       ...state.products,
-    })
-  );
+    }));
 
   const onPressTouch = () => {
     scrollRef?.current?.scrollTo({
@@ -44,7 +43,7 @@ const PriceReductionItems = () => {
   useEffect(() => {
     dispatch(priceReductionItems({ value: "", currentPage }));
     dispatch(userInfo());
-  }, []);
+  }, [favResponse]);
   const result = priceReductionData;
   const userData = userInfoData;
 
@@ -180,6 +179,8 @@ const PriceReductionItems = () => {
                           priceType={item?.defaultSku?.priceType}
                           priceReduced={item?.defaultSku?.priceReduced}
                           orderLimit={item?.defaultSku?.dailyOrderLimit}
+                          accountId={userData?.selectedAccount?.id}
+                          type={item?.defaultSku?.productLists[0]?.type}
                         />
                       </View>
                     );

@@ -27,10 +27,15 @@ const Inventory = () => {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const { inventoryWatchListData, userInfoData, loading, addLoading } =
-    useSelector((state) => ({
-      ...state.products,
-    }));
+  const {
+    inventoryWatchListData,
+    userInfoData,
+    loading,
+    addLoading,
+    favResponse,
+  } = useSelector((state) => ({
+    ...state.products,
+  }));
   const onPressTouch = () => {
     scrollRef?.current?.scrollTo({
       y: 0,
@@ -40,9 +45,9 @@ const Inventory = () => {
   const data = inventoryWatchListData?.products;
 
   useEffect(() => {
-    dispatch(inventoryWatchList, { value: "", currentPage });
+    dispatch(inventoryWatchList({ value: "", currentPage }));
     dispatch(userInfo());
-  }, []);
+  }, [favResponse]);
   const result = inventoryWatchListData;
   const userData = userInfoData;
 
@@ -177,6 +182,8 @@ const Inventory = () => {
                         rewardItem={item?.defaultSku?.rewardItem}
                         priceType={item?.defaultSku?.priceType}
                         orderLimit={item?.defaultSku?.dailyOrderLimit}
+                        accountId={userData?.selectedAccount?.id}
+                        type={item?.defaultSku?.productLists[0]?.type}
                       />
                     </View>
                   );

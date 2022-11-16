@@ -23,9 +23,11 @@ const ShortDate = () => {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const { shortDateData, userInfoData, loading } = useSelector((state) => ({
-    ...state.products,
-  }));
+  const { shortDateData, userInfoData, loading, favResponse } = useSelector(
+    (state) => ({
+      ...state.products,
+    })
+  );
 
   const onPressTouch = () => {
     scrollRef?.current?.scrollTo({
@@ -38,7 +40,7 @@ const ShortDate = () => {
   useEffect(() => {
     dispatch(shortDate({ value: "", currentPage }));
     dispatch(userInfo());
-  }, []);
+  }, [favResponse]);
   const result = shortDateData;
   const userData = userInfoData;
 
@@ -179,6 +181,8 @@ const ShortDate = () => {
                             item?.defaultSku?.inventoryClassKey
                           }
                           orderLimit={item?.defaultSku?.dailyOrderLimit}
+                          accountId={userData?.selectedAccount?.id}
+                          type={item?.defaultSku?.productLists[0]?.type}
                         />
                       </View>
                     );

@@ -18,6 +18,7 @@ import CustomerLikeYou from "./src/components/CustomerLikeYou";
 import PreNegotiatedItems from "./src/components/PreNegotiatedItems";
 import Favorites from "./src/components/Favorites";
 import Account from "./src/components/Account";
+import AndaContractItems from "./src/components/AndaContractItems";
 import Inventory from "./src/components/InventoryWatchList";
 import Savings from "./src/components/Savings";
 import CloseOuts from "./src/components/CloseOuts";
@@ -254,9 +255,17 @@ function AuthenticatedStack() {
               headerShown: false,
             }}
           />
+
           <Stack.Screen
             name="Account"
             component={Account}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="AndaContractItems"
+            component={AndaContractItems}
             options={{
               headerShown: false,
             }}
@@ -296,8 +305,7 @@ export default function Navigation() {
 
   return (
     <NavigationContainer>
-      {!isAuthenticated && <AuthStack />}
-      {isAuthenticated && <BiometricsAuth />}
+      {isAuthenticated ? <BiometricsAuth /> : <AuthStack />}
     </NavigationContainer>
   );
 }

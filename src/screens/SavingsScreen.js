@@ -16,7 +16,10 @@ import {
   addItem,
   userInfo,
   productDetails,
+  addFavorites,
+  removeFavorites,
 } from "../../redux/features/productApi";
+import LikeButton from "../components/LikeButton";
 
 const SavingsScreen = (props) => {
   const scrollRef = useRef();
@@ -32,30 +35,6 @@ const SavingsScreen = (props) => {
       ...state.products,
     })
   );
-  const onPressTouch = () => {
-    scrollRef?.current?.scrollTo({
-      y: 0,
-      animated: true,
-    });
-  };
-  const data = inventoryWatchData?.products;
-
-  useEffect(() => {
-    dispatch(inventoryWatch({ value: "", currentPage }));
-    dispatch(userInfo());
-  }, []);
-  const result = inventoryWatchData;
-  const userData = userInfoData;
-
-  const apiCall = async (currentPage) => {
-    setCurrentPage(currentPage);
-    dispatch(inventoryWatch({ value: "", currentPage }));
-    onPressTouch();
-  };
-
-  useEffect(() => {
-    apiCall(currentPage);
-  }, []);
 
   const checkBoxHandler = (item) => {
     setItem(item);
@@ -71,7 +50,7 @@ const SavingsScreen = (props) => {
     setCount(count - 1);
   };
   async function addItemIntoCart(skuId) {
-    const accountId = userData?.selectedAccount?.id;
+    const accountId = props.accountId;
     const quantity = count;
     try {
       dispatch(addItem({ accountId, skuId, quantity }));
@@ -82,6 +61,14 @@ const SavingsScreen = (props) => {
   const productDetailHandler = async (Id) => {
     navigation.navigate("ProductDetails");
     dispatch(productDetails(Id));
+  };
+  const favoriteHandler = (id, value) => {
+    console.log({ id });
+    if (value === "FAVORITE") {
+      dispatch(removeFavorites({ id }));
+    } else {
+      dispatch(addFavorites({ id }));
+    }
   };
 
   return (
@@ -133,6 +120,12 @@ const SavingsScreen = (props) => {
             />
           )}
         </Pressable>
+        <LikeButton
+          onPress={() => {
+            favoriteHandler(props?.id, props.type);
+          }}
+          value={props.type}
+        />
         <View
           style={{
             marginHorizontal: 10,

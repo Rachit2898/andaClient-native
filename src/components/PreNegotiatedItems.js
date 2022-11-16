@@ -27,9 +27,11 @@ const PreNegotiatedItems = () => {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const { preNegotiatedData, userInfoData, loading } = useSelector((state) => ({
-    ...state.products,
-  }));
+  const { preNegotiatedData, userInfoData, loading, favResponse } = useSelector(
+    (state) => ({
+      ...state.products,
+    })
+  );
   const onPressTouch = () => {
     scrollRef?.current?.scrollTo({
       y: 0,
@@ -41,7 +43,7 @@ const PreNegotiatedItems = () => {
   useEffect(() => {
     dispatch(preNegotiated({ value: "", currentPage }));
     dispatch(userInfo());
-  }, []);
+  }, [favResponse]);
   const result = preNegotiatedData;
   const userData = userInfoData;
 
@@ -173,6 +175,8 @@ const PreNegotiatedItems = () => {
                         rewardItem={item?.defaultSku?.rewardItem}
                         priceType={item?.defaultSku?.priceType}
                         orderLimit={item?.defaultSku?.dailyOrderLimit}
+                        accountId={userData?.selectedAccount?.id}
+                        type={item?.defaultSku?.productLists[0]?.type}
                       />
                     </View>
                   );

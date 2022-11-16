@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { cartInfo } from "../../redux/features/productApi";
+import { cartColor } from "../../redux/features/authUser";
 import { Badge } from "react-native-elements";
 
 const TabBar = () => {
@@ -15,14 +16,15 @@ const TabBar = () => {
   const { cartLength } = useSelector((state) => ({
     ...state.products,
   }));
+  const { cartName } = useSelector((state) => ({
+    ...state.auth,
+  }));
   return (
     <View
       style={{
         flexDirection: "row",
-        justifyContent: "space-around",
         backgroundColor: "#fff",
         paddingBottom: 20,
-        paddingTop: 10,
         borderTopWidth: 1,
         borderColor: "#ececec",
       }}
@@ -30,57 +32,115 @@ const TabBar = () => {
       <Pressable
         onPress={() => {
           navigation.navigate("HomePage");
+          dispatch(cartColor("Home"));
         }}
-        style={{ justifyContent: "center", alignItems: "center" }}
+        style={[
+          cartName === "Home" ? styles.upperBorder : styles.upperBorderNone,
+        ]}
       >
         <Image
           style={{ height: 20, width: 20 }}
-          source={require("../../assets/icon.png")}
+          source={require("../../assets/icon-home.png")}
         />
-        <Text style={{ fontSize: 10 }}>Home</Text>
+        <Text
+          style={[cartName === "Home" ? styles.logoNameLight : styles.logoName]}
+        >
+          Home
+        </Text>
       </Pressable>
       <Pressable
         onPress={() => {
           navigation.navigate("Cart");
+          dispatch(cartColor("Cart"));
         }}
-        style={{ justifyContent: "center", alignItems: "center" }}
+        style={[
+          cartName === "Cart" ? styles.upperBorder : styles.upperBorderNone,
+        ]}
       >
         <View style={{ flexDirection: "row" }}>
-          <Image
-            style={{ height: 20, width: 20 }}
-            source={require("../../assets/cartLogo.png")}
-          />
+          {cartName === "Cart" ? (
+            <Image
+              style={{ height: 20, width: 20 }}
+              source={require("../../assets/shopping-cart-blue.png")}
+            />
+          ) : (
+            <Image
+              style={{ height: 20, width: 20 }}
+              source={require("../../assets/cartLogo.png")}
+            />
+          )}
+
           {cartLength > 0 && (
             <View style={{ marginTop: -5, marginLeft: -8 }}>
               <Badge value={cartLength} />
             </View>
           )}
         </View>
-        <Text style={{ fontSize: 10 }}>Cart</Text>
+        <Text
+          style={[cartName === "Cart" ? styles.logoNameLight : styles.logoName]}
+        >
+          Cart
+        </Text>
       </Pressable>
       <Pressable
         onPress={() => {
           navigation.navigate("Account");
+          dispatch(cartColor("Account"));
         }}
-        style={{ justifyContent: "center", alignItems: "center" }}
+        style={[
+          cartName === "Account" ? styles.upperBorder : styles.upperBorderNone,
+        ]}
       >
-        <Image
-          style={{ height: 20, width: 20 }}
-          source={require("../../assets/account.png")}
-        />
-        <Text style={{ fontSize: 10 }}>Account</Text>
+        {cartName === "Account" ? (
+          <Image
+            style={{ height: 20, width: 20 }}
+            source={require("../../assets/user-blue.png")}
+          />
+        ) : (
+          <Image
+            style={{ height: 20, width: 20 }}
+            source={require("../../assets/account.png")}
+          />
+        )}
+
+        <Text
+          style={[
+            cartName === "Account" ? styles.logoNameLight : styles.logoName,
+          ]}
+        >
+          Account
+        </Text>
       </Pressable>
       <Pressable
         onPress={() => {
           navigation.navigate("Dashboard");
+          dispatch(cartColor("Dashboard"));
         }}
-        style={{ justifyContent: "center", alignItems: "center" }}
+        style={[
+          cartName === "Dashboard"
+            ? styles.upperBorder
+            : styles.upperBorderNone,
+        ]}
       >
-        <Image
-          style={{ height: 20, width: 20 }}
-          source={require("../../assets/more.png")}
-        />
-        <Text style={{ fontSize: 10 }}>Menu</Text>
+        {cartName === "Dashboard" ? (
+          <Image
+            style={{ height: 20, width: 20 }}
+            source={require("../../assets/more-blue.png")}
+          />
+        ) : (
+          <Image
+            style={{ height: 20, width: 20 }}
+            source={require("../../assets/more.png")}
+          />
+        )}
+
+        <Text
+          style={[
+            cartName === "Dashboard" ? styles.logoNameLight : styles.logoName,
+          ]}
+        >
+          Menu
+        </Text>
       </Pressable>
     </View>
   );
@@ -88,4 +148,27 @@ const TabBar = () => {
 
 export default TabBar;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  logoName: {
+    color: "#494c4c",
+    fontSize: 10,
+  },
+  logoNameLight: {
+    fontSize: 10,
+    color: "#006ba6",
+  },
+  upperBorder: {
+    justifyContent: "center",
+    alignItems: "center",
+    borderTopWidth: 3,
+    borderColor: "#006ba6",
+    paddingTop: 7,
+    width: "25%",
+  },
+  upperBorderNone: {
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop: 10,
+    width: "25%",
+  },
+});

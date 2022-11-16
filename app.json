@@ -2,7 +2,7 @@
   "expo": {
     "name": "Anda",
     "slug": "anda-net",
-    "version": "2.1.3",
+    "version": "2.1.7",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",

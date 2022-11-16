@@ -29,11 +29,10 @@ const YourTopPurchase = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [count, setCount] = useState(1);
   const [currentIndex, setCurrentIndex] = useState(-1);
-  const { inventoryWatchData, userInfoData, loading } = useSelector(
-    (state) => ({
+  const { inventoryWatchData, userInfoData, loading, favResponse } =
+    useSelector((state) => ({
       ...state.products,
-    })
-  );
+    }));
   const onPressTouch = () => {
     scrollRef?.current?.scrollTo({
       y: 0,
@@ -45,7 +44,7 @@ const YourTopPurchase = () => {
   useEffect(() => {
     dispatch(inventoryWatch({ value: "", currentPage }));
     dispatch(userInfo());
-  }, []);
+  }, [favResponse]);
   const result = inventoryWatchData;
   const userData = userInfoData;
 
@@ -178,6 +177,8 @@ const YourTopPurchase = () => {
                         rewardItem={item?.defaultSku?.rewardItem}
                         priceType={item?.defaultSku?.priceType}
                         orderLimit={item?.defaultSku?.dailyOrderLimit}
+                        accountId={userData?.selectedAccount?.id}
+                        type={item?.defaultSku?.productLists[0]?.type}
                       />
                     </View>
                   );

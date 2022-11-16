@@ -27,9 +27,11 @@ const Favorites = () => {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const { favoritesData, userInfoData, loading } = useSelector((state) => ({
-    ...state.products,
-  }));
+  const { favoritesData, userInfoData, loading, favResponse } = useSelector(
+    (state) => ({
+      ...state.products,
+    })
+  );
   const onPressTouch = () => {
     scrollRef?.current?.scrollTo({
       y: 0,
@@ -39,9 +41,9 @@ const Favorites = () => {
   const data = favoritesData?.products;
 
   useEffect(() => {
-    dispatch(favoritesApi, { value: "", currentPage });
+    dispatch(favoritesApi({ value: "", currentPage }));
     dispatch(userInfo());
-  }, []);
+  }, [favResponse]);
   const result = favoritesData;
   const userData = userInfoData;
 
@@ -170,6 +172,8 @@ const Favorites = () => {
                         rewardItem={item?.defaultSku?.rewardItem}
                         priceType={item?.defaultSku?.priceType}
                         orderLimit={item?.defaultSku?.dailyOrderLimit}
+                        accountId={userData?.selectedAccount?.id}
+                        type={item?.defaultSku?.productLists[0]?.type}
                       />
                     </View>
                   );

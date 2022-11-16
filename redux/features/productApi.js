@@ -9,10 +9,21 @@ import {
   checkOutCart,
   deleteItems,
   updateCartItems,
+  favorites,
+  favoritesRemove,
 } from "../../utils";
 
 export const addItem = createAsyncThunk("additems", async (body) => {
   const result = await addItems(body);
+  return result;
+});
+export const addFavorites = createAsyncThunk("addFav", async (body) => {
+  const result = await favorites(body);
+  return result;
+});
+
+export const removeFavorites = createAsyncThunk("removeFav", async (body) => {
+  const result = await favoritesRemove(body);
   return result;
 });
 export const cartValidating = createAsyncThunk("cartValidating", async () => {
@@ -389,6 +400,7 @@ const productSlice = createSlice({
     searchItem: [],
     searchProducstsData: {},
     andaContractItemsData: {},
+    favResponse: {},
   },
   extraReducers: {
     [yourTopPurChase.pending]: (state, action) => {
@@ -665,6 +677,28 @@ const productSlice = createSlice({
       state.andaContractItemsData = action.payload;
     },
     [andaContractItems.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [addFavorites.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [addFavorites.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.favResponse = action.payload;
+    },
+    [addFavorites.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [removeFavorites.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [removeFavorites.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.favResponse = action.payload;
+    },
+    [removeFavorites.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },

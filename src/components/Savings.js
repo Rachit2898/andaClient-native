@@ -23,9 +23,11 @@ const SavingsItems = () => {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const { savingsData, userInfoData, loading } = useSelector((state) => ({
-    ...state.products,
-  }));
+  const { savingsData, userInfoData, loading, favResponse } = useSelector(
+    (state) => ({
+      ...state.products,
+    })
+  );
   const onPressTouch = () => {
     scrollRef?.current?.scrollTo({
       y: 0,
@@ -37,7 +39,7 @@ const SavingsItems = () => {
   useEffect(() => {
     dispatch(savings({ value: "", currentPage }));
     dispatch(userInfo());
-  }, []);
+  }, [favResponse]);
   const result = savingsData;
   const userData = userInfoData;
 
@@ -143,6 +145,8 @@ const SavingsItems = () => {
                         rewardItem={item?.defaultSku?.rewardItem}
                         priceType={item?.defaultSku?.priceType}
                         orderLimit={item?.defaultSku?.dailyOrderLimit}
+                        accountId={userData?.selectedAccount?.id}
+                        type={item?.defaultSku?.productLists[0]?.type}
                       />
                     </View>
                   );

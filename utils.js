@@ -48,6 +48,51 @@ export async function cartValidate() {
   return data;
 }
 
+async function favoriteHandler(credentials) {
+  const token = await getToken();
+
+  const url = "https://staging.andanet.com/api/customer/product-list/items";
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+    body: JSON.stringify(credentials),
+  }).then((data) => data.json());
+
+  const data = response;
+
+  return data;
+}
+
+export function favorites(body) {
+  const credentials = {
+    type: "FAVORITE",
+    items: [
+      {
+        skuId: body.id,
+        quantity: 1,
+      },
+    ],
+  };
+  return favoriteHandler(credentials);
+}
+
+export function favoritesRemove(body) {
+  console.log("Favorites", body);
+  const credentials = {
+    type: "FAVORITE",
+    items: [
+      {
+        skuId: body.id,
+        quantity: 0,
+      },
+    ],
+  };
+  return favoriteHandler(credentials);
+}
+
 export async function emptyCart(credentials) {
   const token = await getToken();
   var url = "https://staging.andanet.com/api/cart";
