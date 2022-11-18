@@ -19,7 +19,10 @@ import {
   cartValidating,
   updateCartValues,
   productDetails,
+  addFavorites,
+  removeFavorites,
 } from "../../redux/features/productApi";
+import LikeButton from "../components/LikeButton";
 
 const CartScreen = (props) => {
   const dispatch = useDispatch();
@@ -38,11 +41,10 @@ const CartScreen = (props) => {
     subtotal,
     updateCart,
     deleteCart,
+    favResponse,
   } = useSelector((state) => ({
     ...state.products,
   }));
-  const cartData = cartInfoData;
-  const orderItems = cartData?.orderItems;
 
   const addButton = (id) => {
     setCurrentIndex(id);
@@ -56,22 +58,6 @@ const CartScreen = (props) => {
     setVisible(true);
   };
 
-  async function emptyCart(id) {
-    try {
-      dispatch(emptyCartItems(id));
-    } catch (error) {
-      alert("Could Not Empty Cart!!");
-    }
-  }
-
-  async function SubmitCart() {
-    try {
-      dispatch(cartValidating());
-      navigation.navigate("Auth", { screen: "SubmitCart" });
-    } catch (error) {
-      Alert.alert("Could Not Empty Cart!!");
-    }
-  }
   const deleteCartHandler = async (Id) => {
     setCurrentIndex(Id);
     try {
@@ -90,7 +76,7 @@ const CartScreen = (props) => {
     }
   };
   const productDetailHandler = async (Id) => {
-    navigation.navigate("Auth", { screen: "ProductDetails" });
+    navigation.navigate("ProductDetails");
     dispatch(productDetails(Id));
   };
 
@@ -98,6 +84,15 @@ const CartScreen = (props) => {
     setVisible(false);
     setCount(props.quantity);
   }, [isFocused, props.quantity]);
+
+  const favoriteHandler = (id, value) => {
+    console.log({ id });
+    if (value === "FAVORITE") {
+      dispatch(removeFavorites({ id }));
+    } else {
+      dispatch(addFavorites({ id }));
+    }
+  };
 
   return (
     <View>
@@ -113,10 +108,13 @@ const CartScreen = (props) => {
         }}
       >
         <View style={{ flexDirection: "row" }}>
-          <View
+          <Pressable
             style={{
               justifyContent: "center",
               alignSelf: "center",
+            }}
+            onPress={() => {
+              productDetailHandler(props.skuId);
             }}
           >
             {props.url ? (
@@ -144,7 +142,13 @@ const CartScreen = (props) => {
                 source={require("../../assets/camera.png")}
               />
             )}
-          </View>
+          </Pressable>
+          <LikeButton
+            onPress={() => {
+              favoriteHandler(props?.skuId, props.type);
+            }}
+            value={props.type}
+          />
           <View
             style={{
               marginHorizontal: 10,
@@ -153,7 +157,7 @@ const CartScreen = (props) => {
             }}
           >
             <Pressable
-              style={{ paddingVertical: 5 }}
+              style={{ paddingBottom: 5 }}
               onPress={() => {
                 productDetailHandler(props.skuId);
               }}

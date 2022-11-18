@@ -9,10 +9,27 @@ import {
   checkOutCart,
   deleteItems,
   updateCartItems,
+  favorites,
+  favoritesRemove,
+  productList,
 } from "../../utils";
+
+export const productLists = createAsyncThunk("urls/productLists", async () => {
+  const result = await productList();
+  return result;
+});
 
 export const addItem = createAsyncThunk("additems", async (body) => {
   const result = await addItems(body);
+  return result;
+});
+export const addFavorites = createAsyncThunk("addFav", async (body) => {
+  const result = await favorites(body);
+  return result;
+});
+
+export const removeFavorites = createAsyncThunk("removeFav", async (body) => {
+  const result = await favoritesRemove(body);
   return result;
 });
 export const cartValidating = createAsyncThunk("cartValidating", async () => {
@@ -48,9 +65,9 @@ export const yourTopPurChase = createAsyncThunk(
   "urls/topPurchase",
   async () => {
     const token = await getToken();
+    const result = await productList();
 
-    var url =
-      "https://staging.andanet.com/api/customer/product-list/49020/search?pageSize=4&availability=Available";
+    var url = `https://staging.andanet.com/api/customer/product-list/${result[2]?.id}/search?pageSize=4&availability=Available`;
 
     const response = await fetch(url, {
       method: "GET",
@@ -64,13 +81,31 @@ export const yourTopPurChase = createAsyncThunk(
     return myData;
   }
 );
+export const backInStock = createAsyncThunk("urls/backInStock", async () => {
+  const token = await getToken();
+
+  var url =
+    "https://staging.andanet.com/api/customer/inventory-notification/inventory-watch/search?pageSize=4&availability=Available";
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  });
+  const myData = await response.json();
+
+  return myData;
+});
+
 export const customerLikeYou = createAsyncThunk(
   "urls/customerLikeYou",
   async () => {
     const token = await getToken();
+    const result = await productList();
 
-    var url =
-      "https://staging.andanet.com/api/customer/product-list/97580/search?pageSize=4&availability=Available&previouslyPurchased=Not%20Previously%20Purchased";
+    var url = `https://staging.andanet.com/api/customer/product-list/${result[3]?.id}/search?pageSize=4&availability=Available&previouslyPurchased=Not%20Previously%20Purchased`;
 
     const response = await fetch(url, {
       method: "GET",
@@ -107,7 +142,10 @@ export const inventoryWatch = createAsyncThunk(
   "urls/inventoryWatch",
   async (body) => {
     const token = await getToken();
-    var url = `https://staging.andanet.com/api/customer/product-list/49020/search?${body?.value}page=${body?.currentPage}&searchMode=STANDARD`;
+    const result = await productList();
+    console.log(result[1]?.id);
+    var url = `https://staging.andanet.com/api/customer/product-list/${result[2]?.id}/search?${body?.value}page=${body?.currentPage}&searchMode=STANDARD`;
+    console.log(url);
     const response = await fetch(url, {
       method: "GET",
       headers: {
@@ -123,7 +161,8 @@ export const customerLikeYouSeeMore = createAsyncThunk(
   "urls/customerLikeYouSeeMore",
   async (body) => {
     const token = await getToken();
-    var url = `https://staging.andanet.com/api/customer/product-list/96896/search?${body?.value}page=${body?.currentPage}&searchMode=STANDARD`;
+    const result = await productList();
+    var url = `https://staging.andanet.com/api/customer/product-list/${result[3]?.id}/search?${body?.value}page=${body?.currentPage}&searchMode=STANDARD`;
     const response = await fetch(url, {
       method: "GET",
       headers: {
@@ -198,7 +237,8 @@ export const preNegotiated = createAsyncThunk(
 
 export const favoritesApi = createAsyncThunk("urls/favorites", async (body) => {
   const token = await getToken();
-  var url = `https://staging.andanet.com/api/customer/product-list/180781/search?${body?.value}page=${body?.currentPage}&searchMode=STANDARD`;
+  const result = await productList();
+  var url = `https://staging.andanet.com/api/customer/product-list/${result[0]?.id}/search?${body?.value}page=${body?.currentPage}&searchMode=STANDARD`;
   const response = await fetch(url, {
     method: "GET",
     headers: {
@@ -214,7 +254,8 @@ export const inventoryWatchList = createAsyncThunk(
   "urls/backInStockSeeMore",
   async (body) => {
     const token = await getToken();
-    var url = `https://staging.andanet.com/api/customer/product-list/23164/search?${body?.value}page=${body?.currentPage}&searchMode=STANDARD`;
+    const result = await productList();
+    var url = `https://staging.andanet.com/api/customer/product-list/${result[1]?.id}/search?${body?.value}page=${body?.currentPage}&searchMode=STANDARD`;
     const response = await fetch(url, {
       method: "GET",
       headers: {
@@ -387,10 +428,24 @@ const productSlice = createSlice({
     shortDateData: {},
     updateCart: {},
     searchItem: [],
+    backInStockData: [],
     searchProducstsData: {},
     andaContractItemsData: {},
+    favResponse: {},
+    productListsData: {},
   },
   extraReducers: {
+    [productLists.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [productLists.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.productListsData = action.payload;
+    },
+    [productLists.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
     [yourTopPurChase.pending]: (state, action) => {
       state.loading = true;
     },
@@ -399,6 +454,17 @@ const productSlice = createSlice({
       state.topPurchaseProducts = action.payload;
     },
     [yourTopPurChase.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [backInStock.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [backInStock.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.backInStockData = action.payload;
+    },
+    [backInStock.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
@@ -665,6 +731,28 @@ const productSlice = createSlice({
       state.andaContractItemsData = action.payload;
     },
     [andaContractItems.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [addFavorites.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [addFavorites.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.favResponse = action.payload;
+    },
+    [addFavorites.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [removeFavorites.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [removeFavorites.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.favResponse = action.payload;
+    },
+    [removeFavorites.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },

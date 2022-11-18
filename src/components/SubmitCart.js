@@ -5,6 +5,7 @@ import Navbar from "./Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { cartCheckOut } from "../../redux/features/productApi";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import TabBar from "./TabBar";
 
 const SubmitCart = () => {
   const navigation = useNavigation();
@@ -15,104 +16,113 @@ const SubmitCart = () => {
   const checkOutHandler = async (orderId) => {
     try {
       dispatch(cartCheckOut(orderId));
-      navigation.navigate("Auth", { screen: "CheckOut" });
+      navigation.navigate("CheckOut");
     } catch (error) {
       Alert.alert("Error");
     }
   };
   const editOrderNavigation = () => {
-    navigation.navigate("Auth", { screen: "Cart" });
+    navigation.navigate("Cart");
   };
   const cartCount = cartValidateInfo?.order?.itemCount;
   return (
-    <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
-      <View
-        style={{
-          backgroundColor: "#fff",
-          flex: 1,
-        }}
-      >
-        <Navbar />
-        {cartCount && (
-          <View>
-            <View style={styles.summaryContainer}>
-              <View>
-                <Text style={styles.orderText}>Order Summary</Text>
+    <SafeAreaView
+      style={{ backgroundColor: "#fff", flex: 1 }}
+      edges={["right", "left", "top"]}
+    >
+      <View style={{ flex: 1, marginTop: -40 }}>
+        <View
+          style={{
+            backgroundColor: "#fff",
+            flex: 1,
+          }}
+        >
+          {cartCount && (
+            <View>
+              <View style={styles.summaryContainer}>
+                <View>
+                  <Text style={styles.orderText}>Order Summary</Text>
+                </View>
+                <Pressable
+                  onPress={() => {
+                    editOrderNavigation();
+                  }}
+                >
+                  <Text style={styles.editOrderText}>EDIT ORDER</Text>
+                </Pressable>
+              </View>
+              <View style={styles.itemQuantityContainer}>
+                <View style={styles.itemResponseContainer}>
+                  <Text style={styles.itemText}>Items:</Text>
+                  <View style={styles.itemResponseTextContainer}>
+                    <Text style={styles.itemResponseText}>{cartLength}</Text>
+                  </View>
+                </View>
+                <View style={styles.itemResponseContainer}>
+                  <Text style={styles.itemText}>Item Quantities:</Text>
+                  <View style={styles.itemResponseTextContainer}>
+                    <Text style={styles.itemResponseText}>
+                      {cartValidateInfo?.order?.itemCount}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+              <View style={styles.itemQuantityContainer}>
+                <View style={styles.itemResponseContainer}>
+                  <Text style={styles.itemSubTotal}>Items Subtotal:</Text>
+                  <View style={styles.itemResponseTextContainer}>
+                    <Text style={styles.itemSubTotal}>
+                      ${cartValidateInfo?.order?.subTotal?.amount}
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.itemResponseContainer}>
+                  <Text style={styles.itemSubTotal}>Shipping Fee:</Text>
+                  <View style={styles.itemResponseTextContainer}>
+                    {cartValidateInfo?.order?.totalShipping?.amount > 0 ? (
+                      <Text style={styles.itemSubTotal}>
+                        ${cartValidateInfo?.order?.totalShipping?.amount}
+                      </Text>
+                    ) : (
+                      <Text style={styles.itemSubTotalResponseText}>
+                        Waived
+                      </Text>
+                    )}
+                  </View>
+                </View>
+              </View>
+              <View style={styles.itemQuantityContainer}>
+                <View style={styles.itemResponseContainer}>
+                  <Text style={styles.itemEstimated}>Estimated Tax:</Text>
+                  <View style={styles.itemResponseTextContainer}>
+                    <Text style={styles.itemSubTax}>
+                      {" "}
+                      ${cartValidateInfo?.order?.totalTax?.amount}
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.itemResponseContainer}>
+                  <Text style={styles.itemTotal}>Order Total:</Text>
+                  <View style={styles.itemResponseTotalCostContainer}>
+                    <Text style={styles.itemTotalResponseText}>
+                      ${cartValidateInfo?.order?.total?.amount}
+                    </Text>
+                  </View>
+                </View>
               </View>
               <Pressable
-                onPress={() => {
-                  editOrderNavigation();
-                }}
+                android_ripple={{ color: "#ccc" }}
+                style={styles.proceedButtonContainer}
+                onPress={() => checkOutHandler(cartValidateInfo?.order?.id)}
               >
-                <Text style={styles.editOrderText}>EDIT ORDER</Text>
+                <Text style={styles.proceedButton}>PROCEED TO CHECKOUT</Text>
               </Pressable>
             </View>
-            <View style={styles.itemQuantityContainer}>
-              <View style={styles.itemResponseContainer}>
-                <Text style={styles.itemText}>Items:</Text>
-                <View style={styles.itemResponseTextContainer}>
-                  <Text style={styles.itemResponseText}>{cartLength}</Text>
-                </View>
-              </View>
-              <View style={styles.itemResponseContainer}>
-                <Text style={styles.itemText}>Item Quantities:</Text>
-                <View style={styles.itemResponseTextContainer}>
-                  <Text style={styles.itemResponseText}>
-                    {cartValidateInfo?.order?.itemCount}
-                  </Text>
-                </View>
-              </View>
-            </View>
-            <View style={styles.itemQuantityContainer}>
-              <View style={styles.itemResponseContainer}>
-                <Text style={styles.itemSubTotal}>Items Subtotal:</Text>
-                <View style={styles.itemResponseTextContainer}>
-                  <Text style={styles.itemSubTotal}>
-                    ${cartValidateInfo?.order?.subTotal?.amount}
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.itemResponseContainer}>
-                <Text style={styles.itemSubTotal}>Shipping Fee:</Text>
-                <View style={styles.itemResponseTextContainer}>
-                  {cartValidateInfo?.order?.totalShipping?.amount > 0 ? (
-                    <Text style={styles.itemSubTotal}>
-                      ${cartValidateInfo?.order?.totalShipping?.amount}
-                    </Text>
-                  ) : (
-                    <Text style={styles.itemSubTotalResponseText}>Waived</Text>
-                  )}
-                </View>
-              </View>
-            </View>
-            <View style={styles.itemQuantityContainer}>
-              <View style={styles.itemResponseContainer}>
-                <Text style={styles.itemEstimated}>Estimated Tax:</Text>
-                <View style={styles.itemResponseTextContainer}>
-                  <Text style={styles.itemSubTax}>
-                    {" "}
-                    ${cartValidateInfo?.order?.totalTax?.amount}
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.itemResponseContainer}>
-                <Text style={styles.itemTotal}>Order Total:</Text>
-                <View style={styles.itemResponseTotalCostContainer}>
-                  <Text style={styles.itemTotalResponseText}>
-                    ${cartValidateInfo?.order?.total?.amount}
-                  </Text>
-                </View>
-              </View>
-            </View>
-            <Pressable
-              android_ripple={{ color: "#ccc" }}
-              style={styles.proceedButtonContainer}
-              onPress={() => checkOutHandler(cartValidateInfo?.order?.id)}
-            >
-              <Text style={styles.proceedButton}>PROCEED TO CHECKOUT</Text>
-            </Pressable>
-          </View>
-        )}
+          )}
+        </View>
+        <View style={{ left: 0, right: 0, bottom: 0 }}>
+          <TabBar />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -198,7 +208,6 @@ const styles = StyleSheet.create({
     fontWeight: "800",
   },
   summaryContainer: {
-    marginTop: 10,
     marginHorizontal: 10,
     paddingVertical: 10,
     borderBottomWidth: 0.5,

@@ -19,6 +19,7 @@ import {
   useNavigation,
   StackActions,
 } from "@react-navigation/native";
+import TabBar from "./TabBar";
 
 const Dashboard = ({ size }) => {
   const { userInfoData } = useSelector((state) => ({
@@ -29,413 +30,491 @@ const Dashboard = ({ size }) => {
   const [modalVisible, setModalVisible] = useState(!modalVisible);
   const userData = userInfoData;
   const logoutHandler = () => {
-    navigation.navigate("Auth", { screen: "HomePage" });
+    navigation.navigate("HomePage");
     setTimeout(() => {
       dispatch(logout(false));
     });
   };
   const favoritesOpen = async () => {
-    navigation.navigate("Auth", { screen: "Favorites" });
+    navigation.navigate("Favorites");
     setModalVisible(!modalVisible);
   };
   const topPurchseOpen = async () => {
-    navigation.navigate("Auth", { screen: "TopPurchase" });
+    navigation.navigate("TopPurchase");
     setModalVisible(!modalVisible);
   };
   const customerLikeYouOpen = async () => {
-    navigation.navigate("Auth", { screen: "CustomerLikeYou" });
+    navigation.navigate("CustomerLikeYou");
     setModalVisible(!modalVisible);
   };
   const preNegotiatedOpen = async () => {
-    navigation.navigate("Auth", { screen: "PreNegotiated" });
+    navigation.navigate("PreNegotiated");
     setModalVisible(!modalVisible);
   };
   const inventoryOpen = async () => {
-    navigation.navigate("Auth", { screen: "Inventory" });
+    navigation.navigate("Inventory");
     setModalVisible(!modalVisible);
   };
   const savingsOpen = async () => {
-    navigation.navigate("Auth", { screen: "Savings" });
+    navigation.navigate("Savings");
     setModalVisible(!modalVisible);
   };
   const closeOutsOpen = async () => {
-    navigation.navigate("Auth", { screen: "CloseOuts" });
+    navigation.navigate("CloseOuts");
     setModalVisible(!modalVisible);
   };
   const priceReductionOpen = async () => {
-    navigation.navigate("Auth", { screen: "PriceReduction" });
+    navigation.navigate("PriceReduction");
     setModalVisible(!modalVisible);
   };
   const shortDateOpen = async () => {
-    navigation.navigate("Auth", { screen: "ShortDate" });
+    navigation.navigate("ShortDate");
     setModalVisible(!modalVisible);
   };
   const closeButtonHandler = async () => {
-    navigation.navigate("Auth");
+    navigation.goBack();
   };
   const OrderingOptionsOpen = async () => {
-    navigation.navigate("Auth", { screen: "OrderingOptions" });
+    navigation.navigate("OrderingOptions");
   };
   const OpeningAccountOpen = async () => {
-    navigation.navigate("Auth", { screen: "OpeningAccount" });
+    navigation.navigate("OpeningAccount");
   };
   const PaymentOpen = async () => {
-    navigation.navigate("Auth", { screen: "Payment" });
+    navigation.navigate("Payment");
   };
   const ReturnOpen = async () => {
-    navigation.navigate("Auth", { screen: "ReturnPolicy" });
+    navigation.navigate("ReturnPolicy");
   };
   const FaqOpen = async () => {
-    navigation.navigate("Auth", { screen: "Faq" });
+    navigation.navigate("Faq");
   };
   const SettingOpen = async () => {
-    navigation.navigate("Auth", { screen: "Settings" });
+    navigation.navigate("Settings");
   };
   return (
-    <View style={styles.modalView}>
-      <View style={styles.closeButton}>
-        <View style={{ flexDirection: "row" }}>
-          <Image
-            source={require("../../assets/icon.png")}
-            style={{ height: 40, width: 40 }}
-          />
-        </View>
+    <SafeAreaView
+      style={styles.safeAreaContainer}
+      edges={["right", "left", "top"]}
+    >
+      <View style={{ flex: 1 }}>
+        <View style={styles.closeButton}>
+          <View style={{ flexDirection: "row" }}>
+            <Image
+              source={require("../../assets/icon.png")}
+              style={{ height: 40, width: 40 }}
+            />
+            <View style={{ marginHorizontal: 5, justifyContent: "center" }}>
+              <Text style={{ fontSize: 12 }}>{userData?.username}</Text>
+            </View>
+          </View>
 
-        <Pressable
-          onPress={() => closeButtonHandler()}
-          style={{ justifyContent: "center", alignSelf: "center" }}
-        >
-          <Image
-            source={require("../../assets/close.png")}
-            style={{
-              height: 20,
-              width: 20,
-            }}
-          />
-        </Pressable>
-      </View>
-      <View style={{ margin: 10 }}>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <View
-            style={{
-              width: 25,
-              justifyContent: "center",
-              alignItems: "center",
-              height: 25,
-            }}
+          <Pressable
+            onPress={() => closeButtonHandler()}
+            style={{ justifyContent: "center", alignSelf: "center" }}
           >
             <Image
-              source={require("../../assets/account.png")}
+              source={require("../../assets/close.png")}
               style={{
                 height: 20,
                 width: 20,
               }}
             />
-          </View>
-          <View style={{ marginHorizontal: 10 }}>
-            <Text style={{ fontSize: 15 }}>{userData?.username}</Text>
-          </View>
+          </Pressable>
         </View>
-        {/* <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            marginVertical: 10,
-          }}
-        >
-          <View
-            style={{
-              alignItems: "center",
-            }}
-          >
-            <Image
-              source={require("../../assets/notification.png")}
-              style={{
-                height: 25,
-                width: 25,
-              }}
-            />
+
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View>
+            <View>
+              <View style={styles.prductListBlue}>
+                <Text style={styles.productText}>Product Lists</Text>
+              </View>
+              <View style={{ marginHorizontal: 10, paddingVertical: 5 }}>
+                <Pressable
+                  onPress={() => {
+                    favoritesOpen();
+                  }}
+                  style={{
+                    borderBottomWidth: 1,
+                    borderColor: "#ececec",
+                    paddingBottom: 5,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      paddingVertical: 5,
+                      paddingHorizontal: 10,
+                    }}
+                  >
+                    Favorites
+                  </Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => {
+                    inventoryOpen();
+                  }}
+                  style={{
+                    borderBottomWidth: 1,
+                    borderColor: "#ececec",
+                    paddingVertical: 5,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      paddingVertical: 5,
+                      paddingHorizontal: 10,
+                    }}
+                  >
+                    Inventory Watch List
+                  </Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => {
+                    topPurchseOpen();
+                  }}
+                  style={{
+                    borderBottomWidth: 1,
+                    borderColor: "#ececec",
+                    paddingVertical: 5,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      paddingVertical: 5,
+                      paddingHorizontal: 10,
+                    }}
+                  >
+                    Your Top Purchases
+                  </Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => {
+                    preNegotiatedOpen();
+                  }}
+                  style={{
+                    borderBottomWidth: 1,
+                    borderColor: "#ececec",
+                    paddingVertical: 5,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      paddingVertical: 5,
+                      paddingHorizontal: 10,
+                    }}
+                  >
+                    Pre-Negotiated items
+                  </Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => {
+                    customerLikeYouOpen();
+                  }}
+                  style={{
+                    paddingTop: 5,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      paddingVertical: 5,
+                      paddingHorizontal: 10,
+                    }}
+                  >
+                    Customers Like You
+                  </Text>
+                </Pressable>
+              </View>
+            </View>
+            <View>
+              <View style={styles.prductListBlue}>
+                <Text style={styles.productText}>Savings</Text>
+              </View>
+              <View style={{ marginHorizontal: 10 }}>
+                <Pressable
+                  onPress={() => {
+                    savingsOpen();
+                  }}
+                  style={{
+                    borderBottomWidth: 1,
+                    borderColor: "#ececec",
+                    paddingVertical: 5,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      paddingVertical: 5,
+                      paddingHorizontal: 10,
+                    }}
+                  >
+                    Savings
+                  </Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => {
+                    closeOutsOpen();
+                  }}
+                  style={{
+                    borderBottomWidth: 1,
+                    borderColor: "#ececec",
+                    paddingVertical: 5,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      paddingVertical: 5,
+                      paddingHorizontal: 10,
+                    }}
+                  >
+                    Close Outs
+                  </Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => {
+                    priceReductionOpen();
+                  }}
+                  style={{
+                    borderBottomWidth: 1,
+                    borderColor: "#ececec",
+                    paddingVertical: 5,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      paddingVertical: 5,
+                      paddingHorizontal: 10,
+                    }}
+                  >
+                    Price Reductions
+                  </Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => {
+                    shortDateOpen();
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      paddingVertical: 5,
+                      paddingHorizontal: 10,
+                    }}
+                  >
+                    Short Dates
+                  </Text>
+                </Pressable>
+              </View>
+            </View>
+            <View>
+              <View style={styles.prductListBlue}>
+                <Text style={styles.productText}>Support</Text>
+              </View>
+              <View style={{ marginHorizontal: 10 }}>
+                <Pressable
+                  onPress={() => {
+                    OrderingOptionsOpen();
+                  }}
+                  style={{
+                    borderBottomWidth: 1,
+                    borderColor: "#ececec",
+                    paddingVertical: 5,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      paddingVertical: 5,
+                      paddingHorizontal: 10,
+                    }}
+                  >
+                    Ordering Options and Hours
+                  </Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => {
+                    OpeningAccountOpen();
+                  }}
+                  style={{
+                    borderBottomWidth: 1,
+                    borderColor: "#ececec",
+                    paddingVertical: 5,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      paddingVertical: 5,
+                      paddingHorizontal: 10,
+                    }}
+                  >
+                    Opening an Account
+                  </Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => {
+                    PaymentOpen();
+                  }}
+                  style={{
+                    borderBottomWidth: 1,
+                    borderColor: "#ececec",
+                    paddingVertical: 5,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      paddingVertical: 5,
+                      paddingHorizontal: 10,
+                    }}
+                  >
+                    Payment Options
+                  </Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => {
+                    ReturnOpen();
+                  }}
+                  style={{
+                    borderBottomWidth: 1,
+                    borderColor: "#ececec",
+                    paddingVertical: 5,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      paddingVertical: 5,
+                      paddingHorizontal: 10,
+                    }}
+                  >
+                    Return Policy
+                  </Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => {
+                    FaqOpen();
+                  }}
+                  style={{
+                    borderBottomWidth: 1,
+                    borderColor: "#ececec",
+                    paddingVertical: 5,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      paddingVertical: 5,
+                      paddingHorizontal: 10,
+                    }}
+                  >
+                    FAQs
+                  </Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => {
+                    SettingOpen();
+                  }}
+                  style={{
+                    borderBottomWidth: 1,
+                    borderColor: "#ececec",
+                    paddingVertical: 5,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      paddingVertical: 5,
+                      paddingHorizontal: 10,
+                    }}
+                  >
+                    Settings
+                  </Text>
+                </Pressable>
+                <View>
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      paddingVertical: 5,
+                      paddingHorizontal: 10,
+                      color: "grey",
+                    }}
+                  >
+                    Toll Free: 1-800-331-2632
+                  </Text>
+                </View>
+                <View>
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      paddingVertical: 5,
+                      paddingHorizontal: 10,
+                      color: "grey",
+                    }}
+                  >
+                    Tech Support:1-887-263-2638
+                  </Text>
+                </View>
+                <View>
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      paddingVertical: 5,
+                      paddingHorizontal: 10,
+                      color: "grey",
+                    }}
+                  >
+                    Email: info@andanet.com
+                  </Text>
+                </View>
+                <View style={{}}>
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      paddingVertical: 5,
+                      paddingHorizontal: 10,
+                      color: "grey",
+                    }}
+                  >
+                    DONNA ROCHIN
+                  </Text>
+                </View>
+                <View style={{}}>
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      paddingVertical: 5,
+                      paddingHorizontal: 10,
+                      color: "grey",
+                    }}
+                  >
+                    (800) 331-2632 x75104
+                  </Text>
+                </View>
+              </View>
+            </View>
+            <View>
+              <Pressable
+                android_ripple={{ color: "#ccc" }}
+                style={styles.logoutBox}
+                onPress={() => logoutHandler()}
+              >
+                <Text style={styles.logoutText}>LOGOUT</Text>
+              </Pressable>
+            </View>
           </View>
-          <View style={{ marginHorizontal: 10 }}>
-            <Text style={{ fontSize: 15 }}>Notifications</Text>
-          </View>
-        </View> */}
+        </ScrollView>
+        <View style={{ left: 0, right: 0, bottom: 0 }}>
+          <TabBar />
+        </View>
       </View>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={{ marginBottom: 150 }}>
-          <View>
-            <View style={styles.prductListBlue}>
-              <Text style={styles.productText}>Product Lists</Text>
-            </View>
-            <View style={{ marginHorizontal: 10, paddingVertical: 5 }}>
-              <Pressable
-                onPress={() => {
-                  favoritesOpen();
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 15,
-                    paddingVertical: 5,
-                    textDecorationLine: "underline",
-                  }}
-                >
-                  Favorites
-                </Text>
-              </Pressable>
-              <Pressable
-                onPress={() => {
-                  inventoryOpen();
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 15,
-                    paddingVertical: 5,
-                    textDecorationLine: "underline",
-                  }}
-                >
-                  Inventory Watch List
-                </Text>
-              </Pressable>
-              <Pressable
-                onPress={() => {
-                  topPurchseOpen();
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 15,
-                    paddingVertical: 5,
-                    textDecorationLine: "underline",
-                  }}
-                >
-                  Your Top Purchases
-                </Text>
-              </Pressable>
-              <Pressable
-                onPress={() => {
-                  preNegotiatedOpen();
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 15,
-                    paddingVertical: 5,
-                    textDecorationLine: "underline",
-                  }}
-                >
-                  Pre-Negotiated items
-                </Text>
-              </Pressable>
-              <Pressable
-                onPress={() => {
-                  customerLikeYouOpen();
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 15,
-                    paddingVertical: 5,
-                    textDecorationLine: "underline",
-                  }}
-                >
-                  Customers Like You
-                </Text>
-              </Pressable>
-            </View>
-          </View>
-          <View style={{ marginVertical: 10 }}>
-            <View style={styles.prductListBlue}>
-              <Text style={styles.productText}>Savings</Text>
-            </View>
-            <View style={{ marginHorizontal: 10, paddingVertical: 5 }}>
-              <Pressable
-                onPress={() => {
-                  savingsOpen();
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 15,
-                    paddingVertical: 5,
-                    textDecorationLine: "underline",
-                  }}
-                >
-                  Savings
-                </Text>
-              </Pressable>
-              <Pressable
-                onPress={() => {
-                  closeOutsOpen();
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 15,
-                    paddingVertical: 5,
-                    textDecorationLine: "underline",
-                  }}
-                >
-                  Close Outs
-                </Text>
-              </Pressable>
-              <Pressable
-                onPress={() => {
-                  priceReductionOpen();
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 15,
-                    paddingVertical: 5,
-                    textDecorationLine: "underline",
-                  }}
-                >
-                  Price Reductions
-                </Text>
-              </Pressable>
-              <Pressable
-                onPress={() => {
-                  shortDateOpen();
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 15,
-                    paddingVertical: 5,
-                    textDecorationLine: "underline",
-                  }}
-                >
-                  Short Dates
-                </Text>
-              </Pressable>
-            </View>
-          </View>
-          <View style={{ marginVertical: 10 }}>
-            <View style={styles.prductListBlue}>
-              <Text style={styles.productText}>Support</Text>
-            </View>
-            <View style={{ marginHorizontal: 10, paddingVertical: 5 }}>
-              <Pressable
-                onPress={() => {
-                  OrderingOptionsOpen();
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 15,
-                    paddingVertical: 5,
-                    textDecorationLine: "underline",
-                  }}
-                >
-                  Ordering Options and Hours
-                </Text>
-              </Pressable>
-              <Pressable
-                onPress={() => {
-                  OpeningAccountOpen();
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 15,
-                    paddingVertical: 5,
-                    textDecorationLine: "underline",
-                  }}
-                >
-                  Opening an Account
-                </Text>
-              </Pressable>
-              <Pressable
-                onPress={() => {
-                  PaymentOpen();
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 15,
-                    paddingVertical: 5,
-                    textDecorationLine: "underline",
-                  }}
-                >
-                  Payment Options
-                </Text>
-              </Pressable>
-              <Pressable
-                onPress={() => {
-                  ReturnOpen();
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 15,
-                    paddingVertical: 5,
-                    textDecorationLine: "underline",
-                  }}
-                >
-                  Return Policy
-                </Text>
-              </Pressable>
-              <Pressable
-                onPress={() => {
-                  FaqOpen();
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 15,
-                    paddingVertical: 5,
-                    textDecorationLine: "underline",
-                  }}
-                >
-                  FAQs
-                </Text>
-              </Pressable>
-              <Pressable
-                onPress={() => {
-                  SettingOpen();
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 15,
-                    paddingVertical: 5,
-                    textDecorationLine: "underline",
-                  }}
-                >
-                  Settings
-                </Text>
-              </Pressable>
-              <Text style={{ fontSize: 15, paddingVertical: 5 }}>
-                Toll Free: 1-800-331-2632
-              </Text>
-              <Text style={{ fontSize: 15, paddingVertical: 5 }}>
-                Tech Support:1-887-263-2638
-              </Text>
-              <Text style={{ fontSize: 15, paddingVertical: 5 }}>
-                Email: info@andanet.com
-              </Text>
-              <Text style={{ fontSize: 15, paddingVertical: 5 }}>
-                DONNA ROCHIN
-              </Text>
-              <Text style={{ fontSize: 15, paddingVertical: 5 }}>
-                (800) 331-2632 x75104
-              </Text>
-            </View>
-          </View>
-          <View>
-            <Pressable
-              android_ripple={{ color: "#ccc" }}
-              style={styles.logoutBox}
-              onPress={() => logoutHandler()}
-            >
-              <Text style={styles.logoutText}>LOGOUT</Text>
-            </Pressable>
-          </View>
-        </View>
-      </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -470,8 +549,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     flexDirection: "row",
     justifyContent: "space-between",
-    borderBottomWidth: 0.3,
-    borderColor: "#005185",
   },
   logoutBox: {
     backgroundColor: "#ed8b00",
@@ -490,14 +567,15 @@ const styles = StyleSheet.create({
   },
   prductListBlue: {
     backgroundColor: "#006ba6",
-    height: 30,
-    marginBottom: 10,
+    marginVertical: 5,
+    paddingVertical: 2,
+    justifyContent: "center",
   },
   productText: {
     color: "#fff",
     alignItems: "center",
     textAlign: "center",
-    paddingTop: 5,
-    fontWeight: "800",
+    fontWeight: "700",
+    justifyContent: "center",
   },
 });

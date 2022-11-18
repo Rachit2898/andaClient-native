@@ -16,7 +16,10 @@ import {
   addItem,
   userInfo,
   productDetails,
+  addFavorites,
+  removeFavorites,
 } from "../../redux/features/productApi";
+import LikeButton from "../components/LikeButton";
 
 const PriceReductionScreen = (props) => {
   const scrollRef = useRef();
@@ -27,35 +30,11 @@ const PriceReductionScreen = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [count, setCount] = useState(1);
   const [currentIndex, setCurrentIndex] = useState(-1);
-  const { inventoryWatchData, userInfoData, addLoading } = useSelector(
+  const { inventoryWatchData, userInfoData, addLoading, loading } = useSelector(
     (state) => ({
       ...state.products,
     })
   );
-  const onPressTouch = () => {
-    scrollRef?.current?.scrollTo({
-      y: 0,
-      animated: true,
-    });
-  };
-  const data = inventoryWatchData?.products;
-
-  useEffect(() => {
-    dispatch(inventoryWatch({ value: "", currentPage }));
-    dispatch(userInfo());
-  }, []);
-  const result = inventoryWatchData;
-  const userData = userInfoData;
-
-  const apiCall = async (currentPage) => {
-    setCurrentPage(currentPage);
-    dispatch(inventoryWatch({ value: "", currentPage }));
-    onPressTouch();
-  };
-
-  useEffect(() => {
-    apiCall(currentPage);
-  }, []);
 
   const checkBoxHandler = (item) => {
     setItem(item);
@@ -71,7 +50,7 @@ const PriceReductionScreen = (props) => {
     setCount(count - 1);
   };
   async function addItemIntoCart(skuId) {
-    const accountId = userData?.selectedAccount?.id;
+    const accountId = props.accountId;
     const quantity = count;
     try {
       dispatch(addItem({ accountId, skuId, quantity }));
@@ -80,8 +59,16 @@ const PriceReductionScreen = (props) => {
     }
   }
   const productDetailHandler = async (Id) => {
-    navigation.navigate("Auth", { screen: "ProductDetails" });
+    navigation.navigate("ProductDetails");
     dispatch(productDetails(Id));
+  };
+  const favoriteHandler = (id, value) => {
+    console.log({ id });
+    if (value === "FAVORITE") {
+      dispatch(removeFavorites({ id }));
+    } else {
+      dispatch(addFavorites({ id }));
+    }
   };
 
   return (
@@ -96,6 +83,7 @@ const PriceReductionScreen = (props) => {
         justifyContent: "space-between",
       }}
     >
+      {loading && <Spinner />}
       <View style={{ flexDirection: "row" }}>
         <View
           style={{
@@ -147,6 +135,12 @@ const PriceReductionScreen = (props) => {
             )}
           </Pressable>
         </View>
+        <LikeButton
+          onPress={() => {
+            favoriteHandler(props?.id, props.type);
+          }}
+          value={props.type}
+        />
         <View
           style={{
             marginHorizontal: 10,

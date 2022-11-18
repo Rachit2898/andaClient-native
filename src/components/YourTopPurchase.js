@@ -11,6 +11,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
 import Navbar from "./Navbar";
 import Pagination from "./Pagination";
+import TabBar from "./TabBar";
 import Spinner from "./Spinner";
 import Filter from "../filter/InventoryWatchFilter";
 import ProductScreen from "../screens/ProductScreen";
@@ -28,11 +29,10 @@ const YourTopPurchase = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [count, setCount] = useState(1);
   const [currentIndex, setCurrentIndex] = useState(-1);
-  const { inventoryWatchData, userInfoData, loading } = useSelector(
-    (state) => ({
+  const { inventoryWatchData, userInfoData, loading, favResponse } =
+    useSelector((state) => ({
       ...state.products,
-    })
-  );
+    }));
   const onPressTouch = () => {
     scrollRef?.current?.scrollTo({
       y: 0,
@@ -44,7 +44,7 @@ const YourTopPurchase = () => {
   useEffect(() => {
     dispatch(inventoryWatch({ value: "", currentPage }));
     dispatch(userInfo());
-  }, []);
+  }, [favResponse]);
   const result = inventoryWatchData;
   const userData = userInfoData;
 
@@ -82,7 +82,10 @@ const YourTopPurchase = () => {
   const pageLast = currentLast(currentPage);
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
+    <SafeAreaView
+      style={{ backgroundColor: "#fff", flex: 1 }}
+      edges={["right", "left", "top"]}
+    >
       <Filter
         checkBoxHandler={checkBoxHandler}
         modalVisible={modalVisible}
@@ -91,6 +94,7 @@ const YourTopPurchase = () => {
       <View
         style={{
           backgroundColor: "#fff",
+          flex: 1,
         }}
       >
         <Navbar />
@@ -108,7 +112,6 @@ const YourTopPurchase = () => {
               Your Top Purchases
             </Text>
           </View>
-          {loading && <Spinner />}
           <Pressable
             style={{
               borderWidth: 1,
@@ -174,6 +177,8 @@ const YourTopPurchase = () => {
                         rewardItem={item?.defaultSku?.rewardItem}
                         priceType={item?.defaultSku?.priceType}
                         orderLimit={item?.defaultSku?.dailyOrderLimit}
+                        accountId={userData?.selectedAccount?.id}
+                        type={item?.defaultSku?.productLists[0]?.type}
                       />
                     </View>
                   );
@@ -196,6 +201,9 @@ const YourTopPurchase = () => {
             </View>
           )}
         </View>
+        <View style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+          <TabBar />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -205,7 +213,7 @@ export default YourTopPurchase;
 
 const styles = StyleSheet.create({
   pagination: {
-    marginBottom: 100,
+    marginBottom: 10,
   },
   mainBoxLoading: { opacity: 0.2 },
   mainBox: { backgroundColor: "#fff", marginBottom: 200 },

@@ -11,6 +11,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
 import Navbar from "./Navbar";
 import Pagination from "./Pagination";
+import TabBar from "./TabBar";
 import Spinner from "./Spinner";
 import Filter from "../filter/InventoryWatchFilter";
 import PreNegotiatedScreen from "../screens/InventoryWatchScreen";
@@ -26,10 +27,15 @@ const Inventory = () => {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const { inventoryWatchListData, userInfoData, loading, addLoading } =
-    useSelector((state) => ({
-      ...state.products,
-    }));
+  const {
+    inventoryWatchListData,
+    userInfoData,
+    loading,
+    addLoading,
+    favResponse,
+  } = useSelector((state) => ({
+    ...state.products,
+  }));
   const onPressTouch = () => {
     scrollRef?.current?.scrollTo({
       y: 0,
@@ -39,9 +45,9 @@ const Inventory = () => {
   const data = inventoryWatchListData?.products;
 
   useEffect(() => {
-    dispatch(inventoryWatchList, { value: "", currentPage });
+    dispatch(inventoryWatchList({ value: "", currentPage }));
     dispatch(userInfo());
-  }, []);
+  }, [favResponse]);
   const result = inventoryWatchListData;
   const userData = userInfoData;
 
@@ -79,7 +85,10 @@ const Inventory = () => {
   const pageLast = currentLast(currentPage);
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
+    <SafeAreaView
+      style={{ backgroundColor: "#fff", flex: 1 }}
+      edges={["right", "left", "top"]}
+    >
       <Filter
         checkBoxHandler={checkBoxHandler}
         modalVisible={modalVisible}
@@ -88,6 +97,7 @@ const Inventory = () => {
       <View
         style={{
           backgroundColor: "#fff",
+          flex: 1,
         }}
       >
         <Navbar />
@@ -105,7 +115,6 @@ const Inventory = () => {
               Inventory Watch List
             </Text>
           </View>
-          {loading && <Spinner />}
           <Pressable
             style={{
               borderWidth: 1,
@@ -140,7 +149,8 @@ const Inventory = () => {
           </Text>
         )}
         <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
-          {result.totalResults > 0 ? (
+          {console.log(result?.totalResults)}
+          {result?.totalResults > 0 ? (
             <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false}>
               <View>
                 {data?.map((item, i) => {
@@ -173,6 +183,8 @@ const Inventory = () => {
                         rewardItem={item?.defaultSku?.rewardItem}
                         priceType={item?.defaultSku?.priceType}
                         orderLimit={item?.defaultSku?.dailyOrderLimit}
+                        accountId={userData?.selectedAccount?.id}
+                        type={item?.defaultSku?.productLists[0]?.type}
                       />
                     </View>
                   );
@@ -195,6 +207,9 @@ const Inventory = () => {
             </View>
           )}
         </View>
+        <View style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+          <TabBar />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -204,7 +219,7 @@ export default Inventory;
 
 const styles = StyleSheet.create({
   pagination: {
-    marginBottom: 100,
+    marginBottom: 10,
   },
   mainBoxLoading: { opacity: 0.2 },
   mainBox: { backgroundColor: "#fff", marginBottom: 200 },

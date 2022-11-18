@@ -3,6 +3,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import React from "react";
 import Navbar from "../components/Navbar";
 import Component from "./HeadingDetail";
+import TabBar from "../components/TabBar";
 
 const PaymentComponent = (props) => {
   return (
@@ -36,85 +37,93 @@ const PaymentComponent = (props) => {
 
 const Payment = () => {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: "#fff" }}
+      edges={["right", "left", "top"]}
+    >
       <Navbar />
       <View style={styles.prductListBlue}>
         <Text style={styles.productText}>Payment Options</Text>
       </View>
-      <ScrollView>
-        <View
-          style={{
-            paddingHorizontal: 10,
-          }}
-        >
-          <View>
+      <View style={{ flex: 1 }}>
+        <ScrollView>
+          <View
+            style={{
+              paddingHorizontal: 10,
+            }}
+          >
+            <View>
+              <Text
+                style={{
+                  fontSize: 15,
+                  fontWeight: "bold",
+                  color: "#006ba6",
+                  paddingVertical: 15,
+                }}
+              >
+                Pay Your Way
+              </Text>
+              <Text>
+                We give you the options so you can choose the payment method you
+                prefer.
+              </Text>
+            </View>
+            <View style={{ marginVertical: 15 }}>
+              <PaymentComponent
+                imageUri={require("../../assets/Ach.png")}
+                value={"Ensure on-time payment of your bill every time."}
+                heading={"ACH"}
+              />
+              <PaymentComponent
+                imageUri={require("../../assets/check.png")}
+                value={"Prefer to mail in your payment? Send us a check."}
+                heading={"Check"}
+              />
+              <PaymentComponent
+                imageUri={require("../../assets/Credit.png")}
+                value={
+                  "Safe and secured one-time or recurring payment processing."
+                }
+                heading={"Credit Card"}
+              />
+            </View>
+            <View style={{ marginBottom: 20 }}>
+              <Text>We accept Visa, MasterCard and American Express.</Text>
+            </View>
+          </View>
+          <Component
+            heading={"Returned Payment Policy"}
+            value={
+              "If a check or other form of payment is returned for Non-Sufficient Funds (NSF), Customer agrees to pay an additional $25.00 (Twenty-Five Dollar) charge for each such returned payment. Customer agrees that Customer’s account with ANDA will be placed on “no-ship” status in such event and that pending orders will not be filled. Customer will not be able to place new orders until the replacement payment(s) and the referenced NSF charge(s) is paid to ANDA in good and available funds."
+            }
+          />
+          <View style={{ paddingHorizontal: 10 }}>
             <Text
               style={{
                 fontSize: 15,
                 fontWeight: "bold",
                 color: "#006ba6",
                 paddingVertical: 15,
+                alignSelf: "center",
               }}
             >
-              Pay Your Way
+              Open an account
             </Text>
-            <Text>
-              We give you the options so you can choose the payment method you
-              prefer.
-            </Text>
+            <View style={{ alignItems: "center", justifyContent: "center" }}>
+              <Text
+                style={{
+                  textAlign: "center",
+                }}
+              >
+                and start taking advantage of our extended payment terms!
+              </Text>
+            </View>
           </View>
-          <View style={{ marginVertical: 15 }}>
-            <PaymentComponent
-              imageUri={require("../../assets/Ach.png")}
-              value={"Ensure on-time payment of your bill every time."}
-              heading={"ACH"}
-            />
-            <PaymentComponent
-              imageUri={require("../../assets/check.png")}
-              value={"Prefer to mail in your payment? Send us a check."}
-              heading={"Check"}
-            />
-            <PaymentComponent
-              imageUri={require("../../assets/Credit.png")}
-              value={
-                "Safe and secured one-time or recurring payment processing."
-              }
-              heading={"Credit Card"}
-            />
-          </View>
-          <View style={{ marginBottom: 20 }}>
-            <Text>We accept Visa, MasterCard and American Express.</Text>
-          </View>
+        </ScrollView>
+        <View style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+          <TabBar />
         </View>
-        <Component
-          heading={"Returned Payment Policy"}
-          value={
-            "If a check or other form of payment is returned for Non-Sufficient Funds (NSF), Customer agrees to pay an additional $25.00 (Twenty-Five Dollar) charge for each such returned payment. Customer agrees that Customer’s account with ANDA will be placed on “no-ship” status in such event and that pending orders will not be filled. Customer will not be able to place new orders until the replacement payment(s) and the referenced NSF charge(s) is paid to ANDA in good and available funds."
-          }
-        />
-        <View style={{ paddingHorizontal: 10 }}>
-          <Text
-            style={{
-              fontSize: 15,
-              fontWeight: "bold",
-              color: "#006ba6",
-              paddingVertical: 15,
-              alignSelf: "center",
-            }}
-          >
-            Open an account
-          </Text>
-          <View style={{ alignItems: "center", justifyContent: "center" }}>
-            <Text
-              style={{
-                textAlign: "center",
-              }}
-            >
-              and start taking advantage of our extended payment terms!
-            </Text>
-          </View>
-        </View>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };

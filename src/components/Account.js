@@ -13,6 +13,7 @@ import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Spinner from "./Spinner";
+import TabBar from "./TabBar";
 import Moment from "moment";
 
 import {
@@ -61,12 +62,12 @@ const InputComponent = (props) => {
           {show ? (
             <Image
               style={{ height: 15, width: 18 }}
-              source={require("../../assets/eye.png")}
+              source={require("../../assets/eye-open.png")}
             />
           ) : (
             <Image
               style={{ height: 15, width: 18 }}
-              source={require("../../assets/closedEye.png")}
+              source={require("../../assets/eye-close.png")}
             />
           )}
         </Pressable>
@@ -182,239 +183,46 @@ const Account = () => {
   }, [userData]);
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            paddingHorizontal: 10,
-          }}
-        >
+    <SafeAreaView
+      style={{ backgroundColor: "#fff", flex: 1 }}
+      edges={["right", "left", "top"]}
+    >
+      <View style={{ flex: 1 }}>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View
             style={{
-              width: 25,
-              justifyContent: "center",
+              flexDirection: "row",
               alignItems: "center",
-
-              height: 25,
               paddingHorizontal: 10,
+              flex: 1,
             }}
           >
-            <Image
-              source={require("../../assets/account.png")}
+            <View
               style={{
-                height: 20,
-                width: 20,
-              }}
-            />
-          </View>
-          <Text style={{ color: "#006ba6", fontWeight: "700", marginLeft: 10 }}>
-            {userData?.selectedAccount?.id} | {userData?.selectedAccount?.name}
-          </Text>
-        </View>
-        {loading && <Spinner />}
-        <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
-          <View
-            style={{
-              borderTopWidth: 4,
-              borderColor: "#fafafa",
-              marginVertical: 10,
-            }}
-          />
-          <View style={{ paddingHorizontal: 10 }}>
-            <Text style={styles.labelContainer}>USERNAME*</Text>
-            <View style={styles.inputView}>
-              <TextInput
-                style={styles.TextInput}
-                placeholderTextColor="#003f5c"
-              />
-            </View>
-            <Text style={styles.labelContainer}>EMAIL ADDRESS*</Text>
-            <View style={styles.inputView}>
-              <TextInput
-                style={styles.TextInput}
-                placeholderTextColor="#003f5c"
-              />
-            </View>
-            <View style={{ flexDirection: "row" }}>
-              <MyCheckbox
-                style={styles.checkbox}
-                checked={isChecked}
-                onChange={checkHandler}
-                onPress={() => {
-                  myCheckHandler("andanet");
-                }}
-                buttonStyle={styles.checkboxBase}
-                activeButtonStyle={[isChecked ? styles.checkboxChecked : ""]}
-              />
-              <View
-                style={{
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginLeft: 10,
-                }}
-              >
-                <Text style={{ color: "#494c4c" }}>
-                  I would like to receive marketings emails
-                </Text>
-              </View>
-            </View>
-            <Pressable
-              style={{
-                borderColor: "#006ba6",
-                borderWidth: 1,
-                width: 60,
-                height: 25,
-                borderRadius: 4,
+                width: 25,
                 justifyContent: "center",
                 alignItems: "center",
+                height: 25,
+                paddingHorizontal: 10,
               }}
-              android_ripple={{ color: "#ccc" }}
             >
-              <View>
-                <Text style={styles.emptyText}>UPDATE</Text>
-              </View>
-            </Pressable>
-          </View>
-          <View
-            style={{
-              borderTopWidth: 4,
-              borderColor: "#fafafa",
-              marginVertical: 10,
-            }}
-          />
-          <View
-            style={{
-              padding: 10,
-              borderBottomWidth: 0.3,
-              borderColor: "#006ba6",
-            }}
-          >
-            <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-              Change Password
+              <Image
+                source={require("../../assets/account.png")}
+                style={{
+                  height: 20,
+                  width: 20,
+                }}
+              />
+            </View>
+            <Text
+              style={{ color: "#006ba6", fontWeight: "700", marginLeft: 10 }}
+            >
+              {userData?.selectedAccount?.id} |{" "}
+              {userData?.selectedAccount?.name}
             </Text>
           </View>
-          <View style={{ padding: 10 }}>
-            <Text style={styles.labelContainer}>CURRENT PASSWORD*</Text>
-            <InputComponent
-              onChangeText={(password) => setCurrentPassword(password)}
-            />
-            {error && (
-              <View style={styles.errorView}>
-                <Image
-                  style={{ height: 19, width: 18 }}
-                  source={require("../../assets/errorAlert.png")}
-                />
-                <Text style={{ color: "#990909", marginHorizontal: 10 }}>
-                  password does not match
-                </Text>
-              </View>
-            )}
-            {nullValue && (
-              <View style={styles.errorView}>
-                <Image
-                  style={{ height: 19, width: 18 }}
-                  source={require("../../assets/errorAlert.png")}
-                />
-                <Text style={{ color: "#990909", marginHorizontal: 10 }}>
-                  Fields Cannot Be Empty!!
-                </Text>
-              </View>
-            )}
-            <Text style={styles.labelContainer}>NEW PASSWORD*</Text>
-            <InputComponent
-              onChangeText={(password) => setNewPassword(password)}
-            />
-            {error && (
-              <View style={styles.errorView}>
-                <Image
-                  style={{ height: 19, width: 18 }}
-                  source={require("../../assets/errorAlert.png")}
-                />
-                <Text style={{ color: "#990909", marginHorizontal: 10 }}>
-                  password does not match
-                </Text>
-              </View>
-            )}
-            {nullValue && (
-              <View style={styles.errorView}>
-                <Image
-                  style={{ height: 19, width: 18 }}
-                  source={require("../../assets/errorAlert.png")}
-                />
-                <Text style={{ color: "#990909", marginHorizontal: 10 }}>
-                  Fields Cannot Be Empty!!
-                </Text>
-              </View>
-            )}
-            <Text style={styles.labelContainer}>CONFIRM PASSWORD*</Text>
-            <InputComponent
-              onChangeText={(password) => setConfirmPassword(password)}
-            />
-            {error && (
-              <View style={styles.errorView}>
-                <Image
-                  style={{ height: 19, width: 18 }}
-                  source={require("../../assets/errorAlert.png")}
-                />
-                <Text style={{ color: "#990909", marginHorizontal: 10 }}>
-                  password does not match
-                </Text>
-              </View>
-            )}
-            {nullValue && (
-              <View style={styles.errorView}>
-                <Image
-                  style={{ height: 19, width: 18 }}
-                  source={require("../../assets/errorAlert.png")}
-                />
-                <Text style={{ color: "#990909", marginHorizontal: 10 }}>
-                  Fields Cannot Be Empty!!
-                </Text>
-              </View>
-            )}
-            {error && (
-              <View style={styles.errorView}>
-                <Image
-                  style={{ height: 19, width: 18 }}
-                  source={require("../../assets/errorAlert.png")}
-                />
-                <Text style={{ color: "#990909", marginHorizontal: 10 }}>
-                  password does not match
-                </Text>
-              </View>
-            )}
-
-            {changePasswordValue && (
-              <View style={styles.errorView}>
-                <Image
-                  style={{ height: 19, width: 18 }}
-                  source={require("../../assets/errorAlert.png")}
-                />
-                <Text style={{ color: "#990909", marginHorizontal: 10 }}>
-                  The password you entered does not match the existing password.
-                </Text>
-              </View>
-            )}
-            <Pressable
-              style={{
-                borderColor: "#006ba6",
-                borderWidth: 1,
-                width: 60,
-                height: 25,
-                marginTop: 10,
-                borderRadius: 4,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-              android_ripple={{ color: "#ccc" }}
-              onPress={() => updatePasswordHandler()}
-            >
-              <View>
-                <Text style={styles.emptyText}>UPDATE</Text>
-              </View>
-            </Pressable>
+          {loading && <Spinner />}
+          <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
             <View
               style={{
                 borderTopWidth: 4,
@@ -422,183 +230,401 @@ const Account = () => {
                 marginVertical: 10,
               }}
             />
-          </View>
-          <View
-            style={{
-              padding: 10,
-              borderBottomWidth: 0.3,
-              borderColor: "#006ba6",
-            }}
-          >
-            <Text style={{ fontSize: 15, fontWeight: "bold" }}>Account</Text>
-          </View>
-          <View style={{ padding: 10 }}>
-            <View style={{ flexDirection: "row" }}>
-              <Text>Account Number:</Text>
-              <Text style={{ marginLeft: 5 }}>
-                {userData?.selectedAccount?.id}
-              </Text>
-            </View>
-            <View style={{ flexDirection: "row", marginTop: 5 }}>
-              <Text>Billing Account Number:</Text>
-              <Text style={{ marginLeft: 5 }}>
-                {userData?.selectedAccount?.jdeNumber}
-              </Text>
-            </View>
-            <View style={{ flexDirection: "row", marginTop: 5 }}>
-              <Text>DEA Number:</Text>
-              <Text style={{ marginLeft: 5 }}>
-                {userData?.selectedAccount?.deaNumber}
-              </Text>
-            </View>
-            <View style={{ flexDirection: "row", marginTop: 5 }}>
-              <Text>DEA Expiration:</Text>
-              <Text style={{ marginLeft: 5 }}>
-                {Moment(userData?.selectedAccount?.deaExpiration).format(
-                  "MM/DD/YYYY hh:mmA"
-                )}
-              </Text>
-            </View>
-            <View style={{ flexDirection: "row", marginTop: 5 }}>
-              <Text>State License</Text>
-              <Text style={{ marginLeft: 5 }}>
-                {userData?.selectedAccount?.accountDetail?.stateLicense}
-              </Text>
-            </View>
-            <View style={{ flexDirection: "row", marginTop: 5 }}>
-              <Text>State License Expiration:</Text>
-              <Text style={{ marginLeft: 5 }}>
-                {Moment(
-                  userData?.selectedAccount?.accountDetail
-                    ?.stateLicenseExpiration
-                ).format("MM/DD/YYYY hh:mmA")}
-              </Text>
-            </View>
-            <View style={{ flexDirection: "row", marginTop: 5 }}>
-              <Text>State Control License:</Text>
-              <Text style={{ marginLeft: 5 }}>
-                {userData?.selectedAccount?.accountDetail?.stateControlLicense}
-              </Text>
-            </View>
-            <View style={{ flexDirection: "row", marginTop: 5 }}>
-              <Text>State Control License Expiration:</Text>
-              <Text style={{ marginLeft: 5 }}>
-                {Moment(
-                  userData?.selectedAccount?.accountDetail
-                    ?.stateControlLicenseExpiration
-                ).format("MM/DD/YYYY hh:mmA")}
-              </Text>
-            </View>
-            <View style={{ flexDirection: "row", marginTop: 5 }}>
-              <Text>CMEA Certification Date:</Text>
-              <Text style={{ marginLeft: 5 }}>
-                {Moment(
-                  userData?.selectedAccount?.cmeaCertificationDate
-                ).format("MM/DD/YYYY")}
-              </Text>
-            </View>
-            <View style={{ flexDirection: "row", marginTop: 5 }}>
-              <Text>CMEA Certification Expiration:</Text>
-              <Text style={{ marginLeft: 5 }}>
-                {Moment(
-                  userData?.selectedAccount?.cmeaCertificationExpiration
-                ).format("MM/DD/YYYY hh:mmA")}
-              </Text>
-            </View>
-            <View style={{ flexDirection: "row", marginTop: 5 }}>
-              <Text>Sales Rep:</Text>
-              <Text style={{ marginLeft: 5 }}>
-                {userData?.selectedAccount?.accountDetail?.accountRep.name}
-              </Text>
-            </View>
-            <View style={{ flexDirection: "row", marginTop: 5 }}>
-              <Text>Phone:</Text>
-              <Text style={{ marginLeft: 5, color: "#006ba6" }}>
-                {userData?.selectedAccount?.accountDetail?.accountRep.number}
-                <Text> EXT: </Text>
-                {userData?.selectedAccount?.accountDetail?.accountRep.extension}
-              </Text>
-            </View>
-            <View style={{ flexDirection: "row", marginTop: 5 }}>
-              <Text>Sales Rep Email:</Text>
-              <Text style={{ marginLeft: 5, color: "#006ba6" }}>
-                {
-                  userData?.selectedAccount?.accountDetail?.accountRep
-                    .salesRepEmail
-                }
-              </Text>
-            </View>
-            <View style={{ flexDirection: "row", marginTop: 5 }}>
-              <Text style={{ fontSize: 10 }}>
-                For changes to your account information, please call your Sales
-                Rep
-              </Text>
-            </View>
-          </View>
-          <View
-            style={{
-              borderTopWidth: 4,
-              borderColor: "#fafafa",
-              marginVertical: 10,
-            }}
-          />
-          <View
-            style={{
-              padding: 10,
-              borderBottomWidth: 0.3,
-              borderColor: "#006ba6",
-            }}
-          >
-            <Text style={{ fontSize: 15, fontWeight: "bold" }}>Location</Text>
-          </View>
-          <View style={{ padding: 10 }}>
-            <View style={{ flexDirection: "row", marginTop: 5 }}>
-              <Text>{userData?.selectedAccount.addresses[0]?.companyName}</Text>
-            </View>
-            <View style={{ flexDirection: "row", marginTop: 5 }}>
-              <Text>
-                {userData?.selectedAccount.addresses[0]?.addressLine1}
-              </Text>
-            </View>
-            <View style={{ flexDirection: "row", marginTop: 5 }}>
-              <Text>
-                {userData?.selectedAccount.addresses[0]?.addressLine2}
-              </Text>
-            </View>
-            <View style={{ flexDirection: "row", marginTop: 5 }}>
-              <Text>
-                {userData?.selectedAccount.addresses[0]?.city},{" "}
-                {
-                  userData?.selectedAccount.addresses[0]?.countrySubdivision
-                    ?.abbreviation
-                }{" "}
-                {userData?.selectedAccount.addresses[0]?.postalCode}
-              </Text>
-            </View>
-            <View style={{ marginTop: 5 }}>
-              <View style={{ flexDirection: "row", marginTop: 5 }}>
-                <Text>Phone:</Text>
-                <Text style={{ marginLeft: 5 }}>
-                  {
-                    userData?.selectedAccount.addresses[0]?.phonePrimary
-                      ?.phoneNumber
-                  }
-                </Text>
+            <View style={{ paddingHorizontal: 10 }}>
+              <Text style={styles.labelContainer}>USERNAME*</Text>
+              <View style={styles.inputView}>
+                <TextInput
+                  style={styles.TextInput}
+                  placeholderTextColor="#003f5c"
+                />
               </View>
-              <View style={{ flexDirection: "row", marginTop: 5 }}>
-                <Text>Phone:</Text>
+              <Text style={styles.labelContainer}>EMAIL ADDRESS*</Text>
+              <View style={styles.inputView}>
+                <TextInput
+                  style={styles.TextInput}
+                  placeholderTextColor="#003f5c"
+                />
+              </View>
+              <View style={{ flexDirection: "row" }}>
+                <MyCheckbox
+                  style={styles.checkbox}
+                  checked={isChecked}
+                  onChange={checkHandler}
+                  onPress={() => {
+                    myCheckHandler("andanet");
+                  }}
+                  buttonStyle={styles.checkboxBase}
+                  activeButtonStyle={[isChecked ? styles.checkboxChecked : ""]}
+                />
+                <View
+                  style={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginLeft: 10,
+                  }}
+                >
+                  <Text style={{ color: "#494c4c" }}>
+                    I would like to receive marketings emails
+                  </Text>
+                </View>
+              </View>
+              <Pressable
+                style={{
+                  borderColor: "#006ba6",
+                  borderWidth: 1,
+                  width: 60,
+                  height: 25,
+                  borderRadius: 4,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                android_ripple={{ color: "#ccc" }}
+              >
+                <View>
+                  <Text style={styles.emptyText}>UPDATE</Text>
+                </View>
+              </Pressable>
+            </View>
+            <View
+              style={{
+                borderTopWidth: 4,
+                borderColor: "#fafafa",
+                marginVertical: 10,
+              }}
+            />
+            <View
+              style={{
+                padding: 10,
+                borderBottomWidth: 0.3,
+                borderColor: "#006ba6",
+              }}
+            >
+              <Text style={{ fontSize: 15, fontWeight: "bold" }}>
+                Change Password
+              </Text>
+            </View>
+            <View style={{ padding: 10 }}>
+              <Text style={styles.labelContainer}>CURRENT PASSWORD*</Text>
+              <InputComponent
+                onChangeText={(password) => setCurrentPassword(password)}
+              />
+              {error && (
+                <View style={styles.errorView}>
+                  <Image
+                    style={{ height: 19, width: 18 }}
+                    source={require("../../assets/errorAlert.png")}
+                  />
+                  <Text style={{ color: "#990909", marginHorizontal: 10 }}>
+                    password does not match
+                  </Text>
+                </View>
+              )}
+              {nullValue && (
+                <View style={styles.errorView}>
+                  <Image
+                    style={{ height: 19, width: 18 }}
+                    source={require("../../assets/errorAlert.png")}
+                  />
+                  <Text style={{ color: "#990909", marginHorizontal: 10 }}>
+                    Fields Cannot Be Empty!!
+                  </Text>
+                </View>
+              )}
+              <Text style={styles.labelContainer}>NEW PASSWORD*</Text>
+              <InputComponent
+                onChangeText={(password) => setNewPassword(password)}
+              />
+              {error && (
+                <View style={styles.errorView}>
+                  <Image
+                    style={{ height: 19, width: 18 }}
+                    source={require("../../assets/errorAlert.png")}
+                  />
+                  <Text style={{ color: "#990909", marginHorizontal: 10 }}>
+                    password does not match
+                  </Text>
+                </View>
+              )}
+              {nullValue && (
+                <View style={styles.errorView}>
+                  <Image
+                    style={{ height: 19, width: 18 }}
+                    source={require("../../assets/errorAlert.png")}
+                  />
+                  <Text style={{ color: "#990909", marginHorizontal: 10 }}>
+                    Fields Cannot Be Empty!!
+                  </Text>
+                </View>
+              )}
+              <Text style={styles.labelContainer}>CONFIRM PASSWORD*</Text>
+              <InputComponent
+                onChangeText={(password) => setConfirmPassword(password)}
+              />
+              {error && (
+                <View style={styles.errorView}>
+                  <Image
+                    style={{ height: 19, width: 18 }}
+                    source={require("../../assets/errorAlert.png")}
+                  />
+                  <Text style={{ color: "#990909", marginHorizontal: 10 }}>
+                    password does not match
+                  </Text>
+                </View>
+              )}
+              {nullValue && (
+                <View style={styles.errorView}>
+                  <Image
+                    style={{ height: 19, width: 18 }}
+                    source={require("../../assets/errorAlert.png")}
+                  />
+                  <Text style={{ color: "#990909", marginHorizontal: 10 }}>
+                    Fields Cannot Be Empty!!
+                  </Text>
+                </View>
+              )}
+              {error && (
+                <View style={styles.errorView}>
+                  <Image
+                    style={{ height: 19, width: 18 }}
+                    source={require("../../assets/errorAlert.png")}
+                  />
+                  <Text style={{ color: "#990909", marginHorizontal: 10 }}>
+                    password does not match
+                  </Text>
+                </View>
+              )}
 
+              {changePasswordValue && (
+                <View style={styles.errorView}>
+                  <Image
+                    style={{ height: 19, width: 18 }}
+                    source={require("../../assets/errorAlert.png")}
+                  />
+                  <Text style={{ color: "#990909", marginHorizontal: 10 }}>
+                    The password you entered does not match the existing
+                    password.
+                  </Text>
+                </View>
+              )}
+              <Pressable
+                style={{
+                  borderColor: "#006ba6",
+                  borderWidth: 1,
+                  width: 60,
+                  height: 25,
+                  marginTop: 10,
+                  borderRadius: 4,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                android_ripple={{ color: "#ccc" }}
+                onPress={() => updatePasswordHandler()}
+              >
+                <View>
+                  <Text style={styles.emptyText}>UPDATE</Text>
+                </View>
+              </Pressable>
+              <View
+                style={{
+                  borderTopWidth: 4,
+                  borderColor: "#fafafa",
+                  marginVertical: 10,
+                }}
+              />
+            </View>
+            <View
+              style={{
+                padding: 10,
+                borderBottomWidth: 0.3,
+                borderColor: "#006ba6",
+              }}
+            >
+              <Text style={{ fontSize: 15, fontWeight: "bold" }}>Account</Text>
+            </View>
+            <View style={{ padding: 10 }}>
+              <View style={{ flexDirection: "row" }}>
+                <Text>Account Number:</Text>
+                <Text style={{ marginLeft: 5 }}>
+                  {userData?.selectedAccount?.id}
+                </Text>
+              </View>
+              <View style={{ flexDirection: "row", marginTop: 5 }}>
+                <Text>Billing Account Number:</Text>
+                <Text style={{ marginLeft: 5 }}>
+                  {userData?.selectedAccount?.jdeNumber}
+                </Text>
+              </View>
+              <View style={{ flexDirection: "row", marginTop: 5 }}>
+                <Text>DEA Number:</Text>
+                <Text style={{ marginLeft: 5 }}>
+                  {userData?.selectedAccount?.deaNumber}
+                </Text>
+              </View>
+              <View style={{ flexDirection: "row", marginTop: 5 }}>
+                <Text>DEA Expiration:</Text>
+                <Text style={{ marginLeft: 5 }}>
+                  {Moment(userData?.selectedAccount?.deaExpiration).format(
+                    "MM/DD/YYYY hh:mmA"
+                  )}
+                </Text>
+              </View>
+              <View style={{ flexDirection: "row", marginTop: 5 }}>
+                <Text>State License</Text>
+                <Text style={{ marginLeft: 5 }}>
+                  {userData?.selectedAccount?.accountDetail?.stateLicense}
+                </Text>
+              </View>
+              <View style={{ flexDirection: "row", marginTop: 5 }}>
+                <Text>State License Expiration:</Text>
+                <Text style={{ marginLeft: 5 }}>
+                  {Moment(
+                    userData?.selectedAccount?.accountDetail
+                      ?.stateLicenseExpiration
+                  ).format("MM/DD/YYYY hh:mmA")}
+                </Text>
+              </View>
+              <View style={{ flexDirection: "row", marginTop: 5 }}>
+                <Text>State Control License:</Text>
                 <Text style={{ marginLeft: 5 }}>
                   {
-                    userData?.selectedAccount.addresses[0]?.phoneFax
-                      ?.phoneNumber
+                    userData?.selectedAccount?.accountDetail
+                      ?.stateControlLicense
                   }
                 </Text>
               </View>
+              <View style={{ flexDirection: "row", marginTop: 5 }}>
+                <Text>State Control License Expiration:</Text>
+                <Text style={{ marginLeft: 5 }}>
+                  {Moment(
+                    userData?.selectedAccount?.accountDetail
+                      ?.stateControlLicenseExpiration
+                  ).format("MM/DD/YYYY hh:mmA")}
+                </Text>
+              </View>
+              <View style={{ flexDirection: "row", marginTop: 5 }}>
+                <Text>CMEA Certification Date:</Text>
+                <Text style={{ marginLeft: 5 }}>
+                  {Moment(
+                    userData?.selectedAccount?.cmeaCertificationDate
+                  ).format("MM/DD/YYYY")}
+                </Text>
+              </View>
+              <View style={{ flexDirection: "row", marginTop: 5 }}>
+                <Text>CMEA Certification Expiration:</Text>
+                <Text style={{ marginLeft: 5 }}>
+                  {Moment(
+                    userData?.selectedAccount?.cmeaCertificationExpiration
+                  ).format("MM/DD/YYYY hh:mmA")}
+                </Text>
+              </View>
+              <View style={{ flexDirection: "row", marginTop: 5 }}>
+                <Text>Sales Rep:</Text>
+                <Text style={{ marginLeft: 5 }}>
+                  {userData?.selectedAccount?.accountDetail?.accountRep.name}
+                </Text>
+              </View>
+              <View style={{ flexDirection: "row", marginTop: 5 }}>
+                <Text>Phone:</Text>
+                <Text style={{ marginLeft: 5, color: "#006ba6" }}>
+                  {userData?.selectedAccount?.accountDetail?.accountRep.number}
+                  <Text> EXT: </Text>
+                  {
+                    userData?.selectedAccount?.accountDetail?.accountRep
+                      .extension
+                  }
+                </Text>
+              </View>
+              <View style={{ flexDirection: "row", marginTop: 5 }}>
+                <Text>Sales Rep Email:</Text>
+                <Text style={{ marginLeft: 5, color: "#006ba6" }}>
+                  {
+                    userData?.selectedAccount?.accountDetail?.accountRep
+                      .salesRepEmail
+                  }
+                </Text>
+              </View>
+              <View style={{ flexDirection: "row", marginTop: 5 }}>
+                <Text style={{ fontSize: 10 }}>
+                  For changes to your account information, please call your
+                  Sales Rep
+                </Text>
+              </View>
+            </View>
+            <View
+              style={{
+                borderTopWidth: 4,
+                borderColor: "#fafafa",
+                marginVertical: 10,
+              }}
+            />
+            <View
+              style={{
+                padding: 10,
+                borderBottomWidth: 0.3,
+                borderColor: "#006ba6",
+              }}
+            >
+              <Text style={{ fontSize: 15, fontWeight: "bold" }}>Location</Text>
+            </View>
+            <View style={{ padding: 10 }}>
+              <View style={{ flexDirection: "row", marginTop: 5 }}>
+                <Text>
+                  {userData?.selectedAccount.addresses[0]?.companyName}
+                </Text>
+              </View>
+              <View style={{ flexDirection: "row", marginTop: 5 }}>
+                <Text>
+                  {userData?.selectedAccount.addresses[0]?.addressLine1}
+                </Text>
+              </View>
+              <View style={{ flexDirection: "row", marginTop: 5 }}>
+                <Text>
+                  {userData?.selectedAccount.addresses[0]?.addressLine2}
+                </Text>
+              </View>
+              <View style={{ flexDirection: "row", marginTop: 5 }}>
+                <Text>
+                  {userData?.selectedAccount.addresses[0]?.city},{" "}
+                  {
+                    userData?.selectedAccount.addresses[0]?.countrySubdivision
+                      ?.abbreviation
+                  }{" "}
+                  {userData?.selectedAccount.addresses[0]?.postalCode}
+                </Text>
+              </View>
+              <View style={{ marginTop: 5 }}>
+                <View style={{ flexDirection: "row", marginTop: 5 }}>
+                  <Text>Phone:</Text>
+                  <Text style={{ marginLeft: 5 }}>
+                    {
+                      userData?.selectedAccount.addresses[0]?.phonePrimary
+                        ?.phoneNumber
+                    }
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    marginTop: 5,
+                  }}
+                >
+                  <Text>Phone:</Text>
+
+                  <Text style={{ marginLeft: 5 }}>
+                    {
+                      userData?.selectedAccount.addresses[0]?.phoneFax
+                        ?.phoneNumber
+                    }
+                  </Text>
+                </View>
+              </View>
             </View>
           </View>
+        </ScrollView>
+        <View style={{ left: 0, right: 0, bottom: 0 }}>
+          <TabBar />
         </View>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };

@@ -133,8 +133,6 @@ export default function LoginScreen() {
               />
               <View
                 style={{
-                  borderWidth: 0.5,
-                  borderColor: "#9d9b9b",
                   paddingLeft: 15,
                   paddingVertical: 20,
                   backgroundColor: "#ececec",
@@ -206,12 +204,12 @@ export default function LoginScreen() {
                     {show ? (
                       <Image
                         style={{ height: 15, width: 18 }}
-                        source={require("../../assets/closedEye.png")}
+                        source={require("../../assets/eye-close.png")}
                       />
                     ) : (
                       <Image
-                        style={{ height: 20, width: 18 }}
-                        source={require("../../assets/eye.png")}
+                        style={{ height: 15, width: 18 }}
+                        source={require("../../assets/eye-open.png")}
                       />
                     )}
                   </Pressable>
@@ -229,15 +227,23 @@ export default function LoginScreen() {
                 )}
                 <View>
                   <View style={{ flexDirection: "row", marginTop: 20 }}>
-                    <Pressable style={styles.loginBtn} onPress={submitHandler}>
-                      <Text onPress={submitHandler} style={styles.loginText}>
-                        SIGN IN
-                      </Text>
+                    <Pressable
+                      android_ripple={{ color: "#ccc" }}
+                      style={styles.loginBtn}
+                      onPress={() => submitHandler()}
+                    >
+                      <Text style={styles.loginText}>SIGN IN</Text>
                     </Pressable>
                   </View>
                 </View>
               </View>
-              <View style={{ marginTop: 30, paddingLeft: 20 }}>
+              <View
+                style={{
+                  marginTop: 30,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
                 <View style={{ flexDirection: "row" }}>
                   <Text
                     style={{
@@ -314,10 +320,11 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    width: 150,
-    height: 80,
+    width: 192,
+    height: 51,
     alignSelf: "center",
     justifyContent: "center",
+    marginBottom: 20,
   },
 
   inputView: {

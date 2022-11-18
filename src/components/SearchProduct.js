@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Navbar from "./Navbar";
 import Pagination from "./Pagination";
 import Spinner from "./Spinner";
+import TabBar from "./TabBar";
 import Filter from "../filter/SearchProductFilter";
 import PreNegotiatedScreen from "../screens/SearchProductScreen";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
@@ -28,10 +29,20 @@ const SearchProduct = () => {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const { searchProducstsData, userInfoData, loading, addLoading } =
-    useSelector((state) => ({
-      ...state.products,
-    }));
+  const {
+    searchProducstsData,
+    userInfoData,
+    loading,
+    addLoading,
+    favResponse,
+    searchloading,
+    productDetailsData,
+  } = useSelector((state) => ({
+    ...state.products,
+  }));
+  const { searchedValue } = useSelector((state) => ({
+    ...state.auth,
+  }));
   const onPressTouch = () => {
     scrollRef?.current?.scrollTo({
       y: 0,
@@ -40,9 +51,11 @@ const SearchProduct = () => {
   };
   const data = searchProducstsData?.products;
 
-  useEffect(() => {
-    dispatch(userInfo());
-  }, []);
+  const productDetailHandler = async (Id) => {
+    navigation.navigate("ProductDetails");
+    dispatch(productDetails(Id));
+  };
+
   const result = searchProducstsData;
   const userData = userInfoData;
 
@@ -60,22 +73,62 @@ const SearchProduct = () => {
     setItem(item);
   };
 
-  const productDetailHandler = async (Id) => {
-    navigation.navigate("Auth", { screen: "ProductDetails" });
-    dispatch(productDetails(Id));
-  };
+  if (result.totalResults === 0)
+    return (
+      <SafeAreaView
+        style={{ backgroundColor: "#fff", flex: 1 }}
+        edges={["right", "left", "top"]}
+      >
+        <View
+          style={{
+            backgroundColor: "#fff",
+            flex: 1,
+          }}
+        >
+          <Navbar />
 
-  useEffect(() => {
-    if (searchProducstsData.totalResults === 1) {
-      productDetailHandler(searchProducstsData?.products[0]?.defaultSku?.id);
-    }
-  }, [searchProducstsData?.totalResults]);
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              padding: 10,
+            }}
+          >
+            <View style={{ justifyContent: "center" }}>
+              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                Search Products
+              </Text>
+            </View>
+          </View>
+
+          <View
+            style={{
+              borderTopWidth: 4,
+              borderColor: "#fafafa",
+              marginVertical: 10,
+            }}
+          />
+          <View style={styles.emptyCart}>
+            <Text style={styles.emptyCartText}>
+              No products found for "{searchedValue}"
+            </Text>
+          </View>
+          <View style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+            <TabBar />
+          </View>
+        </View>
+      </SafeAreaView>
+    );
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
+    <SafeAreaView
+      style={{ backgroundColor: "#fff", flex: 1 }}
+      edges={["right", "left", "top"]}
+    >
       <View
         style={{
           backgroundColor: "#fff",
+          flex: 1,
         }}
       >
         <Navbar />
@@ -101,14 +154,9 @@ const SearchProduct = () => {
             marginVertical: 10,
           }}
         />
-        {result.totalResults === 0 && (
-          <View style={styles.emptyCart}>
-            <Text style={styles.emptyCartText}>“No products found!”</Text>
-          </View>
-        )}
-        {loading && <Spinner />}
+
         <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
-          {result.totalResults > 1 ? (
+          {result.totalResults > 0 ? (
             <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false}>
               <View>
                 {data?.map((item, i) => {
@@ -141,6 +189,8 @@ const SearchProduct = () => {
                         rewardItem={item?.defaultSku?.rewardItem}
                         priceType={item?.defaultSku?.priceType}
                         orderLimit={item?.defaultSku?.dailyOrderLimit}
+                        accountId={userData?.selectedAccount?.id}
+                        type={item?.defaultSku?.productLists[0]?.type}
                       />
                     </View>
                   );
@@ -162,6 +212,9 @@ const SearchProduct = () => {
               <Spinner />
             </View>
           )}
+        </View>
+        <View style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+          <TabBar />
         </View>
       </View>
     </SafeAreaView>

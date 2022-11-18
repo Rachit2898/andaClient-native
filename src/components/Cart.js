@@ -22,6 +22,8 @@ import {
   productDetails,
 } from "../../redux/features/productApi";
 import Navbar from "./Navbar";
+import TabBar from "./TabBar";
+import * as Notifications from "expo-notifications";
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -39,6 +41,7 @@ const Cart = () => {
     subtotal,
     updateCart,
     deleteCart,
+    favResponse,
   } = useSelector((state) => ({
     ...state.products,
   }));
@@ -53,97 +56,146 @@ const Cart = () => {
     }
   }
 
+  useEffect(() => {
+    dispatch(cartInfo());
+  }, [cartLength, updateCart, isFocused, favResponse]);
+
+  useEffect(() => {
+    const subscription1 = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        console.log("NOTIFICATION RECEIVED");
+        console.log(notification);
+        const userName = notification.request.content.data.userName;
+        console.log(userName);
+      }
+    );
+
+    const subscription2 = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        console.log("NOTIFICATION RESPONSE RECEIVED");
+        console.log(response);
+        const userName = response.notification.request.content.data.userName;
+        console.log(userName);
+      }
+    );
+
+    return () => {
+      subscription1.remove();
+      subscription2.remove();
+    };
+  }, [cartLength]);
+
+  function scheduleNotificationHandler() {
+    Notifications.scheduleNotificationAsync({
+      content: {
+        title: "Congratulations",
+        body: "Your Order Has Been Placed Successfully",
+        data: { userName: "Andanet" },
+      },
+      trigger: {
+        seconds: 5,
+      },
+    });
+  }
+
   async function SubmitCart() {
     try {
       dispatch(cartValidating());
-      navigation.navigate("Auth", { screen: "SubmitCart" });
+      navigation.navigate("SubmitCart");
+      scheduleNotificationHandler();
     } catch (error) {
       Alert.alert("Could Not Empty Cart!!");
     }
   }
-  useEffect(() => {
-    dispatch(cartInfo());
-  }, [cartLength, updateCart, isFocused]);
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
+    <SafeAreaView
+      style={{ backgroundColor: "#fff", flex: 1 }}
+      edges={["right", "left", "top"]}
+    >
       <View
         style={{
           backgroundColor: "#fff",
-          marginBottom: 150,
+          flex: 1,
         }}
       >
         <Navbar />
-        {cartLength > 0 ? (
-          <View>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                padding: 10,
-              }}
-            >
-              <View>
-                <Text style={styles.cartText}>
-                  {" "}
-                  Your Cart ({cartLength} item
-                  {emptyCartItems !== 1 ? "s" : ""})
-                </Text>
-              </View>
-              <View>
-                <Text style={styles.cartText}> Sub Total: ${subtotal}</Text>
-              </View>
-            </View>
-            <Pressable
-              android_ripple={{ color: "#ccc" }}
-              style={styles.proceedButtonContainer}
-              onPress={() => SubmitCart()}
-            >
-              <Text style={styles.proceedButton}>PROCEED TO CHECKOUT</Text>
-            </Pressable>
-            <View style={styles.emptyButtonContainer}>
-              <View>
-                <TextInput placeholder="Add PO#" style={styles.textInput} />
+        <View style={{ flex: 1 }}>
+          {cartLength > 0 ? (
+            <View style={{ flex: 1 }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  padding: 10,
+                }}
+              >
+                <View>
+                  <Text style={styles.cartText}>
+                    {" "}
+                    Your Cart ({cartLength} item
+                    {emptyCartItems !== 1 ? "s" : ""})
+                  </Text>
+                </View>
+                <View>
+                  <Text style={styles.cartText}> Sub Total: ${subtotal}</Text>
+                </View>
               </View>
               <Pressable
-                style={styles.emptyContainer}
                 android_ripple={{ color: "#ccc" }}
-                onPress={() => emptyCart(cartData?.id)}
+                style={styles.proceedButtonContainer}
+                onPress={() => SubmitCart()}
               >
-                <Text style={styles.emptyText}>EMPTY CART</Text>
+                <Text style={styles.proceedButton}>PROCEED TO CHECKOUT</Text>
               </Pressable>
-            </View>
-            {loading && <Spinner />}
-            <ScrollView showsVerticalScrollIndicator={false}>
-              <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
-                {orderItems?.map((item) => {
-                  return (
-                    <View key={item.id}>
-                      <CartScreen
-                        url={item?.primaryMedia?.url}
-                        name={item?.sku?.name}
-                        nationalDrugCode={item?.sku?.nationalDrugCode}
-                        externalId={item?.sku?.externalId}
-                        manufacturer={item?.sku?.manufacturer}
-                        description={item?.sku?.description}
-                        itemForm={item?.sku?.itemForm}
-                        id={item?.id}
-                        amount={item?.salePrice.amount}
-                        quantity={item?.quantity}
-                        skuId={item?.sku?.id}
-                        orderLimit={item?.sku?.dailyOrderLimit}
-                      />
-                    </View>
-                  );
-                })}
+              <View style={styles.emptyButtonContainer}>
+                <View>
+                  <TextInput placeholder="Add PO#" style={styles.textInput} />
+                </View>
+                <Pressable
+                  style={styles.emptyContainer}
+                  android_ripple={{ color: "#ccc" }}
+                  onPress={() => emptyCart(cartData?.id)}
+                >
+                  <Text style={styles.emptyText}>EMPTY CART</Text>
+                </Pressable>
               </View>
-            </ScrollView>
+              {loading && <Spinner />}
+              <ScrollView showsVerticalScrollIndicator={false}>
+                <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
+                  {orderItems?.map((item) => {
+                    return (
+                      <View key={item.id}>
+                        <CartScreen
+                          url={item?.primaryMedia?.url}
+                          name={item?.sku?.name}
+                          nationalDrugCode={item?.sku?.nationalDrugCode}
+                          externalId={item?.sku?.externalId}
+                          manufacturer={item?.sku?.manufacturer}
+                          description={item?.sku?.description}
+                          itemForm={item?.sku?.itemForm}
+                          id={item?.id}
+                          amount={item?.salePrice.amount}
+                          quantity={item?.quantity}
+                          skuId={item?.sku?.id}
+                          orderLimit={item?.sku?.dailyOrderLimit}
+                          type={item?.sku?.productLists[0]?.type}
+                        />
+                      </View>
+                    );
+                  })}
+                </View>
+              </ScrollView>
+            </View>
+          ) : (
+            <View style={styles.emptyCart}>
+              <Text style={styles.emptyCartText}>Your cart is empty</Text>
+            </View>
+          )}
+          <View style={{ left: 0, right: 0, bottom: 0 }}>
+            <TabBar />
           </View>
-        ) : (
-          <View style={styles.emptyCart}>
-            <Text style={styles.emptyCartText}>Your cart is empty</Text>
-          </View>
-        )}
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -157,7 +209,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   mainBoxLoading: { opacity: 0.2, flex: 1 },
-  mainBox: { backgroundColor: "#fff", marginBottom: 200, flex: 1 },
+  mainBox: { backgroundColor: "#fff", flex: 1 },
   proceedButtonContainer: {
     backgroundColor: "#ed8b00",
     alignItems: "center",
@@ -203,6 +255,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     alignItems: "center",
     marginVertical: 60,
+    flex: 1,
   },
   emptyCartText: {
     fontWeight: "bold",

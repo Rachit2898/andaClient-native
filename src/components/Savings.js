@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Navbar from "./Navbar";
 import Pagination from "./Pagination";
 import Spinner from "./Spinner";
+import TabBar from "./TabBar";
 import Filter from "../filter/SavingsFilter";
 import SavingsScreen from "../screens/SavingsScreen";
 import { savings, addItem, userInfo } from "../../redux/features/productApi";
@@ -22,9 +23,11 @@ const SavingsItems = () => {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const { savingsData, userInfoData, loading } = useSelector((state) => ({
-    ...state.products,
-  }));
+  const { savingsData, userInfoData, loading, favResponse } = useSelector(
+    (state) => ({
+      ...state.products,
+    })
+  );
   const onPressTouch = () => {
     scrollRef?.current?.scrollTo({
       y: 0,
@@ -36,7 +39,7 @@ const SavingsItems = () => {
   useEffect(() => {
     dispatch(savings({ value: "", currentPage }));
     dispatch(userInfo());
-  }, []);
+  }, [favResponse]);
   const result = savingsData;
   const userData = userInfoData;
 
@@ -55,7 +58,10 @@ const SavingsItems = () => {
   };
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
+    <SafeAreaView
+      style={{ backgroundColor: "#fff", flex: 1 }}
+      edges={["right", "left", "top"]}
+    >
       <Filter
         checkBoxHandler={checkBoxHandler}
         modalVisible={modalVisible}
@@ -64,6 +70,7 @@ const SavingsItems = () => {
       <View
         style={{
           backgroundColor: "#fff",
+          flex: 1,
         }}
       >
         <Navbar />
@@ -78,7 +85,6 @@ const SavingsItems = () => {
           <View style={{ justifyContent: "center" }}>
             <Text style={{ fontSize: 20, fontWeight: "bold" }}>Savings</Text>
           </View>
-          {loading && <Spinner />}
           <Pressable
             style={{
               borderWidth: 1,
@@ -139,6 +145,8 @@ const SavingsItems = () => {
                         rewardItem={item?.defaultSku?.rewardItem}
                         priceType={item?.defaultSku?.priceType}
                         orderLimit={item?.defaultSku?.dailyOrderLimit}
+                        accountId={userData?.selectedAccount?.id}
+                        type={item?.defaultSku?.productLists[0]?.type}
                       />
                     </View>
                   );
@@ -160,6 +168,9 @@ const SavingsItems = () => {
               <Spinner />
             </View>
           )}
+        </View>
+        <View style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+          <TabBar />
         </View>
       </View>
     </SafeAreaView>

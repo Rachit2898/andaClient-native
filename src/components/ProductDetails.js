@@ -20,6 +20,7 @@ import {
   addItem,
   updateValues,
 } from "../../redux/features/productApi";
+import TabBar from "./TabBar";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -61,16 +62,19 @@ const ProductDetails = () => {
   }
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
-      <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
-        {loading && <Spinner />}
-        {!!searchedValue && (
-          <Text style={styles.pageText}>
-            Showing results for "{searchedValue}"
-          </Text>
-        )}
-        <View>
-          {items?.id ? (
+    <SafeAreaView
+      style={{ backgroundColor: "#fff", flex: 1 }}
+      edges={["right", "left", "top"]}
+    >
+      {loading && <Spinner />}
+      <View style={{ flex: 1 }}>
+        <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
+          {!!searchedValue && (
+            <Text style={styles.pageText}>
+              Showing results for "{searchedValue}"
+            </Text>
+          )}
+          <View>
             <ScrollView showsVerticalScrollIndicator={false}>
               <View style={{ height: 200, marginVertical: 20 }}>
                 {items?.product?.mediaMap?.primary?.url ? (
@@ -202,7 +206,7 @@ const ProductDetails = () => {
                   <View
                     style={{
                       backgroundColor: "#fff",
-                      width: 70,
+                      width: 72,
                       height: 25,
                       borderRadius: 3,
                       borderRadius: 4,
@@ -491,9 +495,10 @@ const ProductDetails = () => {
                 </View>
               </View>
             </ScrollView>
-          ) : (
-            <Spinner />
-          )}
+          </View>
+        </View>
+        <View style={{ left: 0, right: 0, bottom: 0 }}>
+          <TabBar />
         </View>
       </View>
     </SafeAreaView>
