@@ -149,7 +149,8 @@ const Inventory = () => {
           </Text>
         )}
         <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
-          {result.totalResults > 0 ? (
+          {console.log(result?.totalResults)}
+          {result?.totalResults > 0 ? (
             <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false}>
               <View>
                 {data?.map((item, i) => {

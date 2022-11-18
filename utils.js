@@ -32,6 +32,20 @@ export async function changePassword(credentials) {
   return data;
 }
 
+export async function productList() {
+  const token = await getToken();
+  var url = "https://staging.andanet.com/api/customer/product-list/lists";
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  });
+  const myData = await response.json();
+  return myData;
+}
+
 export async function cartValidate() {
   const token = await getToken();
   var url = "https://staging.andanet.com/api/cart/validate";

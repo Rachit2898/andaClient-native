@@ -9,18 +9,20 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import React, { useState, useEffect } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import {
   userInfo,
   cartInfo,
   searchItems,
   searchProducts,
+  productDetails,
 } from "../../redux/features/productApi";
 import { searchValues } from "../../redux/features/authUser.js";
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const [openSearch, setOpenSearch] = useState(false);
   const {
     userInfoData,
@@ -36,10 +38,10 @@ const Navbar = () => {
     dispatch(searchItems(item));
   };
   const searchProductHandler = async (item) => {
+    console.log({ item });
     try {
       dispatch(searchProducts(item));
       dispatch(searchValues(item));
-      navigation.navigate("SearchProduct");
       setOpenSearch(false);
     } catch (e) {
       Alert.alert(e.message);
@@ -48,6 +50,26 @@ const Navbar = () => {
   const BarCodeHandler = () => {
     navigation.navigate("Barcode");
   };
+
+  const productDetailHandler = async (Id) => {
+    navigation.navigate("ProductDetails");
+    dispatch(productDetails(Id));
+  };
+
+  useEffect(() => {
+    if (searchProducstsData.totalResults === 1) {
+      productDetailHandler(searchProducstsData?.products[0]?.defaultSku?.id);
+      return;
+    }
+    if (searchProducstsData.totalResults > 1) {
+      navigation.navigate("SearchProduct");
+      return;
+    }
+  }, [searchProducstsData]);
+
+  useEffect(() => {
+    searchItemHandler("");
+  }, [isFocused]);
   return (
     <View>
       <View style={styles.searchBox}>

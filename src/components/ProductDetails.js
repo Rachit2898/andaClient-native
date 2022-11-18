@@ -20,6 +20,7 @@ import {
   addItem,
   updateValues,
 } from "../../redux/features/productApi";
+import TabBar from "./TabBar";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -61,434 +62,443 @@ const ProductDetails = () => {
   }
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
-      <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
-        {!!searchedValue && (
-          <Text style={styles.pageText}>
-            Showing results for "{searchedValue}"
-          </Text>
-        )}
-        <View>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={{ height: 200, marginVertical: 20 }}>
-              {items?.product?.mediaMap?.primary?.url ? (
-                <>
-                  <Image
-                    style={{
-                      borderRadius: 3,
-                      marginVertical: 5,
-                      width: 220,
-                      height: 180,
-                      justifyContent: "center",
-                      alignSelf: "center",
-                    }}
-                    source={{
-                      uri: `https://staging.andanet.com${items?.product?.mediaMap?.primary?.url}`,
-                    }}
-                  />
-                </>
-              ) : (
-                <>
-                  <Image
-                    source={require("../../assets/camera.png")}
-                    style={{
-                      width: 120,
-                      height: 100,
-                      marginHorizontal: 10,
-                      marginVertical: 60,
-                      borderRadius: 6,
-                      justifyContent: "center",
-                      alignSelf: "center",
-                    }}
-                  />
-                </>
-              )}
-            </View>
-            <View
-              style={{
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Text
-                style={{
-                  color: "#006ba6",
-                  fontWeight: "700",
-                  fontSize: 15,
-                }}
-              >
-                {items?.name}
-              </Text>
-            </View>
-            <View
-              style={{
-                borderTopWidth: 0.3,
-                borderColor: "#ececec",
-                marginTop: 20,
-              }}
-            >
-              <View
-                style={{
-                  flexDirection: "row",
-                  borderWidth: 0.3,
-                  justifyContent: "center",
-                  margin: 10,
-                }}
-              >
-                <View style={{ paddingHorizontal: 15 }}>
-                  <View style={{ paddingVertical: 10 }}>
-                    <Text style={{ color: "#494c4c", fontWeight: "700" }}>
-                      INV PRICE
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      justifyContent: "center",
-                      alignItems: "center",
-                      paddingVertical: 10,
-                    }}
-                  >
-                    <Text style={{ color: "#494c4c", fontWeight: "700" }}>
-                      ${items?.retailPrice?.amount}
-                    </Text>
-                  </View>
-                </View>
-                <View style={{ borderLeftWidth: 0.3, paddingHorizontal: 15 }}>
-                  <View style={{ paddingVertical: 10 }}>
-                    <Text style={{ color: "#494c4c", fontWeight: "700" }}>
-                      EST. NET PRICE
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      justifyContent: "center",
-                      alignItems: "center",
-                      paddingVertical: 10,
-                    }}
-                  >
-                    <Text style={{ color: "#494c4c", fontWeight: "700" }}>
-                      ${items?.retailPrice?.amount}
-                    </Text>
-                  </View>
-                </View>
-                <View style={{ borderLeftWidth: 0.3, paddingHorizontal: 15 }}>
-                  <View style={{ paddingVertical: 10 }}>
-                    <Text style={{ color: "#494c4c", fontWeight: "700" }}>
-                      PER UNIT
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      justifyContent: "center",
-                      alignItems: "center",
-                      paddingVertical: 10,
-                    }}
-                  >
-                    <Text style={{ color: "#494c4c", fontWeight: "700" }}>
-                      --
-                    </Text>
-                  </View>
-                </View>
+    <SafeAreaView
+      style={{ backgroundColor: "#fff", flex: 1 }}
+      edges={["right", "left", "top"]}
+    >
+      {loading && <Spinner />}
+      <View style={{ flex: 1 }}>
+        <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
+          {!!searchedValue && (
+            <Text style={styles.pageText}>
+              Showing results for "{searchedValue}"
+            </Text>
+          )}
+          <View>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <View style={{ height: 200, marginVertical: 20 }}>
+                {items?.product?.mediaMap?.primary?.url ? (
+                  <>
+                    <Image
+                      style={{
+                        borderRadius: 3,
+                        marginVertical: 5,
+                        width: 220,
+                        height: 180,
+                        justifyContent: "center",
+                        alignSelf: "center",
+                      }}
+                      source={{
+                        uri: `https://staging.andanet.com${items?.product?.mediaMap?.primary?.url}`,
+                      }}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <Image
+                      source={require("../../assets/camera.png")}
+                      style={{
+                        width: 120,
+                        height: 100,
+                        marginHorizontal: 10,
+                        marginVertical: 60,
+                        borderRadius: 6,
+                        justifyContent: "center",
+                        alignSelf: "center",
+                      }}
+                    />
+                  </>
+                )}
               </View>
               <View
                 style={{
                   justifyContent: "center",
-                  flexDirection: "row",
-                  paddingVertical: 10,
+                  alignItems: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    color: "#006ba6",
+                    fontWeight: "700",
+                    fontSize: 15,
+                  }}
+                >
+                  {items?.name}
+                </Text>
+              </View>
+              <View
+                style={{
+                  borderTopWidth: 0.3,
+                  borderColor: "#ececec",
+                  marginTop: 20,
                 }}
               >
                 <View
                   style={{
-                    backgroundColor: "#fff",
-                    width: 72,
-                    height: 25,
-                    borderRadius: 3,
-                    borderRadius: 4,
-                    justifyContent: "space-between",
                     flexDirection: "row",
-                    borderWidth: 1,
-                    borderColor: "#878787",
+                    borderWidth: 0.3,
+                    justifyContent: "center",
+                    margin: 10,
                   }}
                 >
+                  <View style={{ paddingHorizontal: 15 }}>
+                    <View style={{ paddingVertical: 10 }}>
+                      <Text style={{ color: "#494c4c", fontWeight: "700" }}>
+                        INV PRICE
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        justifyContent: "center",
+                        alignItems: "center",
+                        paddingVertical: 10,
+                      }}
+                    >
+                      <Text style={{ color: "#494c4c", fontWeight: "700" }}>
+                        ${items?.retailPrice?.amount}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={{ borderLeftWidth: 0.3, paddingHorizontal: 15 }}>
+                    <View style={{ paddingVertical: 10 }}>
+                      <Text style={{ color: "#494c4c", fontWeight: "700" }}>
+                        EST. NET PRICE
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        justifyContent: "center",
+                        alignItems: "center",
+                        paddingVertical: 10,
+                      }}
+                    >
+                      <Text style={{ color: "#494c4c", fontWeight: "700" }}>
+                        ${items?.retailPrice?.amount}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={{ borderLeftWidth: 0.3, paddingHorizontal: 15 }}>
+                    <View style={{ paddingVertical: 10 }}>
+                      <Text style={{ color: "#494c4c", fontWeight: "700" }}>
+                        PER UNIT
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        justifyContent: "center",
+                        alignItems: "center",
+                        paddingVertical: 10,
+                      }}
+                    >
+                      <Text style={{ color: "#494c4c", fontWeight: "700" }}>
+                        --
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+                <View
+                  style={{
+                    justifyContent: "center",
+                    flexDirection: "row",
+                    paddingVertical: 10,
+                  }}
+                >
+                  <View
+                    style={{
+                      backgroundColor: "#fff",
+                      width: 72,
+                      height: 25,
+                      borderRadius: 3,
+                      borderRadius: 4,
+                      justifyContent: "space-between",
+                      flexDirection: "row",
+                      borderWidth: 1,
+                      borderColor: "#878787",
+                    }}
+                  >
+                    <Pressable
+                      style={{
+                        borderRightWidth: 1,
+                        borderColor: "#878787",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        paddingHorizontal: 5,
+                        backgroundColor: "#cfcccc",
+                      }}
+                      onPress={() => {
+                        removeButton();
+                      }}
+                      disabled={count === 1}
+                    >
+                      <Text
+                        style={{
+                          fontWeight: "bold",
+                          fontSize: 15,
+                        }}
+                      >
+                        -
+                      </Text>
+                    </Pressable>
+                    <View
+                      style={{
+                        alignSelf: "center",
+
+                        width: 30,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          color: "#005185",
+                          alignSelf: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        {count}
+                      </Text>
+                    </View>
+                    {!!items.dailyOrderLimit ? (
+                      <Pressable
+                        style={{
+                          borderLeftWidth: 1,
+                          borderColor: "#878787",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          paddingHorizontal: 5,
+                          backgroundColor: "#cfcccc",
+                        }}
+                        onPress={() => {
+                          addButton();
+                        }}
+                        disabled={count === items.dailyOrderLimit}
+                      >
+                        <Text
+                          style={{
+                            fontWeight: "bold",
+                            fontSize: 15,
+                          }}
+                        >
+                          +
+                        </Text>
+                      </Pressable>
+                    ) : (
+                      <Pressable
+                        style={{
+                          borderLeftWidth: 1,
+                          borderColor: "#878787",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          paddingHorizontal: 5,
+                          backgroundColor: "#cfcccc",
+                        }}
+                        onPress={() => {
+                          addButton();
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontWeight: "bold",
+                            fontSize: 15,
+                          }}
+                        >
+                          +
+                        </Text>
+                      </Pressable>
+                    )}
+                  </View>
                   <Pressable
                     style={{
-                      borderRightWidth: 1,
-                      borderColor: "#878787",
+                      backgroundColor: "#c77500",
+                      width: 60,
+                      height: 25,
+                      borderRadius: 3,
+                      borderRadius: 4,
                       alignItems: "center",
                       justifyContent: "center",
-                      paddingHorizontal: 5,
-                      backgroundColor: "#cfcccc",
+                      marginLeft: 15,
                     }}
-                    onPress={() => {
-                      removeButton();
-                    }}
-                    disabled={count === 1}
+                    onPress={() => addItemIntoCart(items?.id)}
                   >
                     <Text
                       style={{
+                        color: "#fff",
                         fontWeight: "bold",
-                        fontSize: 15,
+                        fontSize: 12,
                       }}
                     >
-                      -
+                      ADD
                     </Text>
                   </Pressable>
+                </View>
+                {!!items.dailyOrderLimit && (
                   <View
                     style={{
-                      alignSelf: "center",
-
-                      width: 30,
+                      height: 20,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    {count === items.dailyOrderLimit && (
+                      <Text style={{ fontSize: 12, color: "#bd1c1c" }}>
+                        You Can Add Only {items.dailyOrderLimit} Items
+                      </Text>
+                    )}
+                  </View>
+                )}
+              </View>
+              <View>
+                <View
+                  style={{
+                    borderWidth: 0.5,
+                    borderColor: "#ececec",
+                    paddingHorizontal: 10,
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      paddingVertical: 5,
                     }}
                   >
                     <Text
                       style={{
-                        color: "#005185",
-                        alignSelf: "center",
-                        justifyContent: "center",
+                        fontWeight: "700",
+                        fontSize: 12,
                       }}
                     >
-                      {count}
+                      Brand Equivalent:
+                    </Text>
+                    <Text style={{ fontSize: 12 }}>{items?.product?.name}</Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      paddingVertical: 5,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontWeight: "700",
+                        fontSize: 12,
+                      }}
+                    >
+                      Product ID:
+                    </Text>
+                    <Text style={{ fontSize: 12 }}>{items?.externalId}</Text>
+                  </View>
+                  <View
+                    style={{
+                      paddingVertical: 5,
+                      flexWrap: "wrap",
+                      flexDirection: "row",
+                      flex: 1,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontWeight: "700",
+                        fontSize: 12,
+                      }}
+                    >
+                      UPC:
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        flexWrap: "wrap",
+                        flex: 1,
+                      }}
+                    >
+                      {items?.upc}
                     </Text>
                   </View>
-                  {!!items.dailyOrderLimit ? (
-                    <Pressable
-                      style={{
-                        borderLeftWidth: 1,
-                        borderColor: "#878787",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        paddingHorizontal: 5,
-                        backgroundColor: "#cfcccc",
-                      }}
-                      onPress={() => {
-                        addButton();
-                      }}
-                      disabled={count === items.dailyOrderLimit}
-                    >
-                      <Text
-                        style={{
-                          fontWeight: "bold",
-                          fontSize: 15,
-                        }}
-                      >
-                        +
-                      </Text>
-                    </Pressable>
-                  ) : (
-                    <Pressable
-                      style={{
-                        borderLeftWidth: 1,
-                        borderColor: "#878787",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        paddingHorizontal: 5,
-                        backgroundColor: "#cfcccc",
-                      }}
-                      onPress={() => {
-                        addButton();
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontWeight: "bold",
-                          fontSize: 15,
-                        }}
-                      >
-                        +
-                      </Text>
-                    </Pressable>
-                  )}
-                </View>
-                <Pressable
-                  style={{
-                    backgroundColor: "#c77500",
-                    width: 60,
-                    height: 25,
-                    borderRadius: 3,
-                    borderRadius: 4,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginLeft: 15,
-                  }}
-                  onPress={() => addItemIntoCart(items?.id)}
-                >
-                  <Text
+                  <View
                     style={{
-                      color: "#fff",
-                      fontWeight: "bold",
-                      fontSize: 12,
+                      paddingVertical: 5,
+                      flexWrap: "wrap",
+                      flexDirection: "row",
+                      flex: 1,
                     }}
                   >
-                    ADD
-                  </Text>
-                </Pressable>
-              </View>
-              {!!items.dailyOrderLimit && (
-                <View
-                  style={{
-                    height: 20,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  {count === items.dailyOrderLimit && (
-                    <Text style={{ fontSize: 12, color: "#bd1c1c" }}>
-                      You Can Add Only {items.dailyOrderLimit} Items
+                    <Text
+                      style={{
+                        fontWeight: "700",
+                        fontSize: 12,
+                      }}
+                    >
+                      Size:
                     </Text>
-                  )}
-                </View>
-              )}
-            </View>
-            <View>
-              <View
-                style={{
-                  borderWidth: 0.5,
-                  borderColor: "#ececec",
-                  paddingHorizontal: 10,
-                }}
-              >
-                <View
-                  style={{
-                    flexDirection: "row",
-                    paddingVertical: 5,
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontWeight: "700",
-                      fontSize: 12,
-                    }}
-                  >
-                    Brand Equivalent:
-                  </Text>
-                  <Text style={{ fontSize: 12 }}>{items?.product?.name}</Text>
-                </View>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    paddingVertical: 5,
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontWeight: "700",
-                      fontSize: 12,
-                    }}
-                  >
-                    Product ID:
-                  </Text>
-                  <Text style={{ fontSize: 12 }}>{items?.externalId}</Text>
-                </View>
-                <View
-                  style={{
-                    paddingVertical: 5,
-                    flexWrap: "wrap",
-                    flexDirection: "row",
-                    flex: 1,
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontWeight: "700",
-                      fontSize: 12,
-                    }}
-                  >
-                    UPC:
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      flexWrap: "wrap",
-                      flex: 1,
-                    }}
-                  >
-                    {items?.upc}
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    paddingVertical: 5,
-                    flexWrap: "wrap",
-                    flexDirection: "row",
-                    flex: 1,
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontWeight: "700",
-                      fontSize: 12,
-                    }}
-                  >
-                    Size:
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      flexWrap: "wrap",
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        flexWrap: "wrap",
 
-                      flex: 1,
-                    }}
-                  >
-                    {items?.packSizeDisplay}
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    paddingVertical: 5,
-                    flexWrap: "wrap",
-                    flexDirection: "row",
-                    flex: 1,
-                  }}
-                >
-                  <Text
+                        flex: 1,
+                      }}
+                    >
+                      {items?.packSizeDisplay}
+                    </Text>
+                  </View>
+                  <View
                     style={{
-                      fontWeight: "700",
-                      fontSize: 12,
-                    }}
-                  >
-                    Form:
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 12,
+                      paddingVertical: 5,
                       flexWrap: "wrap",
-
+                      flexDirection: "row",
                       flex: 1,
                     }}
                   >
-                    {items?.itemForm}
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    paddingVertical: 5,
-                    flexWrap: "wrap",
-                    flexDirection: "row",
-                    flex: 1,
-                  }}
-                >
-                  <Text
+                    <Text
+                      style={{
+                        fontWeight: "700",
+                        fontSize: 12,
+                      }}
+                    >
+                      Form:
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        flexWrap: "wrap",
+
+                        flex: 1,
+                      }}
+                    >
+                      {items?.itemForm}
+                    </Text>
+                  </View>
+                  <View
                     style={{
-                      fontWeight: "700",
-                      fontSize: 12,
-                    }}
-                  >
-                    Manufacturer:
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 12,
+                      paddingVertical: 5,
                       flexWrap: "wrap",
-
+                      flexDirection: "row",
                       flex: 1,
                     }}
                   >
-                    {items?.manufacturer}
-                  </Text>
+                    <Text
+                      style={{
+                        fontWeight: "700",
+                        fontSize: 12,
+                      }}
+                    >
+                      Manufacturer:
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        flexWrap: "wrap",
+
+                        flex: 1,
+                      }}
+                    >
+                      {items?.manufacturer}
+                    </Text>
+                  </View>
                 </View>
               </View>
-            </View>
-          </ScrollView>
+            </ScrollView>
+          </View>
+        </View>
+        <View style={{ left: 0, right: 0, bottom: 0 }}>
+          <TabBar />
         </View>
       </View>
     </SafeAreaView>

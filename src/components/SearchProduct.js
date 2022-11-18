@@ -56,20 +56,8 @@ const SearchProduct = () => {
     dispatch(productDetails(Id));
   };
 
-  useEffect(() => {
-    dispatch(userInfo());
-    if (searchProducstsData.totalResults === 1) {
-      productDetailHandler(searchProducstsData?.products[0]?.defaultSku?.id);
-    }
-  }, [favResponse, productDetailsData]);
   const result = searchProducstsData;
   const userData = userInfoData;
-
-  useEffect(() => {
-    if (searchProducstsData.totalResults === 1) {
-      productDetailHandler(searchProducstsData?.products[0]?.defaultSku?.id);
-    }
-  }, [searchProducstsData.totalResults]);
 
   const apiCall = async (currentPage) => {
     setCurrentPage(currentPage);
@@ -125,6 +113,9 @@ const SearchProduct = () => {
               No products found for "{searchedValue}"
             </Text>
           </View>
+          <View style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+            <TabBar />
+          </View>
         </View>
       </SafeAreaView>
     );
@@ -165,7 +156,7 @@ const SearchProduct = () => {
         />
 
         <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
-          {result.totalResults > 1 ? (
+          {result.totalResults > 0 ? (
             <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false}>
               <View>
                 {data?.map((item, i) => {

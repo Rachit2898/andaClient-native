@@ -64,7 +64,6 @@ function AuthStack() {
         options={{
           headerShown: false,
         }}
-        name="Log"
         component={LoginScreen}
       />
     </Stack.Navigator>
@@ -104,7 +103,8 @@ function AuthenticatedStack() {
             name="SubmitCart"
             component={SubmitCart}
             options={{
-              headerShown: false,
+              headerShown: true,
+              title: null,
             }}
           />
           <Stack.Screen

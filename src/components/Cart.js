@@ -23,6 +23,7 @@ import {
 } from "../../redux/features/productApi";
 import Navbar from "./Navbar";
 import TabBar from "./TabBar";
+import * as Notifications from "expo-notifications";
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -55,17 +56,57 @@ const Cart = () => {
     }
   }
 
+  useEffect(() => {
+    dispatch(cartInfo());
+  }, [cartLength, updateCart, isFocused, favResponse]);
+
+  useEffect(() => {
+    const subscription1 = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        console.log("NOTIFICATION RECEIVED");
+        console.log(notification);
+        const userName = notification.request.content.data.userName;
+        console.log(userName);
+      }
+    );
+
+    const subscription2 = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        console.log("NOTIFICATION RESPONSE RECEIVED");
+        console.log(response);
+        const userName = response.notification.request.content.data.userName;
+        console.log(userName);
+      }
+    );
+
+    return () => {
+      subscription1.remove();
+      subscription2.remove();
+    };
+  }, [cartLength]);
+
+  function scheduleNotificationHandler() {
+    Notifications.scheduleNotificationAsync({
+      content: {
+        title: "Congratulations",
+        body: "Your Order Has Been Placed Successfully",
+        data: { userName: "Andanet" },
+      },
+      trigger: {
+        seconds: 5,
+      },
+    });
+  }
+
   async function SubmitCart() {
     try {
       dispatch(cartValidating());
       navigation.navigate("SubmitCart");
+      scheduleNotificationHandler();
     } catch (error) {
       Alert.alert("Could Not Empty Cart!!");
     }
   }
-  useEffect(() => {
-    dispatch(cartInfo());
-  }, [cartLength, updateCart, isFocused, favResponse]);
 
   return (
     <SafeAreaView
@@ -214,6 +255,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     alignItems: "center",
     marginVertical: 60,
+    flex: 1,
   },
   emptyCartText: {
     fontWeight: "bold",

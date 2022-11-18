@@ -59,7 +59,6 @@ const authReducer = createSlice({
   reducers: {
     logout: (state, action) => {
       AsyncStorage.removeItem("token");
-      AsyncStorage.clear();
       state.isAuthenticated = action.payload;
     },
     fingers: (state, action) => {
