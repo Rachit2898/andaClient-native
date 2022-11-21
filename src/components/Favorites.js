@@ -27,6 +27,7 @@ const Favorites = () => {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [loadingValue, setLoadingValue] = useState(false);
   const { favoritesData, userInfoData, loading, favResponse } = useSelector(
     (state) => ({
       ...state.products,
@@ -78,6 +79,14 @@ const Favorites = () => {
     }
   };
   const pageLast = currentLast(currentPage);
+
+  useEffect(() => {
+    setLoadingValue(result.totalResults > 0);
+    if (loadingValue === false)
+      setTimeout(() => {
+        setLoadingValue(true);
+      }, 5000);
+  }, []);
 
   return (
     <SafeAreaView
@@ -139,7 +148,7 @@ const Favorites = () => {
           </Text>
         )}
         <View style={styles.mainBox}>
-          {result.totalResults > 0 ? (
+          {loadingValue > 0 ? (
             <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false}>
               <View>
                 {data?.map((item, i) => {

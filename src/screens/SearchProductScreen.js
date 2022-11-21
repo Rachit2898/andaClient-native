@@ -160,6 +160,7 @@ const SearchProductScreen = (props) => {
                   style={{
                     fontWeight: "700",
                     fontSize: 12,
+                    color: "#494c4c",
                   }}
                 >
                   NDC:
@@ -176,6 +177,7 @@ const SearchProductScreen = (props) => {
                   style={{
                     fontWeight: "700",
                     fontSize: 12,
+                    color: "#494c4c",
                   }}
                 >
                   ITEM:
@@ -194,6 +196,7 @@ const SearchProductScreen = (props) => {
                   style={{
                     fontWeight: "700",
                     fontSize: 12,
+                    color: "#494c4c",
                   }}
                 >
                   MFR:

@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getToken } from "../../utils";
 import { login, changePassword } from "../../utils";
 import _ from "lodash";
+import jwt_decode from "jwt-decode";
 
 export const signin = createAsyncThunk("signin", async (body) => {
   const result = await login(body);
@@ -60,6 +61,7 @@ const authReducer = createSlice({
     logout: (state, action) => {
       AsyncStorage.removeItem("token");
       state.isAuthenticated = action.payload;
+      state.token = "";
     },
     fingers: (state, action) => {
       state.isFinger = action.payload;
@@ -68,8 +70,24 @@ const authReducer = createSlice({
       state.searchedValue = action.payload;
     },
     authenticate: (state, action) => {
-      state.token = action.payload;
-      state.isAuthenticated = true;
+      state.loading = true;
+      const storedToken = action.payload;
+
+      const jwt_Token_decoded = jwt_decode(storedToken);
+
+      if (storedToken) {
+        if (jwt_Token_decoded.exp * 1000 < Date.now()) {
+          AsyncStorage.removeItem("token");
+          state.isAuthenticated = false;
+          state.token = "";
+        } else {
+          state.token = storedToken;
+          state.isAuthenticated = true;
+        }
+      } else {
+        state.token = storedToken;
+        state.isAuthenticated = false;
+      }
     },
     updateIntventoryUrls: (state, action) => {
       if (containsObject(action.payload, state.inventoryWatchUrls)) {
@@ -185,11 +203,14 @@ const authReducer = createSlice({
     [signin.fulfilled]: (state, action) => {
       state.loading = false;
       state.isAuthenticated = true;
+
+      state.token = action.payload;
     },
     [signin.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
+
     [changeUserPassword.pending]: (state, action) => {
       state.loading = true;
     },

@@ -46,29 +46,30 @@ export default function Barcode() {
     try {
       if (Platform.OS === "android") {
         if (data.length === 12) {
+          Alert.alert(`Barcode Scanned ${data}`);
           dispatch(searchProducts(data));
           dispatch(searchValues(data));
           setScanned(true);
-          console.log(data.slice(1));
           return;
         } else {
-          Alert.alert("Invalid Barcode, Please Try Again!!");
+          Alert.alert(`Invalid Barcode ${data}, Please Try Again!`);
           setScanned(true);
         }
       }
       if (Platform.OS === "ios") {
         if (data.length === 13) {
-          if (data.slice(0, 1) === 0) {
-            dispatch(searchProducts(data.slice(1)));
-            dispatch(searchValues(data.slice(1)));
+          Alert.alert(`Barcode Scanned ${data}`);
+          if (data.substring(0, 1) === "0") {
+            dispatch(searchProducts(data.substring(1)));
+            dispatch(searchValues(data.substring(1)));
             setScanned(true);
-            console.log(data.slice(0, 1));
-            return;
           } else {
-            Alert.alert("Invalid Barcode, Please Try Again!!");
+            Alert.alert(`Invalid Barcode ${data}, Please Try Again!`);
             setScanned(true);
           }
-          return;
+        } else {
+          Alert.alert(`Invalid Barcode ${data}, Please Try Again!`);
+          setScanned(true);
         }
         return;
       }

@@ -6,6 +6,7 @@ import { Provider, useDispatch, useSelector } from "react-redux";
 import { signin, authenticate } from "../../redux/features/authUser";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Spinner from "./Spinner";
 import {
@@ -59,6 +60,7 @@ export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [value, setValue] = useState(false);
+  const [tokenValue, setToken] = useState();
   const [show, setShow] = useState(true);
   const [isChecked, setChecked] = useState(false);
   const [credentialsError, setCredentialsError] = useState(false);
@@ -75,6 +77,13 @@ export default function LoginScreen() {
   async function Signin() {
     return dispatch(signin({ email, password }));
   }
+
+  useEffect(() => {
+    async function tokenSubmit() {
+      await AsyncStorage.setItem("token", tokenValue);
+    }
+    tokenSubmit();
+  }, [tokenValue]);
 
   async function submitHandler() {
     setIsAuthenticating(true);
@@ -95,8 +104,13 @@ export default function LoginScreen() {
 
     const token = await Signin();
 
+    console.log("payload", token?.payload);
+
     if (token.type === "signin/fulfilled") {
       setIsAuthenticating(false);
+      setToken(token?.payload);
+      await AsyncStorage.setItem("token", token?.payload);
+      return;
     }
 
     if (token.type === "signin/rejected") {
@@ -114,199 +128,245 @@ export default function LoginScreen() {
     setShow((pre) => !pre);
   };
 
+  const passwordHandler = (value) => {
+    setPassword(value);
+    setCredentialsError(false);
+    setLoginError(false);
+  };
+  const emailHandler = (value) => {
+    setEmail(value);
+    setCredentialsError(false);
+    setLoginError(false);
+  };
+
   return (
     <>
-      <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
+      <SafeAreaView
+        style={{ backgroundColor: "#fff", flex: 1 }}
+        edges={["right", "left", "top"]}
+      >
         <View
           style={{
             backgroundColor: "white",
             flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
           }}
         >
-          {!isAuthenticating ? (
-            <KeyboardAvoidingView style={styles.container}>
-              <Image
-                style={styles.image}
-                source={require("../../assets/logo.png")}
-              />
-              <View
-                style={{
-                  paddingLeft: 15,
-                  paddingVertical: 20,
-                  backgroundColor: "#ececec",
-                }}
-              >
-                <Text
-                  style={{ color: "#054278", fontWeight: "700", fontSize: 20 }}
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "white",
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {!isAuthenticating ? (
+              <KeyboardAvoidingView style={styles.container}>
+                <Image
+                  style={styles.image}
+                  source={require("../../assets/logo.png")}
+                />
+                <View
+                  style={{
+                    paddingLeft: 15,
+                    paddingVertical: 20,
+                    backgroundColor: "#ececec",
+                  }}
                 >
-                  Sign in to your account{" "}
-                </Text>
-              </View>
-              <View
-                style={{
-                  borderLeftWidth: 3,
-                  borderRightWidth: 3,
-                  borderBottomWidth: 3,
-                  borderColor: "#ececec",
-                  paddingHorizontal: 10,
-                  backgroundColor: "#f8f8f8",
-                }}
-              >
-                {credentialsError && (
-                  <View style={styles.errorView}>
-                    <Image
-                      style={{ height: 19, width: 18 }}
-                      source={require("../../assets/errorAlert.png")}
-                    />
-                    <Text style={{ color: "#990909", marginHorizontal: 10 }}>
-                      Bad Credentials
-                    </Text>
-                  </View>
-                )}
-                <Text style={styles.labelContainer}>USERNAME*</Text>
-                <View style={styles.inputView}>
-                  <TextInput
-                    style={styles.TextInput}
-                    placeholderTextColor="#003f5c"
-                    onChangeText={(email) => setEmail(email)}
-                  />
-                </View>
-                {loginError && (
-                  <View style={styles.errorView}>
-                    <Image
-                      style={{ height: 19, width: 18 }}
-                      source={require("../../assets/errorAlert.png")}
-                    />
-                    <Text style={{ color: "#990909", marginHorizontal: 10 }}>
-                      Invalid Username
-                    </Text>
-                  </View>
-                )}
-                <Text style={styles.labelContainer}>PASSWORD*</Text>
-                <View style={styles.inputView}>
-                  <TextInput
-                    style={styles.TextInput}
-                    placeholderTextColor="#003f5c"
-                    secureTextEntry={show}
-                    onChangeText={(password) => setPassword(password)}
-                  />
-                  <Pressable
+                  <Text
                     style={{
-                      justifyContent: "center",
-                      margin: 10,
-                      paddingHorizontal: 10,
-                      borderRadius: 3,
+                      color: "#054278",
+                      fontWeight: "700",
+                      fontSize: 20,
                     }}
-                    onPress={() => showPasswordHandler(2)}
                   >
-                    {show ? (
-                      <Image
-                        style={{ height: 15, width: 18 }}
-                        source={require("../../assets/eye-close.png")}
-                      />
-                    ) : (
-                      <Image
-                        style={{ height: 15, width: 18 }}
-                        source={require("../../assets/eye-open.png")}
-                      />
-                    )}
-                  </Pressable>
+                    Sign in to your account{" "}
+                  </Text>
                 </View>
-                {loginError && (
-                  <View style={styles.errorView}>
-                    <Image
-                      style={{ height: 19, width: 18 }}
-                      source={require("../../assets/errorAlert.png")}
+                <View
+                  style={{
+                    borderLeftWidth: 3,
+                    borderRightWidth: 3,
+                    borderBottomWidth: 3,
+                    borderColor: "#ececec",
+                    paddingHorizontal: 10,
+                    backgroundColor: "#f8f8f8",
+                  }}
+                >
+                  {credentialsError && (
+                    <View style={styles.errorView}>
+                      <Image
+                        style={{ height: 19, width: 18 }}
+                        source={require("../../assets/errorAlert.png")}
+                      />
+                      <Text style={{ color: "#990909", marginHorizontal: 10 }}>
+                        Bad Credentials
+                      </Text>
+                    </View>
+                  )}
+                  <Text style={styles.labelContainer}>USERNAME*</Text>
+                  <View style={styles.inputView}>
+                    <TextInput
+                      style={styles.TextInput}
+                      placeholderTextColor="#003f5c"
+                      onChangeText={(email) => emailHandler(email)}
                     />
-                    <Text style={{ color: "#990909", marginHorizontal: 10 }}>
-                      Invalid Password
-                    </Text>
                   </View>
-                )}
-                <View>
-                  <View style={{ flexDirection: "row", marginTop: 20 }}>
+                  {loginError && (
+                    <View style={styles.errorView}>
+                      <Image
+                        style={{ height: 19, width: 18 }}
+                        source={require("../../assets/errorAlert.png")}
+                      />
+                      <Text style={{ color: "#990909", marginHorizontal: 10 }}>
+                        Invalid Username
+                      </Text>
+                    </View>
+                  )}
+                  <Text style={styles.labelContainer}>PASSWORD*</Text>
+                  <View style={styles.inputView}>
+                    <TextInput
+                      style={styles.TextInput}
+                      placeholderTextColor="#003f5c"
+                      secureTextEntry={show}
+                      onChangeText={(password) => passwordHandler(password)}
+                    />
                     <Pressable
-                      android_ripple={{ color: "#ccc" }}
-                      style={styles.loginBtn}
-                      onPress={() => submitHandler()}
+                      style={{
+                        justifyContent: "center",
+                        margin: 10,
+                        paddingHorizontal: 10,
+                        borderRadius: 3,
+                      }}
+                      onPress={() => showPasswordHandler(2)}
                     >
-                      <Text style={styles.loginText}>SIGN IN</Text>
+                      {show ? (
+                        <Image
+                          style={{ height: 15, width: 18 }}
+                          source={require("../../assets/eye-close.png")}
+                        />
+                      ) : (
+                        <Image
+                          style={{ height: 15, width: 18 }}
+                          source={require("../../assets/eye-open.png")}
+                        />
+                      )}
                     </Pressable>
                   </View>
+                  {loginError && (
+                    <View style={styles.errorView}>
+                      <Image
+                        style={{ height: 19, width: 18 }}
+                        source={require("../../assets/errorAlert.png")}
+                      />
+                      <Text style={{ color: "#990909", marginHorizontal: 10 }}>
+                        Invalid Password
+                      </Text>
+                    </View>
+                  )}
+                  <View>
+                    <View style={{ flexDirection: "row", marginTop: 20 }}>
+                      <Pressable
+                        android_ripple={{ color: "#ccc" }}
+                        style={styles.loginBtn}
+                        onPress={() => submitHandler()}
+                      >
+                        <Text style={styles.loginText}>SIGN IN</Text>
+                      </Pressable>
+                    </View>
+                  </View>
                 </View>
+                <View
+                  style={{
+                    marginTop: 30,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <View style={{ flexDirection: "row" }}>
+                    <Text
+                      style={{
+                        fontWeight: "700",
+                      }}
+                    >
+                      Forgot
+                    </Text>
+                    <Text
+                      style={{
+                        marginHorizontal: 5,
+                        color: "#006ba6",
+                        fontWeight: "700",
+                      }}
+                    >
+                      Password
+                    </Text>
+                    <Text
+                      style={{
+                        fontWeight: "700",
+                      }}
+                    >
+                      or
+                    </Text>
+                    <Text
+                      style={{
+                        marginHorizontal: 5,
+                        color: "#006ba6",
+                        fontWeight: "700",
+                      }}
+                    >
+                      Username
+                    </Text>
+                  </View>
+                  <View style={{ marginTop: 15 }}>
+                    <Text
+                      style={{
+                        color: "#006ba6",
+                        fontWeight: "700",
+                      }}
+                    >
+                      Sign up for online access
+                    </Text>
+                  </View>
+                </View>
+              </KeyboardAvoidingView>
+            ) : (
+              <View>
+                <Spinner />
               </View>
-              <View
-                style={{
-                  marginTop: 30,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <View style={{ flexDirection: "row" }}>
-                  <Text
-                    style={{
-                      fontWeight: "700",
-                    }}
-                  >
-                    Forgot
-                  </Text>
-                  <Text
-                    style={{
-                      marginHorizontal: 5,
-                      color: "#006ba6",
-                      fontWeight: "700",
-                    }}
-                  >
-                    Password
-                  </Text>
-                  <Text
-                    style={{
-                      fontWeight: "700",
-                    }}
-                  >
-                    or
-                  </Text>
-                  <Text
-                    style={{
-                      marginHorizontal: 5,
-                      color: "#006ba6",
-                      fontWeight: "700",
-                    }}
-                  >
-                    Username
-                  </Text>
-                </View>
-                <View style={{ marginTop: 15 }}>
-                  <Text
-                    style={{
-                      color: "#006ba6",
-                      fontWeight: "700",
-                    }}
-                  >
-                    Sign up for online access
-                  </Text>
-                </View>
-              </View>
-            </KeyboardAvoidingView>
-          ) : (
-            <View>
-              <Spinner />
-            </View>
-          )}
-        </View>
-        <View
+            )}
+          </View>
+          {/* <View
           style={{
             flexDirection: "row",
             justifyContent: "center",
             alignSelf: "center",
-            marginTop: 20,
+            backgroundColor: "red",
           }}
         >
-          <Text style={{ color: "#fff", fontSize: 10, fontWeight: "800" }}>
-            Anda Inc. All Rights Reserved | Terms of Use | Privacy policy
-          </Text>
+         
+        </View> */}
+          <View
+            style={{
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "#054278",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text
+              style={{
+                color: "#fff",
+                fontSize: 10,
+                fontWeight: "800",
+                paddingBottom: 10,
+                paddingTop: 10,
+              }}
+            >
+              Anda Inc. All Rights Reserved | Terms of Use | Privacy policy
+            </Text>
+          </View>
         </View>
       </SafeAreaView>
     </>

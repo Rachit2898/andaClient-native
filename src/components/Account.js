@@ -6,6 +6,7 @@ import {
   TextInput,
   Pressable,
   ScrollView,
+  Linking,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -536,7 +537,14 @@ const Account = () => {
               </View>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
                 <Text>Sales Rep Email:</Text>
-                <Text style={{ marginLeft: 5, color: "#006ba6" }}>
+                <Text
+                  onPress={() =>
+                    Linking.openURL(
+                      `mailto:${userData?.selectedAccount?.accountDetail?.accountRep.salesRepEmail}`
+                    )
+                  }
+                  style={{ marginLeft: 5, color: "#006ba6" }}
+                >
                   {
                     userData?.selectedAccount?.accountDetail?.accountRep
                       .salesRepEmail
@@ -610,7 +618,14 @@ const Account = () => {
                 >
                   <Text>Phone:</Text>
 
-                  <Text style={{ marginLeft: 5 }}>
+                  <Text
+                    onPress={() =>
+                      Linking.openURL(
+                        `tel:${userData?.selectedAccount.addresses[0]?.phoneFax?.phoneNumber}`
+                      )
+                    }
+                    style={{ marginLeft: 5 }}
+                  >
                     {
                       userData?.selectedAccount.addresses[0]?.phoneFax
                         ?.phoneNumber
