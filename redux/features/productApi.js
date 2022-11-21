@@ -523,15 +523,11 @@ const productSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
-    [userInfo.pending]: (state, action) => {
-      state.loading = true;
-    },
+    [userInfo.pending]: (state, action) => {},
     [userInfo.fulfilled]: (state, action) => {
-      state.loading = false;
       state.userInfoData = action.payload;
     },
     [userInfo.rejected]: (state, action) => {
-      state.loading = false;
       state.error = action.payload;
     },
     [cartInfo.pending]: (state, action) => {

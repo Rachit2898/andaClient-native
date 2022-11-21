@@ -41,12 +41,13 @@ import { Badge, withBadge } from "react-native-elements";
 import Dashboard from "./src/components/Dashboard";
 import _ from "lodash";
 import { cartInfo } from "./redux/features/productApi";
-import { getBioMatricsDetails } from "./utils";
+import { getBioMatricsDetails, getToken } from "./utils";
+import { logout, authenticate } from "./redux/features/authUser";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-function AuthStack() {
+function LogOutStack() {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -276,8 +277,9 @@ function AuthenticatedStack() {
   );
 }
 
-function BiometricsAuth() {
+function LogInStack() {
   const [finger, setFinger] = useState(false);
+  const dispatch = useDispatch();
   const bioMatrics = async () => {
     const bioMatrics = await getBioMatricsDetails();
     setFinger(bioMatrics);
@@ -285,9 +287,10 @@ function BiometricsAuth() {
   useEffect(() => {
     bioMatrics();
   }, [finger]);
-  const { cartLength } = useSelector((state) => ({
-    ...state.products,
+  const { isAuthenticated } = useSelector((state) => ({
+    ...state.auth,
   }));
+
   return <>{finger ? <MyAuth /> : <AuthenticatedStack />}</>;
 }
 
@@ -305,7 +308,7 @@ export default function Navigation() {
 
   return (
     <NavigationContainer>
-      {isAuthenticated ? <BiometricsAuth /> : <AuthStack />}
+      {isAuthenticated ? <LogInStack /> : <LogOutStack />}
     </NavigationContainer>
   );
 }

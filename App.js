@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Platform } from "react-native";
+import { View, Platform, Alert } from "react-native";
 import { enableFreeze } from "react-native-screens";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -8,7 +8,6 @@ import { Provider, useDispatch, useSelector } from "react-redux";
 import store from "./redux/store/store";
 import { getToken } from "./utils";
 import { logout, authenticate } from "./redux/features/authUser";
-
 import Navigation from "./Navigation";
 import * as Notifications from "expo-notifications";
 Notifications.setNotificationHandler({
@@ -27,21 +26,24 @@ const Drawer = createDrawerNavigator();
 function Root() {
   // const navigation = useNavigation();
   const [isTryingLogin, setIsTryingLogin] = useState(true);
+  const [token, setToken] = useState();
   const dispatch = useDispatch();
-  const { isAuthenticated } = useSelector((state) => ({
+  const { isAuthenticated, loading } = useSelector((state) => ({
     ...state.auth,
   }));
 
-  async function fetchToken() {
-    const storedToken = await getToken();
-    if (storedToken) {
-      dispatch(authenticate(storedToken));
-    }
-    setIsTryingLogin(false);
-  }
   useEffect(() => {
+    async function fetchToken() {
+      const storedToken = await getToken();
+      setToken(storedToken);
+
+      if (storedToken) {
+        dispatch(authenticate(storedToken));
+      }
+      setIsTryingLogin(false);
+    }
     fetchToken();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, token, loading]);
   if (isTryingLogin) {
     return <View />;
   }
@@ -68,6 +70,7 @@ export default function App() {
       }
 
       const pushTokenData = await Notifications.getExpoPushTokenAsync();
+      console.log(pushTokenData);
 
       if (Platform.OS === "android") {
         Notifications.setNotificationChannelAsync("default", {
@@ -79,6 +82,7 @@ export default function App() {
 
     configurePushNotifications();
   }, []);
+
   return (
     <>
       <SafeAreaView style={{ flex: 1 }}>

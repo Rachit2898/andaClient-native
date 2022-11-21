@@ -6,6 +6,7 @@ import {
   TextInput,
   Image,
   ScrollView,
+  RefreshControl,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
@@ -31,6 +32,7 @@ const Cart = () => {
   const navigation = useNavigation();
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [count, setCount] = useState(1);
+  const [refreshing, setRefreshing] = React.useState(false);
 
   const {
     cartInfoData,
@@ -107,6 +109,15 @@ const Cart = () => {
       Alert.alert("Could Not Empty Cart!!");
     }
   }
+  const wait = (timeout) => {
+    return new Promise((resolve) => setTimeout(resolve, timeout));
+  };
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    dispatch(cartInfo());
+    wait(0).then(() => setRefreshing(false));
+  }, []);
 
   return (
     <SafeAreaView
@@ -161,7 +172,15 @@ const Cart = () => {
                 </Pressable>
               </View>
               {loading && <Spinner />}
-              <ScrollView showsVerticalScrollIndicator={false}>
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                  />
+                }
+              >
                 <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
                   {orderItems?.map((item) => {
                     return (

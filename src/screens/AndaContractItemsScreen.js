@@ -162,6 +162,7 @@ const AndaContractItemsScreen = (props) => {
                   style={{
                     fontWeight: "700",
                     fontSize: 12,
+                    color: "#494c4c",
                   }}
                 >
                   NDC:
@@ -178,6 +179,7 @@ const AndaContractItemsScreen = (props) => {
                   style={{
                     fontWeight: "700",
                     fontSize: 12,
+                    color: "#494c4c",
                   }}
                 >
                   ITEM:
@@ -196,6 +198,7 @@ const AndaContractItemsScreen = (props) => {
                   style={{
                     fontWeight: "700",
                     fontSize: 12,
+                    color: "#494c4c",
                   }}
                 >
                   MFR:
