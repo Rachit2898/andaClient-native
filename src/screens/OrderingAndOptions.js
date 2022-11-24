@@ -9,14 +9,15 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 const OrderingAndOptions = () => {
   return (
     <SafeAreaView
-      style={{ backgroundColor: "#fff", flex: 1 }}
-      edges={["right", "left", "top"]}
+      style={{ flex: 1, backgroundColor: "#fff" }}
+      edges={["right", "left"]}
     >
       <Navbar />
-      <View style={styles.prductListBlue}>
-        <Text style={styles.productText}>Ordering Options and Hours</Text>
-      </View>
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, backgroundColor: "#fff" }}>
+        <View style={styles.prductListBlue}>
+          <Text style={styles.productText}>Ordering Options and Hours</Text>
+        </View>
+
         <ScrollView>
           <Component
             heading={"Order Your Way"}
@@ -48,7 +49,11 @@ const OrderingAndOptions = () => {
             <View style={{ paddingHorizontal: 10 }}>
               <View>
                 <Text
-                  style={{ fontSize: 15, fontWeight: "bold", color: "#006ba6" }}
+                  style={{
+                    fontSize: 15,
+                    fontWeight: "bold",
+                    color: "#006ba6",
+                  }}
                 >
                   Electronic Data Interchange (EDI)
                 </Text>
@@ -163,14 +168,22 @@ const OrderingAndOptions = () => {
             <View style={{ paddingHorizontal: 10 }}>
               <View>
                 <Text
-                  style={{ fontSize: 15, fontWeight: "bold", color: "#006ba6" }}
+                  style={{
+                    fontSize: 15,
+                    fontWeight: "bold",
+                    color: "#006ba6",
+                  }}
                 >
                   Ordering Hours
                 </Text>
               </View>
               <View>
                 <Text
-                  style={{ fontWeight: "700", marginTop: 10, color: "#006ba6" }}
+                  style={{
+                    fontWeight: "700",
+                    marginTop: 10,
+                    color: "#006ba6",
+                  }}
                 >
                   Phone & Fax Hours:
                 </Text>
@@ -193,7 +206,11 @@ const OrderingAndOptions = () => {
               </View>
               <View>
                 <Text
-                  style={{ fontWeight: "700", marginTop: 10, color: "#006ba6" }}
+                  style={{
+                    fontWeight: "700",
+                    marginTop: 10,
+                    color: "#006ba6",
+                  }}
                 >
                   Online Ordering Hours:
                 </Text>
@@ -239,7 +256,11 @@ const OrderingAndOptions = () => {
             <View style={{ paddingHorizontal: 10 }}>
               <View>
                 <Text
-                  style={{ fontSize: 15, fontWeight: "bold", color: "#006ba6" }}
+                  style={{
+                    fontSize: 15,
+                    fontWeight: "bold",
+                    color: "#006ba6",
+                  }}
                 >
                   Shipping & Delivery
                 </Text>
@@ -304,9 +325,9 @@ const OrderingAndOptions = () => {
             </View>
           </View>
         </ScrollView>
-      </View>
-      <View style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-        <TabBar />
+        <View style={{ left: 0, right: 0, bottom: 0 }}>
+          <TabBar />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -319,12 +340,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#006ba6",
     height: 30,
     marginBottom: 10,
+    alignItems: "center",
+    justifyContent: "center",
   },
   productText: {
     color: "#fff",
     alignItems: "center",
     textAlign: "center",
-    paddingTop: 5,
+    justifyContent: "center",
     fontWeight: "800",
   },
 });

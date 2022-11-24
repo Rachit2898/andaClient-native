@@ -13,39 +13,43 @@ import Navbar from "./Navbar";
 import Pagination from "./Pagination";
 import Spinner from "./Spinner";
 import TabBar from "./TabBar";
-import Filter from "../filter/CloseOutsFilter";
-import SavingsScreen from "../screens/CloseOutScreen";
-import { closeOut, addItem, userInfo } from "../../redux/features/productApi";
+import Filter from "../filter/SavingsAndCloseOutFilter";
+import SavingsAndCloseOutScreen from "../screens/SavingsAndCloseOutScreen";
+import {
+  savingsAndCloseOut,
+  addItem,
+  userInfo,
+} from "../../redux/features/productApi";
 
-const CloseOuts = () => {
+const SavingsAndCloseOut = () => {
   const scrollRef = useRef();
   const [itemValues, setItem] = useState([]);
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const { closeOutData, userInfoData, loading, favResponse } = useSelector(
-    (state) => ({
+  const { savingsAndCloseOutData, userInfoData, loading, favResponse } =
+    useSelector((state) => ({
       ...state.products,
-    })
-  );
+    }));
   const onPressTouch = () => {
     scrollRef?.current?.scrollTo({
       y: 0,
       animated: true,
     });
   };
-  const data = closeOutData?.products;
+  const data = savingsAndCloseOutData?.products;
 
   useEffect(() => {
-    dispatch(closeOut({ value: "", currentPage }));
+    dispatch(savingsAndCloseOut({ value: "", currentPage }));
     dispatch(userInfo());
   }, [favResponse]);
-  const result = closeOutData;
+  const result = savingsAndCloseOutData;
+
   const userData = userInfoData;
 
   const apiCall = async (currentPage) => {
     setCurrentPage(currentPage);
-    dispatch(closeOut({ value: "", currentPage }));
+    dispatch(savingsAndCloseOut({ value: "", currentPage }));
     onPressTouch();
   };
 
@@ -102,9 +106,10 @@ const CloseOuts = () => {
           }}
         >
           <View style={{ justifyContent: "center" }}>
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>Close Outs</Text>
+            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+              Savings And CloseOut
+            </Text>
           </View>
-
           <Pressable
             style={{
               borderWidth: 1,
@@ -146,7 +151,7 @@ const CloseOuts = () => {
 
                   return (
                     <View key={item?.defaultSku?.id}>
-                      <SavingsScreen
+                      <SavingsAndCloseOutScreen
                         url={item?.mediaMap?.primary?.url}
                         name={item?.defaultSku?.name}
                         externalId={item?.defaultSku?.externalId}
@@ -169,10 +174,13 @@ const CloseOuts = () => {
                         itemRating={item?.defaultSku?.itemRating}
                         rewardItem={item?.defaultSku?.rewardItem}
                         priceType={item?.defaultSku?.priceType}
-                        inventoryClassKey={item?.defaultSku?.inventoryClassKey}
                         orderLimit={item?.defaultSku?.dailyOrderLimit}
                         accountId={userData?.selectedAccount?.id}
                         type={item?.defaultSku?.productLists[0]?.type}
+                        shortOrCloseOutDate={
+                          item?.defaultSku?.shortOrCloseOutDate
+                        }
+                        inventoryClassKey={item?.defaultSku?.inventoryClassKey}
                       />
                     </View>
                   );
@@ -190,7 +198,7 @@ const CloseOuts = () => {
               )}
             </ScrollView>
           ) : (
-            <View style={{ flex: 1 }}>
+            <View>
               <Spinner />
             </View>
           )}
@@ -203,18 +211,18 @@ const CloseOuts = () => {
   );
 };
 
-export default CloseOuts;
+export default SavingsAndCloseOut;
 
 const styles = StyleSheet.create({
   pagination: {
-    marginBottom: 100,
+    marginBottom: 10,
   },
-  mainBoxLoading: { opacity: 0.2 },
-  mainBox: { backgroundColor: "#fff", marginBottom: 200 },
   pageText: {
     color: "#494c4c",
     fontWeight: "600",
     fontSize: 18,
     paddingHorizontal: 10,
   },
+  mainBoxLoading: { opacity: 0.2 },
+  mainBox: { backgroundColor: "#fff", marginBottom: 200 },
 });

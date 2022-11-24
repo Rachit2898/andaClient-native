@@ -8,6 +8,7 @@ import {
   Linking,
   Alert,
   RefreshControl,
+  StatusBar,
 } from "react-native";
 import Moment from "moment";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -36,6 +37,7 @@ import { logout, authenticate } from "../../redux/features/authUser";
 import dataSlider from "./DataSlider.js";
 import ImageSlider from "./ImageSlide.js";
 import { getToken } from "../../utils";
+import AddButton from "./Ui/AddButton";
 //import { SliderBox } from "react-native-image-slider-box";
 
 // const LikeButton = (props) => {
@@ -89,6 +91,7 @@ import { getToken } from "../../utils";
 
 export default function HomePage() {
   const dispatch = useDispatch();
+
   const [preDate, setPreDate] = useState();
   const [cmeaDate, setCmeaDate] = useState();
   const [date, setDate] = useState();
@@ -99,6 +102,8 @@ export default function HomePage() {
   const [id, setId] = useState();
   const [refreshing, setRefreshing] = React.useState(false);
   const [loadingValue, setLoadingValue] = useState(false);
+
+  const [hidden, setHidden] = useState(false);
 
   const {
     topPurchaseProducts,
@@ -136,7 +141,7 @@ export default function HomePage() {
     navigation.navigate("Favorites");
   };
   const closeOutsOpen = async () => {
-    navigation.navigate("ShortDate");
+    navigation.navigate("SavingsAndCloseOut");
   };
   const customerLikeYouOpen = async () => {
     navigation.navigate("CustomerLikeYou");
@@ -155,7 +160,6 @@ export default function HomePage() {
   useEffect(() => {
     async function fetchToken() {
       const storedToken = await getToken();
-      console.log({ storedToken });
       if (storedToken) {
         dispatch(authenticate(storedToken));
       }
@@ -249,7 +253,7 @@ export default function HomePage() {
     dispatch(backInStock());
     dispatch(productLists());
     wait(100).then(() => setRefreshing(false));
-  }, [token]);
+  }, []);
 
   useEffect(() => {
     setLoadingValue(
@@ -265,111 +269,124 @@ export default function HomePage() {
 
   return (
     <SafeAreaView
-      style={{ backgroundColor: "#fff", flex: 1 }}
+      style={{ flex: 1, backgroundColor: "#063e63" }}
       edges={["right", "left", "top"]}
     >
+      <StatusBar
+        animated={false}
+        translucent
+        backgroundColor={"#063e63"}
+        barStyle={"light-content"}
+        hidden={false}
+      />
+
       <View style={{ backgroundColor: "#fff", flex: 1 }}>
         <Navbar />
+
         <View style={{ flex: 1 }}>
           {loadingValue ? (
             <View style={{ backgroundColor: "#fff", flex: 1 }}>
-              {loading && <Spinner />}
-              {userData?.selectedAccount?.cmeaCertificationExpiration && (
-                <View
-                  style={{
-                    borderColor: "#ed8b00",
-                    borderWidth: 1,
-                    borderRadius: 5,
-                    margin: 10,
-                  }}
-                >
+              {userData?.selectedAccount?.cmeaCertificationExpiration &&
+                cmeaDays > 0 &&
+                days > 0 && (
                   <View
                     style={{
-                      borderBottomColor: "#ed8b00",
-                      borderBottomWidth: 1,
+                      borderColor: "#ed8b00",
+                      borderWidth: 1,
+                      borderRadius: 5,
+                      margin: 10,
                     }}
                   >
-                    <Text
-                      style={{
-                        color: "#ed8b00",
-                        fontSize: 12,
-                        fontWeight: "bold",
-                        textAlign: "center",
-                      }}
-                    >
-                      Account Alerts
-                    </Text>
-                  </View>
-                  <View style={{ marginVertical: 10, paddingHorizontal: 5 }}>
                     <View
                       style={{
-                        flexDirection: "row",
-                        paddingHorizontal: 5,
+                        borderBottomColor: "#ed8b00",
+                        borderBottomWidth: 1,
                       }}
                     >
-                      <Image
-                        source={require("../../assets/alert.png")}
-                        style={{
-                          width: 10,
-                          height: 10,
-                        }}
-                      />
                       <Text
                         style={{
+                          color: "#ed8b00",
                           fontSize: 12,
-                          color: "#494c4c",
-                          textAlign: "left",
+                          fontWeight: "bold",
+                          textAlign: "center",
                         }}
                       >
-                        Your DEA license expires in {days - 1} days
+                        Account Alerts
                       </Text>
                     </View>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        paddingHorizontal: 5,
-                      }}
-                    >
-                      <Text style={{ flex: 1, width: "100%" }}>
-                        <Image
-                          source={require("../../assets/alert.png")}
+                    <View style={{ marginVertical: 10, paddingHorizontal: 5 }}>
+                      {days > 0 && days < 100 && (
+                        <View
                           style={{
-                            width: 10,
-                            height: 10,
-                          }}
-                        />
-
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: "#494c4c",
+                            flexDirection: "row",
+                            paddingHorizontal: 5,
+                            alignItems: "center",
                           }}
                         >
-                          Your CMEA certificate expires in {cmeaDays - 1} days.
-                          Click
-                          <Text
-                            onPress={() =>
-                              Linking.openURL(
-                                "https://www.deadiversion.usdoj.gov/meth/index.html#self_cert"
-                              )
-                            }
+                          <Image
+                            source={require("../../assets/alert.png")}
                             style={{
-                              color: "#ed8b00",
+                              width: 15,
+                              height: 15,
+                            }}
+                          />
+                          <Text
+                            style={{
                               fontSize: 12,
-                              textAlign: "center",
+                              color: "#494c4c",
+                              textAlign: "left",
                             }}
                           >
-                            {" "}
-                            here
+                            Your DEA license expires in {days - 1} days
                           </Text>
-                          , or contact your sales representative for details.
+                        </View>
+                      )}
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          paddingHorizontal: 5,
+                        }}
+                      >
+                        <Text style={{ flex: 1, width: "100%" }}>
+                          <Image
+                            source={require("../../assets/alert.png")}
+                            style={{
+                              width: 15,
+                              height: 15,
+                            }}
+                          />
+
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: "#494c4c",
+                            }}
+                          >
+                            Your CMEA certificate expires in {cmeaDays - 1}{" "}
+                            days. Click
+                            <Text
+                              onPress={() =>
+                                Linking.openURL(
+                                  "https://www.deadiversion.usdoj.gov/meth/index.html#self_cert"
+                                )
+                              }
+                              style={{
+                                color: "#ed8b00",
+                                fontSize: 12,
+                                textAlign: "center",
+                              }}
+                            >
+                              {" "}
+                              here
+                            </Text>
+                            , or contact your sales representative for details.
+                          </Text>
                         </Text>
-                      </Text>
+                      </View>
                     </View>
                   </View>
-                </View>
-              )}
-
+                )}
+              {loading && <Spinner />}
               <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
                 <ScrollView
                   showsVerticalScrollIndicator={false}
@@ -405,8 +422,9 @@ export default function HomePage() {
                               width: 95,
                               borderRadius: 3,
                               marginVertical: 5,
-                              borderWidth: 0.3,
+                              borderWidth: 0.5,
                               borderColor: "#ececec",
+                              resizeMode: "stretch",
                             }}
                             source={require("../../assets/cart1.jpeg")}
                           />
@@ -426,6 +444,7 @@ export default function HomePage() {
                           onPress={() => {
                             favoritesOpen();
                           }}
+                          style={{ height: 50 }}
                         >
                           <Image
                             style={{
@@ -433,8 +452,9 @@ export default function HomePage() {
                               width: 95,
                               borderRadius: 3,
                               marginVertical: 5,
-                              borderWidth: 0.3,
+                              borderWidth: 0.5,
                               borderColor: "#ececec",
+                              resizeMode: "stretch",
                             }}
                             source={require("../../assets/favorites.jpeg")}
                           />
@@ -454,6 +474,7 @@ export default function HomePage() {
                           onPress={() => {
                             closeOutsOpen();
                           }}
+                          style={{ height: 50 }}
                         >
                           <Image
                             style={{
@@ -461,8 +482,9 @@ export default function HomePage() {
                               width: 95,
                               borderRadius: 3,
                               marginVertical: 5,
-                              borderWidth: 0.3,
+                              borderWidth: 0.5,
                               borderColor: "#ececec",
+                              resizeMode: "stretch",
                             }}
                             source={require("../../assets/shortDate.jpeg")}
                           />
@@ -482,6 +504,7 @@ export default function HomePage() {
                           onPress={() => {
                             customerLikeYouOpen();
                           }}
+                          style={{ height: 50 }}
                         >
                           <Image
                             style={{
@@ -489,8 +512,9 @@ export default function HomePage() {
                               width: 95,
                               borderRadius: 3,
                               marginVertical: 5,
-                              borderWidth: 0.3,
+                              borderWidth: 0.5,
                               borderColor: "#ececec",
+                              resizeMode: "stretch",
                             }}
                             source={require("../../assets/customer.jpeg")}
                           />
@@ -547,7 +571,6 @@ export default function HomePage() {
                       }}
                     >
                       <View>
-                        {/* <SliderBox /> */}
                         <ImageSlider />
                       </View>
                     </View>
@@ -754,31 +777,11 @@ export default function HomePage() {
                                           }
                                         </Text>
                                       </View>
-                                      <Pressable
-                                        style={{
-                                          backgroundColor: "#c77500",
-                                          width: 60,
-                                          height: 25,
-                                          borderRadius: 3,
-                                          marginHorizontal: 10,
-                                          borderRadius: 4,
-                                          alignItems: "center",
-                                          justifyContent: "center",
-                                        }}
+                                      <AddButton
                                         onPress={() =>
-                                          addItemIntoCart(item?.defaultSku?.id)
+                                          addItemIntoCart(props?.id)
                                         }
-                                      >
-                                        <Text
-                                          style={{
-                                            color: "#fff",
-                                            fontWeight: "bold",
-                                            fontSize: 10,
-                                          }}
-                                        >
-                                          ADD
-                                        </Text>
-                                      </Pressable>
+                                      />
                                     </View>
                                   </View>
                                 </View>
@@ -993,31 +996,15 @@ export default function HomePage() {
                                           }
                                         </Text>
                                       </View>
-                                      <Pressable
-                                        style={{
-                                          backgroundColor: "#c77500",
-                                          width: 60,
-                                          height: 25,
-                                          borderRadius: 3,
-                                          marginHorizontal: 10,
-                                          borderRadius: 4,
-                                          alignItems: "center",
-                                          justifyContent: "center",
-                                        }}
-                                        onPress={() =>
-                                          addItemIntoCart(item?.defaultSku?.id)
-                                        }
-                                      >
-                                        <Text
-                                          style={{
-                                            color: "#fff",
-                                            fontWeight: "bold",
-                                            fontSize: 10,
-                                          }}
-                                        >
-                                          ADD
-                                        </Text>
-                                      </Pressable>
+                                      <View style={{ marginHorizontal: 10 }}>
+                                        <AddButton
+                                          onPress={() =>
+                                            addItemIntoCart(
+                                              item?.defaultSku?.id
+                                            )
+                                          }
+                                        />
+                                      </View>
                                     </View>
                                   </View>
                                 </View>
@@ -1229,31 +1216,15 @@ export default function HomePage() {
                                           }
                                         </Text>
                                       </View>
-                                      <Pressable
-                                        style={{
-                                          backgroundColor: "#c77500",
-                                          width: 60,
-                                          height: 25,
-                                          borderRadius: 3,
-                                          marginHorizontal: 10,
-                                          borderRadius: 4,
-                                          alignItems: "center",
-                                          justifyContent: "center",
-                                        }}
-                                        onPress={() =>
-                                          addItemIntoCart(item?.defaultSku?.id)
-                                        }
-                                      >
-                                        <Text
-                                          style={{
-                                            color: "#fff",
-                                            fontWeight: "bold",
-                                            fontSize: 10,
-                                          }}
-                                        >
-                                          ADD
-                                        </Text>
-                                      </Pressable>
+                                      <View style={{ marginHorizontal: 10 }}>
+                                        <AddButton
+                                          onPress={() =>
+                                            addItemIntoCart(
+                                              item?.defaultSku?.id
+                                            )
+                                          }
+                                        />
+                                      </View>
                                     </View>
                                   </View>
                                 </View>
@@ -1465,31 +1436,15 @@ export default function HomePage() {
                                           }
                                         </Text>
                                       </View>
-                                      <Pressable
-                                        style={{
-                                          backgroundColor: "#c77500",
-                                          width: 60,
-                                          height: 25,
-                                          borderRadius: 3,
-                                          marginHorizontal: 10,
-                                          borderRadius: 4,
-                                          alignItems: "center",
-                                          justifyContent: "center",
-                                        }}
-                                        onPress={() =>
-                                          addItemIntoCart(item?.defaultSku?.id)
-                                        }
-                                      >
-                                        <Text
-                                          style={{
-                                            color: "#fff",
-                                            fontWeight: "bold",
-                                            fontSize: 10,
-                                          }}
-                                        >
-                                          ADD
-                                        </Text>
-                                      </Pressable>
+                                      <View style={{ marginHorizontal: 10 }}>
+                                        <AddButton
+                                          onPress={() =>
+                                            addItemIntoCart(
+                                              item?.defaultSku?.id
+                                            )
+                                          }
+                                        />
+                                      </View>
                                     </View>
                                   </View>
                                 </View>

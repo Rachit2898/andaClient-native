@@ -23,7 +23,7 @@ import {
   searchItems,
   searchProducsts,
 } from "../../redux/features/productApi";
-import { changeUserPassword, loading } from "../../redux/features/authUser";
+import { changeUserPassword } from "../../redux/features/authUser";
 
 const InputComponent = (props) => {
   const [value, setValue] = useState(false);
@@ -116,16 +116,20 @@ const Account = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [showPassword, setShowPassword] = useState(-1);
+  const [formattedNumber, setFormattedNumber] = useState("");
+  const [phoneFaxNumber, setPhoneFaxNumber] = useState();
+  const [phoneNumber, setPhoneNumber] = useState();
   const {
     userInfoData,
     cartInfoData,
     cartLength,
+    loading,
     searchItem,
     searchProducstsData,
   } = useSelector((state) => ({
     ...state.products,
   }));
-  const { loading, changeUserPasswordData, changePasswordValue } = useSelector(
+  const { changeUserPasswordData, changePasswordValue } = useSelector(
     (state) => ({
       ...state.auth,
     })
@@ -134,7 +138,6 @@ const Account = () => {
   useEffect(() => {
     dispatch(userInfo());
     dispatch(cartInfo());
-
     setShow(true);
   }, [dispatch, isFocused]);
 
@@ -181,14 +184,35 @@ const Account = () => {
         "MM/DD/YYYY hh:mmA"
       )
     );
+    let stringNumber =
+      userData?.selectedAccount?.accountDetail?.accountRep.number;
+    if (stringNumber.length === 10) {
+      setFormattedNumber(
+        stringNumber.replace(/(\d{3})(\d{3})(\d{4})/gi, "($1) $2-$3")
+      );
+    }
+    let phoneFax =
+      userData?.selectedAccount.addresses[0]?.phoneFax?.phoneNumber;
+    if (phoneFax.length === 10) {
+      setPhoneFaxNumber(
+        phoneFax.replace(/(\d{3})(\d{3})(\d{4})/gi, "($1) $2-$3")
+      );
+    }
+    let phoneNumbers =
+      userData?.selectedAccount.addresses[0]?.phonePrimary?.phoneNumber;
+    if (phoneNumbers.length === 10) {
+      setPhoneNumber(
+        phoneNumbers.replace(/(\d{3})(\d{3})(\d{4})/gi, "($1) $2-$3")
+      );
+    }
   }, [userData]);
 
   return (
     <SafeAreaView
-      style={{ backgroundColor: "#fff", flex: 1 }}
+      style={{ backgroundColor: "#063e63", flex: 1 }}
       edges={["right", "left", "top"]}
     >
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, backgroundColor: "#fff" }}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View
             style={{
@@ -236,14 +260,16 @@ const Account = () => {
               <View style={styles.inputView}>
                 <TextInput
                   style={styles.TextInput}
-                  placeholderTextColor="#003f5c"
+                  placeholderTextColor="#494c4c"
+                  placeholder={`${userData?.username}`}
                 />
               </View>
               <Text style={styles.labelContainer}>EMAIL ADDRESS*</Text>
               <View style={styles.inputView}>
                 <TextInput
                   style={styles.TextInput}
-                  placeholderTextColor="#003f5c"
+                  placeholderTextColor="#494c4c"
+                  placeholder={`${userData?.emailAddress}`}
                 />
               </View>
               <View style={{ flexDirection: "row" }}>
@@ -273,11 +299,12 @@ const Account = () => {
                 style={{
                   borderColor: "#006ba6",
                   borderWidth: 1,
-                  width: 60,
-                  height: 25,
+                  width: 80,
+                  height: 35,
                   borderRadius: 4,
                   justifyContent: "center",
                   alignItems: "center",
+                  alignSelf: "flex-end",
                 }}
                 android_ripple={{ color: "#ccc" }}
               >
@@ -411,11 +438,12 @@ const Account = () => {
                 style={{
                   borderColor: "#006ba6",
                   borderWidth: 1,
-                  width: 60,
-                  height: 25,
+                  width: 80,
+                  height: 35,
                   marginTop: 10,
                   borderRadius: 4,
                   justifyContent: "center",
+                  alignSelf: "flex-end",
                   alignItems: "center",
                 }}
                 android_ripple={{ color: "#ccc" }}
@@ -526,8 +554,11 @@ const Account = () => {
               </View>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
                 <Text>Phone:</Text>
-                <Text style={{ marginLeft: 5, color: "#006ba6" }}>
-                  {userData?.selectedAccount?.accountDetail?.accountRep.number}
+                <Text
+                  style={{ marginLeft: 5, color: "#006ba6" }}
+                  onPress={() => Linking.openURL(`tel:${formattedNumber}`)}
+                >
+                  {formattedNumber}
                   <Text> EXT: </Text>
                   {
                     userData?.selectedAccount?.accountDetail?.accountRep
@@ -603,11 +634,11 @@ const Account = () => {
               <View style={{ marginTop: 5 }}>
                 <View style={{ flexDirection: "row", marginTop: 5 }}>
                   <Text>Phone:</Text>
-                  <Text style={{ marginLeft: 5 }}>
-                    {
-                      userData?.selectedAccount.addresses[0]?.phonePrimary
-                        ?.phoneNumber
-                    }
+                  <Text
+                    onPress={() => Linking.openURL(`tel:${phoneNumber}`)}
+                    style={{ marginLeft: 5 }}
+                  >
+                    {phoneNumber}
                   </Text>
                 </View>
                 <View
@@ -619,17 +650,10 @@ const Account = () => {
                   <Text>Phone:</Text>
 
                   <Text
-                    onPress={() =>
-                      Linking.openURL(
-                        `tel:${userData?.selectedAccount.addresses[0]?.phoneFax?.phoneNumber}`
-                      )
-                    }
+                    onPress={() => Linking.openURL(`tel:${phoneFaxNumber}`)}
                     style={{ marginLeft: 5 }}
                   >
-                    {
-                      userData?.selectedAccount.addresses[0]?.phoneFax
-                        ?.phoneNumber
-                    }
+                    {phoneFaxNumber}
                   </Text>
                 </View>
               </View>
@@ -705,7 +729,7 @@ const styles = StyleSheet.create({
   mainBox: { backgroundColor: "#fff" },
   emptyText: {
     color: "#006ba6",
-    fontSize: 10,
+    fontSize: 15,
     fontWeight: "bold",
   },
 });

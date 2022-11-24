@@ -7,6 +7,8 @@ import {
   Image,
   ScrollView,
   RefreshControl,
+  Alert,
+  StatusBar,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
@@ -51,41 +53,53 @@ const Cart = () => {
   const orderItems = cartData?.orderItems;
 
   async function emptyCart(id) {
-    try {
-      dispatch(emptyCartItems(id));
-    } catch (error) {
-      alert("Could Not Empty Cart!!");
-    }
+    Alert.alert(
+      "Hold on!",
+      "Are you sure you want to remove all items from your cart?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => null,
+          style: "cancel",
+        },
+        { text: "YES", onPress: () => dispatch(emptyCartItems(id)) },
+      ]
+    );
+    // try {
+    //   dispatch(emptyCartItems(id));
+    // } catch (error) {
+    //   alert("Could Not Empty Cart!!");
+    // }
   }
 
   useEffect(() => {
     dispatch(cartInfo());
   }, [cartLength, updateCart, isFocused, favResponse]);
 
-  useEffect(() => {
-    const subscription1 = Notifications.addNotificationReceivedListener(
-      (notification) => {
-        console.log("NOTIFICATION RECEIVED");
-        console.log(notification);
-        const userName = notification.request.content.data.userName;
-        console.log(userName);
-      }
-    );
+  // useEffect(() => {
+  //   const subscription1 = Notifications.addNotificationReceivedListener(
+  //     (notification) => {
+  //       console.log("NOTIFICATION RECEIVED");
+  //       console.log(notification);
+  //       const userName = notification.request.content.data.userName;
+  //       console.log(userName);
+  //     }
+  //   );
 
-    const subscription2 = Notifications.addNotificationResponseReceivedListener(
-      (response) => {
-        console.log("NOTIFICATION RESPONSE RECEIVED");
-        console.log(response);
-        const userName = response.notification.request.content.data.userName;
-        console.log(userName);
-      }
-    );
+  //   const subscription2 = Notifications.addNotificationResponseReceivedListener(
+  //     (response) => {
+  //       console.log("NOTIFICATION RESPONSE RECEIVED");
+  //       console.log(response);
+  //       const userName = response.notification.request.content.data.userName;
+  //       console.log(userName);
+  //     }
+  //   );
 
-    return () => {
-      subscription1.remove();
-      subscription2.remove();
-    };
-  }, [cartLength]);
+  //   return () => {
+  //     subscription1.remove();
+  //     subscription2.remove();
+  //   };
+  // }, [cartLength]);
 
   function scheduleNotificationHandler() {
     Notifications.scheduleNotificationAsync({
@@ -104,7 +118,6 @@ const Cart = () => {
     try {
       dispatch(cartValidating());
       navigation.navigate("SubmitCart");
-      scheduleNotificationHandler();
     } catch (error) {
       Alert.alert("Could Not Empty Cart!!");
     }
@@ -116,14 +129,22 @@ const Cart = () => {
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     dispatch(cartInfo());
+
     wait(0).then(() => setRefreshing(false));
   }, []);
 
   return (
     <SafeAreaView
-      style={{ backgroundColor: "#fff", flex: 1 }}
+      style={{ backgroundColor: "#063e63", flex: 1 }}
       edges={["right", "left", "top"]}
     >
+      <StatusBar
+        animated={false}
+        translucent
+        backgroundColor={"#063e63"}
+        barStyle={"light-content"}
+        hidden={false}
+      />
       <View
         style={{
           backgroundColor: "#fff",
@@ -183,6 +204,7 @@ const Cart = () => {
               >
                 <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
                   {orderItems?.map((item) => {
+                    console.log(item?.sku?.itemMessages[0]?.message);
                     return (
                       <View key={item.id}>
                         <CartScreen
@@ -199,6 +221,7 @@ const Cart = () => {
                           skuId={item?.sku?.id}
                           orderLimit={item?.sku?.dailyOrderLimit}
                           type={item?.sku?.productLists[0]?.type}
+                          message={item?.sku?.itemMessages[0]?.message}
                         />
                       </View>
                     );

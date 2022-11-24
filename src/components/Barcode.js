@@ -19,7 +19,7 @@ import {
 } from "../../redux/features/productApi";
 import { searchValues } from "../../redux/features/authUser";
 
-export default function Barcode() {
+function Barcode() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
@@ -38,66 +38,68 @@ export default function Barcode() {
       setHasPermission(status === "granted");
     };
     getBarCodeScannerPermissions();
-    setSearchData(null);
   }, [isFocused]);
+
+  // if (searchProducstsData?.totalResults>=0) {
+  //   if (searchProducstsData?.totalResults === 1) {
+  //     productDetailHandler(searchProducstsData?.products[0]?.defaultSku?.id);
+  //     return;
+  //   }
+  //   if (searchProducstsData?.totalResults > 1) {
+  //     navigation.navigate("SearchProduct");
+  //     return;
+  //   }
+  //   if (searchProducstsData?.totalResults == 0) {
+  //     navigation.navigate("SearchProduct");
+  //     return;
+  //   }
+  // }
 
   const handleBarCodeScanned = async ({ type, data }) => {
     // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
-    try {
-      if (Platform.OS === "android") {
-        if (data.length === 12) {
-          Alert.alert(`Barcode Scanned ${data}`);
-          dispatch(searchProducts(data));
-          dispatch(searchValues(data));
-          setScanned(true);
-          return;
-        } else {
-          Alert.alert(`Invalid Barcode ${data}, Please Try Again!`);
-          setScanned(true);
-        }
-      }
-      if (Platform.OS === "ios") {
-        if (data.length === 13) {
-          Alert.alert(`Barcode Scanned ${data}`);
-          if (data.substring(0, 1) === "0") {
-            dispatch(searchProducts(data.substring(1)));
-            dispatch(searchValues(data.substring(1)));
+    setScanned(true);
+    (async () => {
+      try {
+        if (Platform.OS === "android") {
+          if (data.length === 12) {
+            dispatch(searchProducts(data));
+            dispatch(searchValues(data));
             setScanned(true);
+            navigation.navigate("SearchProduct");
+            return;
           } else {
             Alert.alert(`Invalid Barcode ${data}, Please Try Again!`);
             setScanned(true);
           }
-        } else {
-          Alert.alert(`Invalid Barcode ${data}, Please Try Again!`);
-          setScanned(true);
         }
-        return;
+        if (Platform.OS === "ios") {
+          if (data.length === 13) {
+            if (data.substring(0, 1) === "0") {
+              dispatch(searchProducts(data.substring(1)));
+              dispatch(searchValues(data.substring(1)));
+              navigation.navigate("SearchProduct");
+              setScanned(true);
+            } else {
+              Alert.alert(`Invalid Barcode ${data}, Please Try Again!`);
+              setScanned(true);
+            }
+          } else {
+            Alert.alert(`Invalid Barcode ${data}, Please Try Again!`);
+            setScanned(true);
+          }
+          return;
+        }
+      } catch (e) {
+        Alert.alert(e.message);
+        setScanned(true);
       }
-    } catch (e) {
-      Alert.alert(e.message);
-      setScanned(true);
-    }
+    })();
   };
 
   const productDetailHandler = async (Id) => {
     navigation.navigate("ProductDetails");
     dispatch(productDetails(Id));
   };
-
-  useEffect(() => {
-    if (searchData?.totalResults === 1) {
-      productDetailHandler(searchProducstsData?.products[0]?.defaultSku?.id);
-      return;
-    }
-    if (searchData?.totalResults > 1) {
-      navigation.navigate("SearchProduct");
-      return;
-    }
-    if (searchData?.totalResults == 0) {
-      navigation.navigate("SearchProduct");
-      return;
-    }
-  }, [searchProducstsData]);
 
   if (hasPermission === null) {
     return (
@@ -126,7 +128,6 @@ export default function Barcode() {
       <View
         style={{ flex: 1, flexDirection: "column", justifyContent: "center" }}
       >
-        {console.log({ scanned })}
         <BarCodeScanner
           onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
           style={{
@@ -143,15 +144,14 @@ export default function Barcode() {
         style={{ width: 200, justifyContent: "center", alignSelf: "center" }}
       >
         {scanned && (
-          <Button
-            title={"Tap to Scan Again"}
-            onPress={() => setScanned(false)}
-          />
+          <Button title={"Scan Again"} onPress={() => setScanned(false)} />
         )}
       </View>
     </SafeAreaView>
   );
 }
+
+export default Barcode;
 
 const styles = StyleSheet.create({
   container: {

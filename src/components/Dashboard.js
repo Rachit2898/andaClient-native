@@ -8,6 +8,7 @@ import {
   Image,
   ScrollView,
   TextInput,
+  Linking,
 } from "react-native";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import React, { useState, useEffect, useCallback } from "react";
@@ -22,6 +23,9 @@ import {
 import TabBar from "./TabBar";
 
 const Dashboard = ({ size }) => {
+  const [formattedNumber, setFormattedNumber] = useState("");
+  const [phoneFaxNumber, setPhoneFaxNumber] = useState();
+  const [phoneNumber, setPhoneNumber] = useState();
   const { userInfoData } = useSelector((state) => ({
     ...state.products,
   }));
@@ -35,6 +39,15 @@ const Dashboard = ({ size }) => {
       dispatch(logout(false));
     });
   };
+  useEffect(() => {
+    let stringNumber =
+      userData?.selectedAccount?.accountDetail?.accountRep.number;
+    if (stringNumber.length === 10) {
+      setFormattedNumber(
+        stringNumber.replace(/(\d{3})(\d{3})(\d{4})/gi, "($1) $2-$3")
+      );
+    }
+  }, [userData]);
   const favoritesOpen = async () => {
     navigation.navigate("Favorites");
     setModalVisible(!modalVisible);
@@ -97,7 +110,7 @@ const Dashboard = ({ size }) => {
       style={styles.safeAreaContainer}
       edges={["right", "left", "top"]}
     >
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, backgroundColor: "#fff" }}>
         <View style={styles.closeButton}>
           <View style={{ flexDirection: "row" }}>
             <Image
@@ -105,13 +118,18 @@ const Dashboard = ({ size }) => {
               style={{ height: 40, width: 40 }}
             />
             <View style={{ marginHorizontal: 5, justifyContent: "center" }}>
-              <Text style={{ fontSize: 12 }}>{userData?.username}</Text>
+              <Text style={{ fontSize: 14 }}>{userData?.username}</Text>
             </View>
           </View>
 
           <Pressable
             onPress={() => closeButtonHandler()}
-            style={{ justifyContent: "center", alignSelf: "center" }}
+            style={{
+              justifyContent: "center",
+              alignSelf: "center",
+
+              padding: 5,
+            }}
           >
             <Image
               source={require("../../assets/close.png")}
@@ -142,7 +160,7 @@ const Dashboard = ({ size }) => {
                 >
                   <Text
                     style={{
-                      fontSize: 12,
+                      fontSize: 14,
                       paddingVertical: 5,
                       paddingHorizontal: 10,
                     }}
@@ -162,7 +180,7 @@ const Dashboard = ({ size }) => {
                 >
                   <Text
                     style={{
-                      fontSize: 12,
+                      fontSize: 14,
                       paddingVertical: 5,
                       paddingHorizontal: 10,
                     }}
@@ -182,7 +200,7 @@ const Dashboard = ({ size }) => {
                 >
                   <Text
                     style={{
-                      fontSize: 12,
+                      fontSize: 14,
                       paddingVertical: 5,
                       paddingHorizontal: 10,
                     }}
@@ -202,7 +220,7 @@ const Dashboard = ({ size }) => {
                 >
                   <Text
                     style={{
-                      fontSize: 12,
+                      fontSize: 14,
                       paddingVertical: 5,
                       paddingHorizontal: 10,
                     }}
@@ -220,7 +238,7 @@ const Dashboard = ({ size }) => {
                 >
                   <Text
                     style={{
-                      fontSize: 12,
+                      fontSize: 14,
                       paddingVertical: 5,
                       paddingHorizontal: 10,
                     }}
@@ -247,7 +265,7 @@ const Dashboard = ({ size }) => {
                 >
                   <Text
                     style={{
-                      fontSize: 12,
+                      fontSize: 14,
                       paddingVertical: 5,
                       paddingHorizontal: 10,
                     }}
@@ -267,7 +285,7 @@ const Dashboard = ({ size }) => {
                 >
                   <Text
                     style={{
-                      fontSize: 12,
+                      fontSize: 14,
                       paddingVertical: 5,
                       paddingHorizontal: 10,
                     }}
@@ -287,7 +305,7 @@ const Dashboard = ({ size }) => {
                 >
                   <Text
                     style={{
-                      fontSize: 12,
+                      fontSize: 14,
                       paddingVertical: 5,
                       paddingHorizontal: 10,
                     }}
@@ -299,10 +317,13 @@ const Dashboard = ({ size }) => {
                   onPress={() => {
                     shortDateOpen();
                   }}
+                  style={{
+                    paddingVertical: 5,
+                  }}
                 >
                   <Text
                     style={{
-                      fontSize: 12,
+                      fontSize: 14,
                       paddingVertical: 5,
                       paddingHorizontal: 10,
                     }}
@@ -329,7 +350,7 @@ const Dashboard = ({ size }) => {
                 >
                   <Text
                     style={{
-                      fontSize: 12,
+                      fontSize: 14,
                       paddingVertical: 5,
                       paddingHorizontal: 10,
                     }}
@@ -349,7 +370,7 @@ const Dashboard = ({ size }) => {
                 >
                   <Text
                     style={{
-                      fontSize: 12,
+                      fontSize: 14,
                       paddingVertical: 5,
                       paddingHorizontal: 10,
                     }}
@@ -369,7 +390,7 @@ const Dashboard = ({ size }) => {
                 >
                   <Text
                     style={{
-                      fontSize: 12,
+                      fontSize: 14,
                       paddingVertical: 5,
                       paddingHorizontal: 10,
                     }}
@@ -389,7 +410,7 @@ const Dashboard = ({ size }) => {
                 >
                   <Text
                     style={{
-                      fontSize: 12,
+                      fontSize: 14,
                       paddingVertical: 5,
                       paddingHorizontal: 10,
                     }}
@@ -409,7 +430,7 @@ const Dashboard = ({ size }) => {
                 >
                   <Text
                     style={{
-                      fontSize: 12,
+                      fontSize: 14,
                       paddingVertical: 5,
                       paddingHorizontal: 10,
                     }}
@@ -429,7 +450,7 @@ const Dashboard = ({ size }) => {
                 >
                   <Text
                     style={{
-                      fontSize: 12,
+                      fontSize: 14,
                       paddingVertical: 5,
                       paddingHorizontal: 10,
                     }}
@@ -440,11 +461,12 @@ const Dashboard = ({ size }) => {
                 <View>
                   <Text
                     style={{
-                      fontSize: 12,
+                      fontSize: 14,
                       paddingVertical: 5,
                       paddingHorizontal: 10,
                       color: "grey",
                     }}
+                    onPress={() => Linking.openURL(`tel:${18003312632}`)}
                   >
                     Toll Free: 1-800-331-2632
                   </Text>
@@ -452,11 +474,12 @@ const Dashboard = ({ size }) => {
                 <View>
                   <Text
                     style={{
-                      fontSize: 12,
+                      fontSize: 14,
                       paddingVertical: 5,
                       paddingHorizontal: 10,
                       color: "grey",
                     }}
+                    onPress={() => Linking.openURL(`tel:${18872632638}`)}
                   >
                     Tech Support:1-887-263-2638
                   </Text>
@@ -464,11 +487,14 @@ const Dashboard = ({ size }) => {
                 <View>
                   <Text
                     style={{
-                      fontSize: 12,
+                      fontSize: 14,
                       paddingVertical: 5,
                       paddingHorizontal: 10,
                       color: "grey",
                     }}
+                    onPress={() =>
+                      Linking.openURL(`mailto:${"info@andanet.com"}`)
+                    }
                   >
                     Email: info@andanet.com
                   </Text>
@@ -476,26 +502,87 @@ const Dashboard = ({ size }) => {
                 <View style={{}}>
                   <Text
                     style={{
-                      fontSize: 12,
+                      fontSize: 14,
                       paddingVertical: 5,
                       paddingHorizontal: 10,
                       color: "grey",
                     }}
                   >
-                    DONNA ROCHIN
+                    {userData?.selectedAccount?.accountDetail?.accountRep.name}
                   </Text>
                 </View>
                 <View style={{}}>
                   <Text
                     style={{
-                      fontSize: 12,
+                      fontSize: 14,
+                      paddingVertical: 5,
+                      paddingHorizontal: 10,
+                      color: "grey",
+                    }}
+                    onPress={() => Linking.openURL(`tel:${formattedNumber}`)}
+                  >
+                    {formattedNumber} x
+                    {
+                      userData?.selectedAccount?.accountDetail?.accountRep
+                        .extension
+                    }
+                  </Text>
+                </View>
+                <View style={{}}>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      paddingVertical: 5,
+                      paddingHorizontal: 10,
+                      color: "#006ba6",
+                    }}
+                    onPress={() =>
+                      Linking.openURL(
+                        `mailto:${userData?.selectedAccount?.accountDetail?.accountRep.salesRepEmail}`
+                      )
+                    }
+                  >
+                    {
+                      userData?.selectedAccount?.accountDetail?.accountRep
+                        .salesRepEmail
+                    }
+                  </Text>
+                </View>
+                <View style={{ flexDirection: "row" }}>
+                  <Text
+                    style={{
+                      fontSize: 14,
                       paddingVertical: 5,
                       paddingHorizontal: 10,
                       color: "grey",
                     }}
                   >
-                    (800) 331-2632 x75104
+                    Follow Us @AndaInc
                   </Text>
+                  <View style={{ flexDirection: "row" }}>
+                    <Pressable
+                      onPress={() =>
+                        Linking.openURL(
+                          "https://www.linkedin.com/company/andainc"
+                        )
+                      }
+                    >
+                      <Image
+                        source={require("../../assets/linkedin.png")}
+                        style={{ height: 30, width: 30 }}
+                      />
+                    </Pressable>
+                    <Pressable
+                      onPress={() =>
+                        Linking.openURL("https://www.facebook.com/AndaInc")
+                      }
+                    >
+                      <Image
+                        source={require("../../assets/facebook.png")}
+                        style={{ height: 30, width: 30, marginHorizontal: 10 }}
+                      />
+                    </Pressable>
+                  </View>
                 </View>
               </View>
             </View>
@@ -526,7 +613,7 @@ const styles = StyleSheet.create({
 
   safeAreaContainer: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#063e63",
   },
 
   modalView: {
@@ -545,7 +632,6 @@ const styles = StyleSheet.create({
   },
 
   closeButton: {
-    paddingBottom: 10,
     paddingHorizontal: 10,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -568,14 +654,14 @@ const styles = StyleSheet.create({
   prductListBlue: {
     backgroundColor: "#006ba6",
     marginVertical: 5,
-    paddingVertical: 2,
+    paddingVertical: 5,
     justifyContent: "center",
   },
   productText: {
     color: "#fff",
     alignItems: "center",
     textAlign: "center",
-    fontWeight: "700",
+    fontWeight: "600",
     justifyContent: "center",
   },
 });

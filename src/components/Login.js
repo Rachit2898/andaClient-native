@@ -20,6 +20,7 @@ import {
   Pressable,
   TouchableOpacity,
   KeyboardAvoidingView,
+  Linking,
 } from "react-native";
 
 function MyCheckbox({
@@ -104,8 +105,6 @@ export default function LoginScreen() {
 
     const token = await Signin();
 
-    console.log("payload", token?.payload);
-
     if (token.type === "signin/fulfilled") {
       setIsAuthenticating(false);
       setToken(token?.payload);
@@ -142,7 +141,7 @@ export default function LoginScreen() {
   return (
     <>
       <SafeAreaView
-        style={{ backgroundColor: "#fff", flex: 1 }}
+        style={{ backgroundColor: "#063e63", flex: 1 }}
         edges={["right", "left", "top"]}
       >
         <View
@@ -175,7 +174,7 @@ export default function LoginScreen() {
                 >
                   <Text
                     style={{
-                      color: "#054278",
+                      color: "#063e63",
                       fontWeight: "700",
                       fontSize: 20,
                     }}
@@ -350,9 +349,10 @@ export default function LoginScreen() {
               left: 0,
               right: 0,
               bottom: 0,
-              backgroundColor: "#054278",
+              backgroundColor: "#063e63",
               justifyContent: "center",
               alignItems: "center",
+              flexDirection: "row",
             }}
           >
             <Text
@@ -360,11 +360,43 @@ export default function LoginScreen() {
                 color: "#fff",
                 fontSize: 10,
                 fontWeight: "800",
-                paddingBottom: 10,
+                paddingBottom: 20,
                 paddingTop: 10,
               }}
             >
-              Anda Inc. All Rights Reserved | Terms of Use | Privacy policy
+              Anda Inc. All Rights Reserved |{" "}
+            </Text>
+            <Text
+              style={{
+                color: "#fff",
+                fontSize: 10,
+                fontWeight: "800",
+                paddingBottom: 20,
+                paddingTop: 10,
+              }}
+              onPress={() =>
+                Linking.openURL(
+                  "https://staging.andanet.com/content/terms-of-use"
+                )
+              }
+            >
+              Terms of Use |{" "}
+            </Text>
+            <Text
+              style={{
+                color: "#fff",
+                fontSize: 10,
+                fontWeight: "800",
+                paddingBottom: 20,
+                paddingTop: 10,
+              }}
+              onPress={() =>
+                Linking.openURL(
+                  "https://staging.andanet.com/content/privacy-policy"
+                )
+              }
+            >
+              Privacy Policy
             </Text>
           </View>
         </View>
@@ -426,7 +458,7 @@ const styles = StyleSheet.create({
   },
 
   loginBtn: {
-    backgroundColor: "#c77500",
+    backgroundColor: "#ed8b00",
     width: "100%",
     height: 40,
     marginBottom: 20,

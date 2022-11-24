@@ -307,7 +307,7 @@ const ProductDetails = () => {
                   </View>
                   <Pressable
                     style={{
-                      backgroundColor: "#c77500",
+                      backgroundColor: "#ed8b00",
                       width: 60,
                       height: 25,
                       borderRadius: 3,

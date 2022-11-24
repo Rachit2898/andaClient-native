@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Linking } from "react-native";
 import React from "react";
 
 const Component = (props) => {
@@ -27,6 +27,7 @@ const Component = (props) => {
               <Text style={{ fontWeight: "700" }}>Call</Text>
               <Text
                 style={{ fontWeight: "700", marginLeft: 5, color: "#006ba6" }}
+                onPress={() => Linking.openURL(`tel:${props.phone}`)}
               >
                 {props.phone}
               </Text>

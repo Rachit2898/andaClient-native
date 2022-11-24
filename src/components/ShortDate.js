@@ -79,7 +79,7 @@ const ShortDate = () => {
 
   return (
     <SafeAreaView
-      style={{ backgroundColor: "#fff", flex: 1 }}
+      style={{ backgroundColor: "#063e63", flex: 1 }}
       edges={["right", "left", "top"]}
     >
       <Filter
@@ -107,24 +107,26 @@ const ShortDate = () => {
               Short Dates
             </Text>
           </View>
-          <Pressable
-            style={{
-              borderWidth: 1,
-              width: 60,
-              height: 25,
-              borderColor: "#c77500",
-              borderRadius: 3,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            onPress={() => setModalVisible(true)}
-          >
-            <Text
-              style={{ fontWeight: "bold", color: "#c77500", fontSize: 12 }}
+          {result.totalResults > 0 && (
+            <Pressable
+              style={{
+                borderWidth: 1,
+                width: 60,
+                height: 25,
+                borderColor: "#ed8b00",
+                borderRadius: 3,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              onPress={() => setModalVisible(true)}
             >
-              Filter
-            </Text>
-          </Pressable>
+              <Text
+                style={{ fontWeight: "bold", color: "#ed8b00", fontSize: 12 }}
+              >
+                Filter
+              </Text>
+            </Pressable>
+          )}
         </View>
         <View
           style={{

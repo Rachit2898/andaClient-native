@@ -385,7 +385,7 @@ const CartScreen = (props) => {
               {currentIndex == props.id && visible && (
                 <Pressable
                   style={{
-                    backgroundColor: "#c77500",
+                    backgroundColor: "#ed8b00",
                     width: 60,
                     height: 25,
                     borderRadius: 4,
@@ -440,6 +440,61 @@ const CartScreen = (props) => {
                   You Can Add Only {props.orderLimit} Items
                 </Text>
               )}
+            </View>
+          )}
+          {!!props.orderLimit && (
+            <View
+              style={{
+                flexDirection: "row",
+                paddingHorizontal: 5,
+                alignItems: "center",
+              }}
+            >
+              <Image
+                source={require("../../assets/alert.png")}
+                style={{
+                  width: 15,
+                  height: 15,
+                }}
+              />
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: "#ed8b00",
+                  textAlign: "left",
+                  marginLeft: 5,
+                }}
+              >
+                Daily Order Limit: {props.orderLimit}
+              </Text>
+            </View>
+          )}
+
+          {!!props.message && (
+            <View
+              style={{
+                flexDirection: "row",
+                paddingHorizontal: 5,
+                alignItems: "center",
+              }}
+            >
+              <Image
+                source={require("../../assets/alert.png")}
+                style={{
+                  width: 15,
+                  height: 15,
+                }}
+              />
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: "#ed8b00",
+                  textAlign: "left",
+                  marginLeft: 5,
+                }}
+              >
+                {props.message}
+              </Text>
             </View>
           )}
         </View>

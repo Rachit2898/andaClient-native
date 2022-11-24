@@ -61,9 +61,28 @@ const AndaContractItems = () => {
     setItem(item);
   };
 
+  const currentFirst = (currentPage) => {
+    return (currentPage - 1) * result?.pageSize + 1;
+  };
+  const pageFirst = currentFirst(currentPage);
+  const currentLast = (currentPage) => {
+    if (currentPage == 1 && result?.totalResults >= result?.pageSize) {
+      const lastPageValue = pageFirst + result?.pageSize - 1;
+      return lastPageValue;
+    } else if (result?.totalResults <= result?.pageSize) {
+      return result?.totalResults;
+    } else if (result?.totalResults <= pageFirst + result?.pageSize) {
+      return result?.totalResults;
+    } else {
+      const lastPageValue = pageFirst + result?.pageSize - 1;
+      return lastPageValue;
+    }
+  };
+  const pageLast = currentLast(currentPage);
+
   return (
     <SafeAreaView
-      style={{ backgroundColor: "#fff", flex: 1 }}
+      style={{ backgroundColor: "#063e63", flex: 1 }}
       edges={["right", "left", "top"]}
     >
       <Filter
@@ -97,7 +116,7 @@ const AndaContractItems = () => {
               borderWidth: 1,
               width: 60,
               height: 25,
-              borderColor: "#c77500",
+              borderColor: "#ed8b00",
               borderRadius: 3,
               alignItems: "center",
               justifyContent: "center",
@@ -105,7 +124,7 @@ const AndaContractItems = () => {
             onPress={() => setModalVisible(true)}
           >
             <Text
-              style={{ fontWeight: "bold", color: "#c77500", fontSize: 12 }}
+              style={{ fontWeight: "bold", color: "#ed8b00", fontSize: 12 }}
             >
               Filter
             </Text>
@@ -118,6 +137,11 @@ const AndaContractItems = () => {
             marginVertical: 10,
           }}
         />
+        {result.totalResults > 0 && (
+          <Text style={styles.pageText}>
+            Showing {pageFirst} - {pageLast} of {result.totalResults} results
+          </Text>
+        )}
         <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
           {result.totalResults > 0 ? (
             <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false}>
@@ -192,4 +216,10 @@ const styles = StyleSheet.create({
   },
   mainBoxLoading: { opacity: 0.2 },
   mainBox: { backgroundColor: "#fff", marginBottom: 200 },
+  pageText: {
+    color: "#494c4c",
+    fontWeight: "600",
+    fontSize: 18,
+    paddingHorizontal: 10,
+  },
 });

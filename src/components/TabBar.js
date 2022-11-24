@@ -38,10 +38,17 @@ const TabBar = () => {
           cartName === "Home" ? styles.upperBorder : styles.upperBorderNone,
         ]}
       >
-        <Image
-          style={{ height: 20, width: 20 }}
-          source={require("../../assets/icon-home.png")}
-        />
+        {cartName === "Home" ? (
+          <Image
+            style={{ height: 20, width: 20 }}
+            source={require("../../assets/icon-home-blue.png")}
+          />
+        ) : (
+          <Image
+            style={{ height: 20, width: 20 }}
+            source={require("../../assets/icon-home.png")}
+          />
+        )}
         <Text
           style={[cartName === "Home" ? styles.logoNameLight : styles.logoName]}
         >
@@ -57,7 +64,7 @@ const TabBar = () => {
           cartName === "Cart" ? styles.upperBorder : styles.upperBorderNone,
         ]}
       >
-        <View style={{ flexDirection: "row" }}>
+        <View style={{ flexDirection: "row", marginLeft: 20 }}>
           {cartName === "Cart" ? (
             <Image
               style={{ height: 20, width: 20 }}
@@ -69,12 +76,9 @@ const TabBar = () => {
               source={require("../../assets/cartLogo.png")}
             />
           )}
-
-          {cartLength > 0 && (
-            <View style={{ marginTop: -5, marginLeft: -8 }}>
-              <Badge value={cartLength} />
-            </View>
-          )}
+          <View style={{ marginTop: -5, marginLeft: -8, width: 30 }}>
+            {cartLength > 0 && <Badge value={cartLength} />}
+          </View>
         </View>
         <Text
           style={[cartName === "Cart" ? styles.logoNameLight : styles.logoName]}
@@ -139,7 +143,7 @@ const TabBar = () => {
             cartName === "Dashboard" ? styles.logoNameLight : styles.logoName,
           ]}
         >
-          Menu
+          More
         </Text>
       </Pressable>
     </View>

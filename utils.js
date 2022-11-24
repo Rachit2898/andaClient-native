@@ -94,7 +94,6 @@ export function favorites(body) {
 }
 
 export function favoritesRemove(body) {
-  console.log("Favorites", body);
   const credentials = {
     type: "FAVORITE",
     items: [

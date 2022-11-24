@@ -90,7 +90,7 @@ const Favorites = () => {
 
   return (
     <SafeAreaView
-      style={{ backgroundColor: "#fff", flex: 1 }}
+      style={{ backgroundColor: "#063e63", flex: 1 }}
       edges={["right", "left", "top"]}
     >
       <Filter
@@ -121,7 +121,7 @@ const Favorites = () => {
               borderWidth: 1,
               width: 60,
               height: 25,
-              borderColor: "#c77500",
+              borderColor: "#ed8b00",
               borderRadius: 3,
               alignItems: "center",
               justifyContent: "center",
@@ -129,7 +129,7 @@ const Favorites = () => {
             onPress={() => setModalVisible(true)}
           >
             <Text
-              style={{ fontWeight: "bold", color: "#c77500", fontSize: 12 }}
+              style={{ fontWeight: "bold", color: "#ed8b00", fontSize: 12 }}
             >
               Filter
             </Text>

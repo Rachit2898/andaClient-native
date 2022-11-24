@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Pressable } from "react-native";
+import { StyleSheet, Text, View, Pressable, StatusBar } from "react-native";
 import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -59,9 +59,8 @@ const Settings = () => {
   return (
     <SafeAreaView
       style={{ backgroundColor: "#fff", flex: 1 }}
-      edges={["right", "left", "top"]}
+      edges={["right", "left"]}
     >
-      <Navbar />
       <View style={{ flex: 1 }}>
         <View
           style={{
