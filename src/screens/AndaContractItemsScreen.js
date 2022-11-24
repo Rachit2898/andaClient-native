@@ -22,6 +22,7 @@ import {
   productDetails,
   addItem,
 } from "../../redux/features/productApi";
+import AddButton from "../components/Ui/AddButton";
 
 const AndaContractItemsScreen = (props) => {
   const navigation = useNavigation();
@@ -52,12 +53,10 @@ const AndaContractItemsScreen = (props) => {
   };
   async function addItemIntoCart(skuId) {
     const accountId = props.accountId;
-    console.log(accountId, skuId);
     const quantity = count;
     try {
       dispatch(addItem({ accountId, skuId, quantity }));
     } catch (error) {
-      console.log(error);
       alert("Could not Update Product!!");
     }
   }
@@ -248,7 +247,7 @@ const AndaContractItemsScreen = (props) => {
                 {props.generic && !props.petFriendly && (
                   <Image
                     source={{
-                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_brand.png",
+                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_brand_hover.png",
                     }}
                     style={{
                       width: 20,
@@ -260,7 +259,7 @@ const AndaContractItemsScreen = (props) => {
                 {props.schedule === 2 && (
                   <Image
                     source={{
-                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_cii.png",
+                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_cii_hover.png",
                     }}
                     style={{
                       width: 20,
@@ -271,7 +270,7 @@ const AndaContractItemsScreen = (props) => {
                 {props.petFriendly && (
                   <Image
                     source={{
-                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_pet.png",
+                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_pet_hover.png",
                     }}
                     style={{
                       width: 20,
@@ -282,7 +281,7 @@ const AndaContractItemsScreen = (props) => {
                 {props.petFriendly && props.rxItem && (
                   <Image
                     source={{
-                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_prescription.png",
+                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_prescription_hover.png",
                     }}
                     style={{
                       width: 20,
@@ -293,7 +292,7 @@ const AndaContractItemsScreen = (props) => {
                 {props.refrigerated && (
                   <Image
                     source={{
-                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_refrigerated.png",
+                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_refrigerated_hover.png",
                     }}
                     style={{
                       width: 20,
@@ -304,7 +303,7 @@ const AndaContractItemsScreen = (props) => {
                 {props.hazardousMaterial && (
                   <Image
                     source={{
-                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_hazardous.png",
+                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_hazardous_hover.png",
                     }}
                     style={{
                       width: 20,
@@ -315,7 +314,7 @@ const AndaContractItemsScreen = (props) => {
                 {props.groundShip && (
                   <Image
                     source={{
-                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_dropship.png",
+                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_dropship_hover.png",
                     }}
                     style={{
                       width: 20,
@@ -326,7 +325,7 @@ const AndaContractItemsScreen = (props) => {
                 {props.dropShipOnly && (
                   <Image
                     source={{
-                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_dropship.png",
+                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_dropship_hover.png",
                     }}
                     style={{
                       width: 20,
@@ -337,7 +336,7 @@ const AndaContractItemsScreen = (props) => {
                 {props.itemRating === "AB" && (
                   <Image
                     source={{
-                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_ab_rated.png",
+                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_ab_rated_hover.png",
                     }}
                     style={{
                       width: 20,
@@ -348,7 +347,7 @@ const AndaContractItemsScreen = (props) => {
                 {props.rewardItem === "AB" && (
                   <Image
                     source={{
-                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_rewards.png",
+                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_ab_rated_hover.png",
                     }}
                     style={{
                       width: 20,
@@ -359,7 +358,7 @@ const AndaContractItemsScreen = (props) => {
                 {props.priceType === "INDIRECT_CONTRACT" && (
                   <Image
                     source={{
-                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_anda_mfg_contract.png",
+                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_anda_mfg_contract_hover.png",
                     }}
                     style={{
                       width: 20,
@@ -478,28 +477,7 @@ const AndaContractItemsScreen = (props) => {
                 </Pressable>
               )}
             </View>
-            <Pressable
-              style={{
-                backgroundColor: "#c77500",
-                width: 60,
-                height: 25,
-                borderRadius: 3,
-                borderRadius: 4,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-              onPress={() => addItemIntoCart(props?.id)}
-            >
-              <Text
-                style={{
-                  color: "#fff",
-                  fontWeight: "bold",
-                  fontSize: 12,
-                }}
-              >
-                ADD
-              </Text>
-            </Pressable>
+            <AddButton onPress={() => addItemIntoCart(props?.id)} />
           </View>
 
           {!!props.orderLimit && (

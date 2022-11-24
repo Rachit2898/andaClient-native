@@ -8,7 +8,7 @@ const ReturnPolicy = () => {
   return (
     <SafeAreaView
       style={{ backgroundColor: "#fff", flex: 1 }}
-      edges={["right", "left", "top"]}
+      edges={["right", "left"]}
     >
       <Navbar />
       <View style={styles.prductListBlue}>
@@ -176,7 +176,7 @@ const ReturnPolicy = () => {
             </View>
           </View>
         </ScrollView>
-        <View style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+        <View style={{ left: 0, right: 0, bottom: 0 }}>
           <TabBar />
         </View>
       </View>

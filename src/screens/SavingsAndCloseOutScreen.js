@@ -6,6 +6,7 @@ import {
   Pressable,
   ScrollView,
 } from "react-native";
+import _ from "lodash";
 import React, { useState, useEffect, useRef } from "react";
 import Spinner from "../components/Spinner";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -22,7 +23,7 @@ import {
 import LikeButton from "../components/LikeButton";
 import AddButton from "../components/Ui/AddButton";
 
-const SearchProductScreen = (props) => {
+const SavingsScreen = (props) => {
   const scrollRef = useRef();
   const navigation = useNavigation();
   const [itemValues, setItem] = useState([]);
@@ -31,7 +32,7 @@ const SearchProductScreen = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [count, setCount] = useState(1);
   const [currentIndex, setCurrentIndex] = useState(-1);
-  const { inventoryWatchData, userInfoData, addLoading } = useSelector(
+  const { inventoryWatchData, userInfoData, addLoading, loading } = useSelector(
     (state) => ({
       ...state.products,
     })
@@ -59,12 +60,10 @@ const SearchProductScreen = (props) => {
       alert("Could not Update Product!!");
     }
   }
-
   const productDetailHandler = async (Id) => {
     navigation.navigate("ProductDetails");
     dispatch(productDetails(Id));
   };
-
   const favoriteHandler = (id, value) => {
     console.log({ id });
     if (value === "FAVORITE") {
@@ -86,18 +85,52 @@ const SearchProductScreen = (props) => {
         justifyContent: "space-between",
       }}
     >
+      {loading && <Spinner />}
       <View style={{ flexDirection: "row" }}>
-        <Pressable
+        <View
           style={{
             justifyContent: "center",
             alignSelf: "center",
           }}
-          onPress={() => {
-            productDetailHandler(props.id);
-          }}
         >
-          {props.url ? (
-            <>
+          {!_.isNil(props.shortOrCloseOutDate) &&
+            props.shortOrCloseOutDate !== "" &&
+            props.inventoryClassKey === "S" && (
+              <View
+                style={[
+                  styles.bannerComponent,
+                  {
+                    transform: [{ skewY: "-45deg" }],
+                  },
+                ]}
+              >
+                <Text style={styles.bannerText}>S/D</Text>
+              </View>
+            )}
+          <Pressable
+            style={{
+              justifyContent: "center",
+              alignSelf: "center",
+            }}
+            onPress={() => {
+              productDetailHandler(props.id);
+            }}
+          >
+            {props.url ? (
+              <>
+                <Image
+                  style={{
+                    borderRadius: 3,
+                    marginVertical: 5,
+                    width: 80,
+                    height: 80,
+                  }}
+                  source={{
+                    uri: `https://staging.andanet.com${props?.url}`,
+                  }}
+                />
+              </>
+            ) : (
               <Image
                 style={{
                   borderRadius: 3,
@@ -105,23 +138,11 @@ const SearchProductScreen = (props) => {
                   width: 80,
                   height: 80,
                 }}
-                source={{
-                  uri: `https://staging.andanet.com${props?.url}`,
-                }}
+                source={require("../../assets/camera.png")}
               />
-            </>
-          ) : (
-            <Image
-              style={{
-                borderRadius: 3,
-                marginVertical: 5,
-                width: 80,
-                height: 80,
-              }}
-              source={require("../../assets/camera.png")}
-            />
-          )}
-        </Pressable>
+            )}
+          </Pressable>
+        </View>
         <LikeButton
           onPress={() => {
             favoriteHandler(props?.id, props.type);
@@ -136,7 +157,7 @@ const SearchProductScreen = (props) => {
           }}
         >
           <Pressable
-            style={{ paddingBottom: 5 }}
+            style={{ paddingVertical: 5 }}
             onPress={() => {
               productDetailHandler(props.id);
             }}
@@ -511,10 +532,24 @@ const SearchProductScreen = (props) => {
   );
 };
 
-export default SearchProductScreen;
+export default SavingsScreen;
 
 const styles = StyleSheet.create({
   pagination: {
-    marginBottom: 100,
+    marginBottom: 10,
+  },
+  bannerComponent: {
+    backgroundColor: "#ed8b00",
+    width: 30,
+    zIndex: 1,
+    height: 20,
+    marginHorizontal: 10,
+  },
+  bannerText: {
+    color: "#fff",
+    fontSize: 12,
+    textAlign: "center",
+    paddingHorizontal: 5,
+    paddingVertical: 2,
   },
 });

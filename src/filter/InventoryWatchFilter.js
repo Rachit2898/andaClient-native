@@ -18,14 +18,14 @@ import {
   updateIntventoryUrls,
   setSorting,
 } from "../../redux/features/authUser";
-import { inventoryWatch } from "../../redux/features/productApi";
+import { inventoryWatchList } from "../../redux/features/productApi";
 
 const Filter = ({ modalVisible, setModalVisible }) => {
   const [response, setResponse] = useState();
   const [isChecked, setChecked] = useState(false);
   const [loading, setLoading] = useState(false);
   const [sortingOpen, setsortingOpen] = useState(false);
-  const [sortingValue, setsortingValue] = useState(null);
+  const [sortingValue, setsortingValue] = useState("");
   const [sorting, setsorting] = useState([
     { label: "Item Description", value: "itemName%20asc" },
     { label: "Size", value: "packSize%20asc" },
@@ -51,8 +51,13 @@ const Filter = ({ modalVisible, setModalVisible }) => {
   const url = urlStructure.join("");
 
   useEffect(() => {
+    console.log("hello");
     dispatch(
-      inventoryWatch({ value: url, currentPage: 1, sortValues: sortingValue })
+      inventoryWatchList({
+        value: url,
+        currentPage: 1,
+        sortValues: sortingValue,
+      })
     );
     dispatch(setSorting(sortingValue));
   }, [inventoryWatchUrls, sortingValue]);
@@ -128,7 +133,7 @@ const Filter = ({ modalVisible, setModalVisible }) => {
       >
         <ScrollView>
           <View>
-            <View style={styles.centeredView}>
+            <View>
               <View style={styles.modalView}>
                 <View style={styles.closeButton}>
                   {(loading || paginationLoading) && <Spinner />}
@@ -157,7 +162,6 @@ const Filter = ({ modalVisible, setModalVisible }) => {
                     setItems={setsorting}
                     placeholder="Select..."
                     placeholderStyle={styles.placeholderStyles}
-                    onOpen={onsortingOpen}
                     onChangeValue={onChange}
                     zIndex={1000}
                     zIndexInverse={3000}
@@ -185,7 +189,7 @@ const Filter = ({ modalVisible, setModalVisible }) => {
                           <View>
                             {item?.values?.map((value) => {
                               return (
-                                <View key={value?.quantity}>
+                                <View key={value?.value}>
                                   {value?.quantity ? (
                                     <View
                                       style={{
@@ -328,7 +332,6 @@ const styles = StyleSheet.create({
     padding: 35,
     zIndex: 3000,
     zIndexInverse: 1000,
-    width: 400,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {

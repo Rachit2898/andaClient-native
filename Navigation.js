@@ -21,6 +21,7 @@ import Account from "./src/components/Account";
 import AndaContractItems from "./src/components/AndaContractItems";
 import Inventory from "./src/components/InventoryWatchList";
 import Savings from "./src/components/Savings";
+import SavingsAndCloseOut from "./src/components/SavingsAndCloseOut";
 import CloseOuts from "./src/components/CloseOuts";
 import PriceReduction from "./src/components/PriceReduction";
 import ShortDate from "./src/components/ShortDate";
@@ -106,6 +107,10 @@ function AuthenticatedStack() {
             options={{
               headerShown: true,
               title: null,
+              headerStyle: {
+                backgroundColor: "#063e63",
+              },
+              headerTintColor: "#fff",
             }}
           />
           <Stack.Screen
@@ -151,6 +156,13 @@ function AuthenticatedStack() {
             }}
           />
           <Stack.Screen
+            name="SavingsAndCloseOut"
+            component={SavingsAndCloseOut}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
             name="CloseOuts"
             component={CloseOuts}
             options={{
@@ -177,6 +189,10 @@ function AuthenticatedStack() {
             options={{
               headerShown: true,
               title: null,
+              headerStyle: {
+                backgroundColor: "#063e63",
+              },
+              headerTintColor: "#fff",
             }}
           />
           <Stack.Screen
@@ -197,35 +213,60 @@ function AuthenticatedStack() {
             name="OrderingOptions"
             component={OrderingOptions}
             options={{
-              headerShown: false,
+              headerShown: true,
+              title: null,
+              headerStyle: {
+                backgroundColor: "#063e63",
+              },
+              headerTintColor: "#fff",
             }}
           />
           <Stack.Screen
             name="OpeningAccount"
             component={OpeningAccount}
             options={{
-              headerShown: false,
+              headerShown: true,
+              title: null,
+              headerStyle: {
+                backgroundColor: "#063e63",
+              },
+              headerTintColor: "#fff",
             }}
           />
           <Stack.Screen
             name="Payment"
             component={PaymentOptions}
             options={{
-              headerShown: false,
+              headerShown: true,
+              title: null,
+              headerStyle: {
+                backgroundColor: "#063e63",
+              },
+              headerTintColor: "#fff",
             }}
           />
           <Stack.Screen
             name="ReturnPolicy"
             component={ReturnPolicy}
             options={{
-              headerShown: false,
+              headerShown: true,
+              title: null,
+              headerStyle: {
+                backgroundColor: "#063e63",
+              },
+              headerTintColor: "#fff",
             }}
           />
           <Stack.Screen
             name="Faq"
             component={Faq}
             options={{
-              headerShown: false,
+              headerShown: true,
+              title: null,
+              headerStyle: {
+                backgroundColor: "#063e63",
+              },
+              headerTintColor: "#fff",
             }}
           />
           <Stack.Screen
@@ -239,7 +280,12 @@ function AuthenticatedStack() {
             name="Settings"
             component={Settings}
             options={{
-              headerShown: false,
+              headerShown: true,
+              title: null,
+              headerStyle: {
+                backgroundColor: "#063e63",
+              },
+              headerTintColor: "#fff",
             }}
           />
           <Stack.Screen

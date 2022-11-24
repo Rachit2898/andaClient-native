@@ -39,7 +39,7 @@ const Payment = () => {
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: "#fff" }}
-      edges={["right", "left", "top"]}
+      edges={["right", "left"]}
     >
       <Navbar />
       <View style={styles.prductListBlue}>
@@ -75,7 +75,7 @@ const Payment = () => {
                 heading={"ACH"}
               />
               <PaymentComponent
-                imageUri={require("../../assets/check.png")}
+                imageUri={require("../../assets/cheque.png")}
                 value={"Prefer to mail in your payment? Send us a check."}
                 heading={"Check"}
               />

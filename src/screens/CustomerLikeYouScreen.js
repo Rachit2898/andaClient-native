@@ -20,6 +20,7 @@ import {
   removeFavorites,
 } from "../../redux/features/productApi";
 import LikeButton from "../components/LikeButton";
+import AddButton from "../components/Ui/AddButton";
 
 const ProductScreen = (props) => {
   const scrollRef = useRef();
@@ -64,7 +65,6 @@ const ProductScreen = (props) => {
   };
 
   const favoriteHandler = (id, value) => {
-    console.log({ id });
     if (value === "FAVORITE") {
       dispatch(removeFavorites({ id }));
     } else {
@@ -234,7 +234,7 @@ const ProductScreen = (props) => {
                 {props.netPriceItem && (
                   <Image
                     source={{
-                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_netprice_hover_2.png",
+                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_netprice_2.png",
                     }}
                     style={{
                       width: 20,
@@ -246,7 +246,7 @@ const ProductScreen = (props) => {
                 {props.generic && !props.petFriendly && (
                   <Image
                     source={{
-                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_brand.png",
+                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_brand_hover.png",
                     }}
                     style={{
                       width: 20,
@@ -258,7 +258,7 @@ const ProductScreen = (props) => {
                 {props.schedule === 2 && (
                   <Image
                     source={{
-                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_cii.png",
+                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_cii_hover.png",
                     }}
                     style={{
                       width: 20,
@@ -269,7 +269,7 @@ const ProductScreen = (props) => {
                 {props.petFriendly && (
                   <Image
                     source={{
-                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_pet.png",
+                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_pet_hover.png",
                     }}
                     style={{
                       width: 20,
@@ -280,7 +280,7 @@ const ProductScreen = (props) => {
                 {props.petFriendly && props.rxItem && (
                   <Image
                     source={{
-                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_prescription.png",
+                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_prescription_hover.png",
                     }}
                     style={{
                       width: 20,
@@ -291,7 +291,7 @@ const ProductScreen = (props) => {
                 {props.refrigerated && (
                   <Image
                     source={{
-                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_refrigerated.png",
+                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_refrigerated_hover.png",
                     }}
                     style={{
                       width: 20,
@@ -302,7 +302,7 @@ const ProductScreen = (props) => {
                 {props.hazardousMaterial && (
                   <Image
                     source={{
-                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_hazardous.png",
+                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_hazardous_hover.png",
                     }}
                     style={{
                       width: 20,
@@ -313,7 +313,7 @@ const ProductScreen = (props) => {
                 {props.groundShip && (
                   <Image
                     source={{
-                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_dropship.png",
+                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_dropship_hover.png",
                     }}
                     style={{
                       width: 20,
@@ -324,7 +324,7 @@ const ProductScreen = (props) => {
                 {props.dropShipOnly && (
                   <Image
                     source={{
-                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_dropship.png",
+                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_dropship_hover.png",
                     }}
                     style={{
                       width: 20,
@@ -335,7 +335,7 @@ const ProductScreen = (props) => {
                 {props.itemRating === "AB" && (
                   <Image
                     source={{
-                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_ab_rated.png",
+                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_ab_rated_hover.png",
                     }}
                     style={{
                       width: 20,
@@ -346,7 +346,7 @@ const ProductScreen = (props) => {
                 {props.rewardItem === "AB" && (
                   <Image
                     source={{
-                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_rewards.png",
+                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_ab_rated_hover.png",
                     }}
                     style={{
                       width: 20,
@@ -357,7 +357,7 @@ const ProductScreen = (props) => {
                 {props.priceType === "INDIRECT_CONTRACT" && (
                   <Image
                     source={{
-                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_anda_mfg_contract.png",
+                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_anda_mfg_contract_hover.png",
                     }}
                     style={{
                       width: 20,
@@ -476,28 +476,7 @@ const ProductScreen = (props) => {
                 </Pressable>
               )}
             </View>
-            <Pressable
-              style={{
-                backgroundColor: "#c77500",
-                width: 60,
-                height: 25,
-                borderRadius: 3,
-                borderRadius: 4,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-              onPress={() => addItemIntoCart(props?.id)}
-            >
-              <Text
-                style={{
-                  color: "#fff",
-                  fontWeight: "bold",
-                  fontSize: 12,
-                }}
-              >
-                ADD
-              </Text>
-            </Pressable>
+            <AddButton onPress={() => addItemIntoCart(props?.id)} />
           </View>
 
           {!!props.orderLimit && (

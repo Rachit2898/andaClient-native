@@ -152,7 +152,6 @@ const Filter = ({ modalVisible, setModalVisible }) => {
                     setItems={setsorting}
                     placeholder="Select..."
                     placeholderStyle={styles.placeholderStyles}
-                    onOpen={onsortingOpen}
                     onChangeValue={onChange}
                     zIndex={1000}
                     zIndexInverse={3000}
@@ -180,7 +179,7 @@ const Filter = ({ modalVisible, setModalVisible }) => {
                           <View>
                             {item?.values?.map((value) => {
                               return (
-                                <View key={value?.quantity}>
+                                <View key={value?.value}>
                                   {value?.quantity ? (
                                     <View
                                       style={{
@@ -323,7 +322,6 @@ const styles = StyleSheet.create({
     padding: 35,
     zIndex: 3000,
     zIndexInverse: 1000,
-    width: 400,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {

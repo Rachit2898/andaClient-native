@@ -38,7 +38,6 @@ const Navbar = () => {
     dispatch(searchItems(item));
   };
   const searchProductHandler = async (item) => {
-    console.log({ item });
     try {
       dispatch(searchProducts(item));
       dispatch(searchValues(item));
@@ -73,6 +72,21 @@ const Navbar = () => {
   return (
     <View>
       <View style={styles.searchBox}>
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            paddingHorizontal: 5,
+          }}
+        >
+          <Image
+            source={require("../../assets/search.png")}
+            style={{
+              width: 20,
+              height: 20,
+            }}
+          />
+        </View>
         <TextInput
           style={styles.input}
           placeholder="Search by number, name or keyword"
@@ -80,7 +94,7 @@ const Navbar = () => {
           onClear={(value) => searchItemHandler("")}
         />
         <Pressable
-          style={{ justifyContent: "center" }}
+          style={{ justifyContent: "center", marginHorizontal: 5 }}
           onPress={() => BarCodeHandler()}
         >
           <Image
@@ -130,7 +144,7 @@ const styles = StyleSheet.create({
   input: {
     color: "#494c4c",
     fontSize: 15,
-    width: "85%",
+    width: "80%",
   },
   search: {
     color: "#9b9b9b",

@@ -83,7 +83,7 @@ const CustomerLikeYou = () => {
 
   return (
     <SafeAreaView
-      style={{ backgroundColor: "#fff", flex: 1 }}
+      style={{ backgroundColor: "#063e63", flex: 1 }}
       edges={["right", "left", "top"]}
     >
       <Filter
@@ -116,7 +116,7 @@ const CustomerLikeYou = () => {
               borderWidth: 1,
               width: 60,
               height: 25,
-              borderColor: "#c77500",
+              borderColor: "#ed8b00",
               borderRadius: 3,
               alignItems: "center",
               justifyContent: "center",

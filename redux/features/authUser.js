@@ -191,6 +191,7 @@ const authReducer = createSlice({
     },
     setSorting: (state, action) => {
       state.sortingUrl = action.payload;
+      console.log(action.payload);
     },
     cartColor: (state, action) => {
       state.cartName = action.payload;
@@ -241,5 +242,6 @@ export const {
   cartColor,
   updateAndaContractItemsUrls,
   updateSearchProductUrls,
+  updateCloseOutUrls,
 } = authReducer.actions;
 export default authReducer.reducer;

@@ -156,7 +156,7 @@ const SearchProduct = () => {
         />
 
         <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
-          {result.totalResults > 0 ? (
+          {result.totalResults ? (
             <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false}>
               <View>
                 {data?.map((item, i) => {
