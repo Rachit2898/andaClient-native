@@ -9,6 +9,7 @@ import {
   RefreshControl,
   Alert,
   StatusBar,
+  Modal,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
@@ -28,9 +29,46 @@ import Navbar from "./Navbar";
 import TabBar from "./TabBar";
 import * as Notifications from "expo-notifications";
 
+function ClockModel(props) {
+  const [modalVisible, setShow] = useState(false);
+  return (
+    <View style={{ justifyContent: "center", alignItems: "center" }}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setShow(!modalVisible);
+        }}
+      >
+        <View
+          style={{
+            width: "100%",
+            height: 200,
+            backgroundColor: "red",
+
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text>Hello</Text>
+          <Pressable
+            style={[styles.button, styles.buttonClose]}
+            onPress={() => setShow(!modalVisible)}
+          >
+            <Text style={styles.textStyle}>Hide Modal</Text>
+          </Pressable>
+        </View>
+      </Modal>
+    </View>
+  );
+}
+
 const Cart = () => {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
+  const [modalVisible, setShow] = useState(false);
   const navigation = useNavigation();
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [count, setCount] = useState(1);
@@ -60,7 +98,7 @@ const Cart = () => {
         {
           text: "Cancel",
           onPress: () => null,
-          style: "cancel",
+          style: "NO",
         },
         { text: "YES", onPress: () => dispatch(emptyCartItems(id)) },
       ]
@@ -133,9 +171,23 @@ const Cart = () => {
     wait(0).then(() => setRefreshing(false));
   }, []);
 
+  const modelOpenHandler = () => {
+    setShow((pre) => !pre);
+    console.log(modalVisible);
+  };
+  const onRequestClose = () => {
+    Alert.alert("Modal has been closed.");
+    setShow(!modalVisible);
+  };
+
   return (
     <SafeAreaView
-      style={{ backgroundColor: "#063e63", flex: 1 }}
+      style={{
+        backgroundColor: "#063e63",
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+      }}
       edges={["right", "left", "top"]}
     >
       <StatusBar
@@ -145,6 +197,89 @@ const Cart = () => {
         barStyle={"light-content"}
         hidden={false}
       />
+      <View style={{}}>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+            setShow(!modalVisible);
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: "#fff",
+              margin: 10,
+              marginTop: 250,
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 4,
+              elevation: 5,
+              borderRadius: 5,
+            }}
+          >
+            <View
+              style={{
+                justifyContent: "space-between",
+                padding: 10,
+                borderBottomWidth: 1,
+                borderColor: "#006ba6",
+                flexDirection: "row",
+              }}
+            >
+              <View style={{}}>
+                <Text style={{ color: "#494c4c", fontWeight: "500" }}>
+                  SHIPPING COUNT DOWN
+                </Text>
+              </View>
+              <Pressable
+                onPress={() => setShow(!modalVisible)}
+                style={{ justifyContent: "center" }}
+              >
+                <Image
+                  source={require("../../assets/close.png")}
+                  style={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </Pressable>
+            </View>
+            <View style={{ padding: 10 }}>
+              <Text style={{ color: "#494c4c" }}>
+                Time left for next day shipping
+              </Text>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                borderColor: "#9b9b9b",
+                borderWidth: 0.3,
+                width: "80%",
+                alignSelf: "center",
+                paddingVertical: 10,
+                marginVertical: 30,
+                marginBottom: 50,
+                borderRadius: 5,
+              }}
+            >
+              <View style={{ paddingHorizontal: 10 }}>
+                <Text style={{ fontWeight: "700" }}>00h 00m</Text>
+              </View>
+              <View style={{ justifyContent: "center", marginHorizontal: 30 }}>
+                <Text style={{ fontSize: 10, color: "#9b9b9b" }}>
+                  Left for next delivery
+                </Text>
+              </View>
+            </View>
+          </View>
+        </Modal>
+      </View>
       <View
         style={{
           backgroundColor: "#fff",
@@ -164,11 +299,23 @@ const Cart = () => {
               >
                 <View>
                   <Text style={styles.cartText}>
-                    {" "}
                     Your Cart ({cartLength} item
                     {emptyCartItems !== 1 ? "s" : ""})
                   </Text>
                 </View>
+                <Pressable
+                  onPress={() => {
+                    modelOpenHandler();
+                  }}
+                >
+                  <Image
+                    source={require("../../assets/clock.png")}
+                    style={{
+                      width: 20,
+                      height: 20,
+                    }}
+                  />
+                </Pressable>
                 <View>
                   <Text style={styles.cartText}> Sub Total: ${subtotal}</Text>
                 </View>
@@ -193,6 +340,7 @@ const Cart = () => {
                 </Pressable>
               </View>
               {loading && <Spinner />}
+
               <ScrollView
                 showsVerticalScrollIndicator={false}
                 refreshControl={
@@ -204,7 +352,6 @@ const Cart = () => {
               >
                 <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
                   {orderItems?.map((item) => {
-                    console.log(item?.sku?.itemMessages[0]?.message);
                     return (
                       <View key={item.id}>
                         <CartScreen

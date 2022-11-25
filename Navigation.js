@@ -37,6 +37,10 @@ import Spinner from "./src/components/Spinner";
 import TabBar from "./src/components/TabBar";
 import Faq from "./src/screens/Faq.js";
 import Barcode from "./src/components/Barcode";
+import ForgotPassword from "./src/components/ForgotPassword";
+import ResetPassword from "./src/components/ResetPassword";
+import ForgotUser from "./src/components/ForgotUser";
+import SignUpAccess from "./src/components/SignupAccess";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Badge, withBadge } from "react-native-elements";
 import Dashboard from "./src/components/Dashboard";
@@ -67,6 +71,47 @@ function LogOutStack() {
           headerShown: false,
         }}
         component={LoginScreen}
+      />
+      <Stack.Screen
+        name="ForgotPassword"
+        screenOptions={{
+          backgroundColor: "white",
+        }}
+        options={{
+          headerShown: false,
+        }}
+        component={ForgotPassword}
+      />
+      <Stack.Screen
+        name="ForgotUser"
+        screenOptions={{
+          backgroundColor: "white",
+        }}
+        options={{
+          headerShown: false,
+        }}
+        component={ForgotUser}
+      />
+
+      <Stack.Screen
+        name="ResetPassword"
+        screenOptions={{
+          backgroundColor: "white",
+        }}
+        options={{
+          headerShown: false,
+        }}
+        component={ResetPassword}
+      />
+      <Stack.Screen
+        name="SignUpAccess"
+        screenOptions={{
+          backgroundColor: "white",
+        }}
+        options={{
+          headerShown: false,
+        }}
+        component={SignUpAccess}
       />
     </Stack.Navigator>
   );
@@ -214,7 +259,7 @@ function AuthenticatedStack() {
             component={OrderingOptions}
             options={{
               headerShown: true,
-              title: null,
+              title: "Ordering Options and Hours",
               headerStyle: {
                 backgroundColor: "#063e63",
               },
@@ -226,7 +271,7 @@ function AuthenticatedStack() {
             component={OpeningAccount}
             options={{
               headerShown: true,
-              title: null,
+              title: "Opening an Account",
               headerStyle: {
                 backgroundColor: "#063e63",
               },
@@ -238,7 +283,7 @@ function AuthenticatedStack() {
             component={PaymentOptions}
             options={{
               headerShown: true,
-              title: null,
+              title: "Payment Options",
               headerStyle: {
                 backgroundColor: "#063e63",
               },
@@ -250,7 +295,7 @@ function AuthenticatedStack() {
             component={ReturnPolicy}
             options={{
               headerShown: true,
-              title: null,
+              title: "Return Policy",
               headerStyle: {
                 backgroundColor: "#063e63",
               },
@@ -262,7 +307,7 @@ function AuthenticatedStack() {
             component={Faq}
             options={{
               headerShown: true,
-              title: null,
+              title: "FAQs",
               headerStyle: {
                 backgroundColor: "#063e63",
               },
@@ -281,7 +326,7 @@ function AuthenticatedStack() {
             component={Settings}
             options={{
               headerShown: true,
-              title: null,
+              title: "Settings",
               headerStyle: {
                 backgroundColor: "#063e63",
               },

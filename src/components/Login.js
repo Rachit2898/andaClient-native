@@ -79,13 +79,6 @@ export default function LoginScreen() {
     return dispatch(signin({ email, password }));
   }
 
-  useEffect(() => {
-    async function tokenSubmit() {
-      await AsyncStorage.setItem("token", tokenValue);
-    }
-    tokenSubmit();
-  }, [tokenValue]);
-
   async function submitHandler() {
     setIsAuthenticating(true);
 
@@ -107,8 +100,6 @@ export default function LoginScreen() {
 
     if (token.type === "signin/fulfilled") {
       setIsAuthenticating(false);
-      setToken(token?.payload);
-      await AsyncStorage.setItem("token", token?.payload);
       return;
     }
 
@@ -296,6 +287,7 @@ export default function LoginScreen() {
                         color: "#006ba6",
                         fontWeight: "700",
                       }}
+                      onPress={() => navigation.navigate("ForgotPassword")}
                     >
                       Password
                     </Text>
@@ -312,6 +304,7 @@ export default function LoginScreen() {
                         color: "#006ba6",
                         fontWeight: "700",
                       }}
+                      onPress={() => navigation.navigate("ForgotUser")}
                     >
                       Username
                     </Text>
@@ -322,6 +315,7 @@ export default function LoginScreen() {
                         color: "#006ba6",
                         fontWeight: "700",
                       }}
+                      onPress={() => navigation.navigate("SignUpAccess")}
                     >
                       Sign up for online access
                     </Text>

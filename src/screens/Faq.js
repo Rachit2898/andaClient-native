@@ -62,7 +62,6 @@ const Faq = () => {
       style={{ backgroundColor: "#fff", flex: 1 }}
       edges={["right", "left"]}
     >
-      <Navbar />
       <View style={styles.prductListBlue}>
         <Text style={styles.productText}>Frequently Asked Questions</Text>
       </View>

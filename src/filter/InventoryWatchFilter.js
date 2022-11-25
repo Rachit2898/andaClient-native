@@ -18,7 +18,8 @@ import {
   updateIntventoryUrls,
   setSorting,
 } from "../../redux/features/authUser";
-import { inventoryWatchList } from "../../redux/features/productApi";
+import { inventoryWatch } from "../../redux/features/productApi";
+import Filters from "../components/Ui/Filters";
 
 const Filter = ({ modalVisible, setModalVisible }) => {
   const [response, setResponse] = useState();
@@ -26,6 +27,7 @@ const Filter = ({ modalVisible, setModalVisible }) => {
   const [loading, setLoading] = useState(false);
   const [sortingOpen, setsortingOpen] = useState(false);
   const [sortingValue, setsortingValue] = useState("");
+  const [filterOpen, setFilterOpen] = useState(false);
   const [sorting, setsorting] = useState([
     { label: "Item Description", value: "itemName%20asc" },
     { label: "Size", value: "packSize%20asc" },
@@ -53,7 +55,7 @@ const Filter = ({ modalVisible, setModalVisible }) => {
   useEffect(() => {
     console.log("hello");
     dispatch(
-      inventoryWatchList({
+      inventoryWatch({
         value: url,
         currentPage: 1,
         sortValues: sortingValue,
@@ -171,26 +173,19 @@ const Filter = ({ modalVisible, setModalVisible }) => {
                 <View style={styles.headingSrting}>
                   <Text style={styles.headingSortingText}>Filters</Text>
                 </View>
+
                 {filterValues?.map((item) => {
                   return (
                     <View key={item?.label}>
-                      <View style={styles.headingAvailability}>
-                        <Text style={styles.headingAvalText}>
-                          {item?.label}
-                        </Text>
-                      </View>
-                      <View>
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            marginTop: 5,
-                          }}
-                        >
+                      <Filters
+                        label={item.label}
+                        values={item.values}
+                        MyFilter={
                           <View>
                             {item?.values?.map((value) => {
                               return (
                                 <View key={value?.value}>
-                                  {value?.quantity ? (
+                                  {value?.quantity && (
                                     <View
                                       style={{
                                         flexDirection: "row",
@@ -233,15 +228,13 @@ const Filter = ({ modalVisible, setModalVisible }) => {
                                         ({value?.quantity})
                                       </Text>
                                     </View>
-                                  ) : (
-                                    <></>
                                   )}
                                 </View>
                               );
                             })}
                           </View>
-                        </View>
-                      </View>
+                        }
+                      />
                     </View>
                   );
                 })}

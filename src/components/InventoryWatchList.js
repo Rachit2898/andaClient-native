@@ -13,7 +13,7 @@ import Navbar from "./Navbar";
 import Pagination from "./Pagination";
 import TabBar from "./TabBar";
 import Spinner from "./Spinner";
-import Filter from "../filter/InventoryWatchFilter";
+import Filter from "../filter/InventoryWatchListFilter";
 import PreNegotiatedScreen from "../screens/InventoryWatchScreen";
 import {
   inventoryWatchList,

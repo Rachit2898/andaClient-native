@@ -22,7 +22,7 @@ import {
   addFavorites,
   removeFavorites,
 } from "../../redux/features/productApi";
-import LikeButton from "../components/LikeButton";
+import LikeButton from "../components/Ui/LikeButton";
 
 const CartScreen = (props) => {
   const dispatch = useDispatch();
