@@ -127,6 +127,10 @@ export function login(body) {
   const credentials = {
     username: body.email,
     password: body.password,
+    params: {
+      apiLogin: true,
+      appLogin: true,
+    },
   };
 
   return authenticate(credentials);

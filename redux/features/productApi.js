@@ -434,13 +434,9 @@ export const searchItems = createAsyncThunk(
 export const searchProducts = createAsyncThunk(
   "urls/searchProducsts",
   async (searchItem) => {
+    console.log("Searching products", searchItem);
     const token = await getToken();
-    if (body?.sortValues) {
-      var url = `https://staging.andanet.com/api/catalog/search?sort=${body?.sortValues}&q=${searchItem}&suggesterUsed=true`;
-    } else {
-      var url = `https://staging.andanet.com/api/catalog/search?q=${searchItem}&suggesterUsed=true`;
-    }
-
+    var url = `https://staging.andanet.com/api/catalog/search?q=${searchItem}&suggesterUsed=true`;
     const response = await fetch(url, {
       method: "GET",
       headers: {
@@ -450,7 +446,6 @@ export const searchProducts = createAsyncThunk(
     });
 
     const myData = await response.json();
-
     return myData;
   }
 );
@@ -460,9 +455,9 @@ export const andaContractItems = createAsyncThunk(
   async (body) => {
     const token = await getToken();
     if (body?.sortValues) {
-      var url = `https://staging.andanet.com/api/catalog/search?sort=${body?.sortValues}&page=1&characteristicFacet=Anda%20Contract&q=*`;
+      var url = `https://staging.andanet.com/api/catalog/search?sort=${body?.sortValues}&${body?.value}page=${body?.currentPage}&characteristicFacet=Anda%20Contract&q=*`;
     } else {
-      var url = `https://staging.andanet.com/api/catalog/search?page=1&characteristicFacet=Anda%20Contract&q=*`;
+      var url = `https://staging.andanet.com/api/catalog/search?${body?.value}page=${body?.currentPage}&characteristicFacet=Anda%20Contract&q=*`;
     }
 
     const response = await fetch(url, {

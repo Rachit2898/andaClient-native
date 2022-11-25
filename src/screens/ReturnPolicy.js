@@ -10,10 +10,6 @@ const ReturnPolicy = () => {
       style={{ backgroundColor: "#fff", flex: 1 }}
       edges={["right", "left"]}
     >
-      <Navbar />
-      <View style={styles.prductListBlue}>
-        <Text style={styles.productText}>Return Policy</Text>
-      </View>
       <View style={{ flex: 1 }}>
         <ScrollView>
           <View style={{ padding: 10 }}>

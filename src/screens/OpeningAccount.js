@@ -60,11 +60,7 @@ const OpeningAccount = () => {
       style={{ backgroundColor: "#fff", flex: 1 }}
       edges={["right", "left"]}
     >
-      <Navbar />
       <View style={{ flex: 1, backgroundColor: "#fff" }}>
-        <View style={styles.prductListBlue}>
-          <Text style={styles.productText}>Opening an Account</Text>
-        </View>
         <View style={{ paddingHorizontal: 10 }}>
           <Text style={{ color: "#006ba6" }}>
             Open an Anda account and start benefeting from our reliable and

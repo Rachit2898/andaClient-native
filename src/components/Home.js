@@ -16,7 +16,7 @@ import React, { useState, useEffect } from "react";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import Navbar from "./Navbar";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import LikeButton from "./LikeButton";
+import LikeButton from "./Ui/LikeButton";
 import Spinner from "./Spinner";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import TabBar from "./TabBar";
@@ -38,6 +38,7 @@ import dataSlider from "./DataSlider.js";
 import ImageSlider from "./ImageSlide.js";
 import { getToken } from "../../utils";
 import AddButton from "./Ui/AddButton";
+import HomeProduct from "./Ui/HomeProduct";
 //import { SliderBox } from "react-native-image-slider-box";
 
 // const LikeButton = (props) => {
@@ -149,10 +150,6 @@ export default function HomePage() {
   const inventoryWatchListOpen = async () => {
     navigation.navigate("Inventory");
   };
-  const productDetailHandler = async (Id) => {
-    navigation.navigate("ProductDetails");
-    dispatch(productDetails(Id));
-  };
   const AndaContractItemsOpen = async () => {
     navigation.navigate("AndaContractItems");
   };
@@ -200,14 +197,6 @@ export default function HomePage() {
     require("../../assets/image3.jpeg"),
   ];
 
-  const favoriteHandler = (id, value) => {
-    if (value === "FAVORITE") {
-      dispatch(removeFavorites({ id }));
-      setId(id);
-    } else {
-      dispatch(addFavorites({ id }));
-    }
-  };
   useEffect(() => {
     const day = getDifferenceInDays(date1, date2);
     setDays(day);
@@ -580,6 +569,7 @@ export default function HomePage() {
                           style={{
                             flexDirection: "row",
                             justifyContent: "space-between",
+                            marginBottom: 10,
                           }}
                         >
                           <View>
@@ -606,414 +596,57 @@ export default function HomePage() {
                           </Pressable>
                         </View>
 
-                        <ScrollView
-                          horizontal={true}
-                          showsHorizontalScrollIndicator={false}
-                          style={{
-                            height: "90%",
-                            flexDirection: "row",
-                            width: "100%",
-                            paddingHorizontal: 5,
-                          }}
-                        >
-                          {backInStockData?.products?.map((item) => {
-                            return (
-                              <View
-                                style={{
-                                  justifyContent: "center",
-                                }}
-                                key={item?.defaultSku?.id}
-                              >
-                                <View
-                                  style={{
-                                    borderWidth: 0.3,
-                                    borderColor: "#ececec",
-                                    borderRadius: 7,
-                                    backgroundColor: "#fafafa",
-                                    width: 180,
-                                    height: 220,
-                                    marginHorizontal: 2,
-                                  }}
-                                >
-                                  <View
-                                    style={{
-                                      flexDirection: "row",
-                                      justifyContent: "center",
-                                    }}
-                                  >
-                                    <Pressable
-                                      onPress={() => {
-                                        productDetailHandler(
-                                          item?.defaultSku?.id
-                                        );
-                                      }}
-                                    >
-                                      {item?.mediaMap?.primary?.url ? (
-                                        <Image
-                                          style={{
-                                            borderRadius: 3,
-                                            marginVertical: 5,
-                                            width: 80,
-                                            borderRadius: 7,
-                                            height: 80,
-                                            justifyContent: "center",
-                                            alignSelf: "center",
-                                          }}
-                                          source={{
-                                            uri: `https://staging.andanet.com${item?.mediaMap?.primary?.url}`,
-                                          }}
-                                        />
-                                      ) : (
-                                        <Image
-                                          style={{
-                                            borderRadius: 3,
-                                            marginVertical: 5,
-                                            width: 80,
-                                            height: 80,
-                                            borderRadius: 7,
-                                            justifyContent: "center",
-                                            alignSelf: "center",
-                                          }}
-                                          source={require("../../assets/camera.png")}
-                                        />
-                                      )}
-                                    </Pressable>
-                                    <View
-                                      style={{
-                                        marginHorizontal: 10,
-                                        marginVertical: 5,
-                                      }}
-                                    >
-                                      <LikeButton
-                                        onPress={() => {
-                                          favoriteHandler(
-                                            item?.defaultSku?.id,
-                                            item?.defaultSku?.productLists[0]
-                                              ?.type
-                                          );
-                                        }}
-                                        value={
-                                          item?.defaultSku?.productLists[0]
-                                            ?.type
-                                        }
-                                      />
-                                    </View>
-                                  </View>
-                                  <Pressable
-                                    style={{
-                                      margin: 5,
-                                      height: 30,
-                                    }}
-                                    onPress={() => {
-                                      productDetailHandler(
-                                        item?.defaultSku?.id
-                                      );
-                                    }}
-                                  >
-                                    <Text
-                                      style={{
-                                        color: "#006ba6",
-                                        fontWeight: "700",
-                                        fontSize: 10,
-                                        flexWrap: "wrap",
-                                        width: "100%",
-                                      }}
-                                    >
-                                      {item.defaultSku.name}
-                                    </Text>
-                                  </Pressable>
-                                  <View style={{ margin: 5 }}>
-                                    <View style={{ flexDirection: "row" }}>
-                                      <Text
-                                        style={{
-                                          fontWeight: "700",
-                                          fontSize: 9,
-                                          color: "#494c4c",
-                                        }}
-                                      >
-                                        NDC:
-                                      </Text>
-                                      <Text style={{ fontSize: 9 }}>
-                                        {item?.defaultSku?.nationalDrugCode}
-                                      </Text>
-                                    </View>
-                                    <View style={{ flexDirection: "row" }}>
-                                      <Text
-                                        style={{
-                                          fontWeight: "700",
-                                          fontSize: 9,
-                                          color: "#494c4c",
-                                        }}
-                                      >
-                                        ITEM:
-                                      </Text>
-                                      <Text style={{ fontSize: 9 }}>
-                                        {item?.defaultSku?.id}
-                                      </Text>
-                                    </View>
-                                    <View
-                                      style={{
-                                        marginVertical: 10,
-                                        flexDirection: "row",
-                                        justifyContent: "space-between",
-                                      }}
-                                    >
-                                      <View
-                                        style={{
-                                          alignItems: "center",
-                                          justifyContent: "center",
-                                        }}
-                                      >
-                                        <Text
-                                          style={{
-                                            fontWeight: "700",
-                                            fontSize: 12,
-                                          }}
-                                        >
-                                          $
-                                          {
-                                            item?.defaultSku?.retailPrice
-                                              ?.amount
-                                          }
-                                        </Text>
-                                      </View>
-                                      <AddButton
-                                        onPress={() =>
-                                          addItemIntoCart(props?.id)
-                                        }
-                                      />
-                                    </View>
-                                  </View>
-                                </View>
-                              </View>
-                            );
-                          })}
-                        </ScrollView>
+                        <HomeProduct
+                          products={backInStockData}
+                          accountId={userData?.selectedAccount?.id}
+                        />
                       </View>
                     )}
                     <View
                       style={{ borderTopWidth: 4, borderColor: "#fafafa" }}
                     />
 
-                    {topPurchaseProducts?.products?.length && (
-                      <View style={{ margin: 10, height: 250 }}>
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                          }}
-                        >
-                          <View>
-                            <Text
-                              style={{ fontWeight: "700", color: "#494c4c" }}
-                            >
-                              Your Top Purchases
-                            </Text>
-                          </View>
-                          <Pressable
-                            android_ripple={{ color: "#ccc" }}
-                            onPress={() => {
-                              inventoryOpen();
+                    <View>
+                      {topPurchaseProducts?.products?.length && (
+                        <View style={{ margin: 10, height: 250 }}>
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              justifyContent: "space-between",
+                              marginBottom: 10,
                             }}
                           >
-                            <Text
-                              style={{
-                                color: "#006ba6",
-                                fontWeight: "700",
+                            <View>
+                              <Text
+                                style={{ fontWeight: "700", color: "#494c4c" }}
+                              >
+                                Your Top Purchases
+                              </Text>
+                            </View>
+                            <Pressable
+                              android_ripple={{ color: "#ccc" }}
+                              onPress={() => {
+                                inventoryOpen();
                               }}
                             >
-                              See More
-                            </Text>
-                          </Pressable>
-                        </View>
-
-                        <ScrollView
-                          horizontal={true}
-                          showsHorizontalScrollIndicator={false}
-                          style={{
-                            height: "90%",
-                            flexDirection: "row",
-                            width: "100%",
-                            paddingHorizontal: 5,
-                          }}
-                        >
-                          {topPurchaseProducts?.products?.map((item) => {
-                            return (
-                              <View
+                              <Text
                                 style={{
-                                  justifyContent: "center",
+                                  color: "#006ba6",
+                                  fontWeight: "700",
                                 }}
-                                key={item?.defaultSku?.id}
                               >
-                                <View
-                                  style={{
-                                    borderWidth: 0.3,
-                                    borderColor: "#ececec",
-                                    borderRadius: 7,
-                                    backgroundColor: "#fafafa",
-                                    width: 180,
-                                    height: 220,
-                                    marginHorizontal: 2,
-                                  }}
-                                >
-                                  <View
-                                    style={{
-                                      flexDirection: "row",
-                                      justifyContent: "center",
-                                    }}
-                                  >
-                                    <Pressable
-                                      onPress={() => {
-                                        productDetailHandler(
-                                          item?.defaultSku?.id
-                                        );
-                                      }}
-                                    >
-                                      {item?.mediaMap?.primary?.url ? (
-                                        <Image
-                                          style={{
-                                            borderRadius: 3,
-                                            marginVertical: 5,
-                                            width: 80,
-                                            borderRadius: 7,
-                                            height: 80,
-                                            justifyContent: "center",
-                                            alignSelf: "center",
-                                          }}
-                                          source={{
-                                            uri: `https://staging.andanet.com${item?.mediaMap?.primary?.url}`,
-                                          }}
-                                        />
-                                      ) : (
-                                        <Image
-                                          style={{
-                                            borderRadius: 3,
-                                            marginVertical: 5,
-                                            width: 80,
-                                            height: 80,
-                                            borderRadius: 7,
-                                            justifyContent: "center",
-                                            alignSelf: "center",
-                                          }}
-                                          source={require("../../assets/camera.png")}
-                                        />
-                                      )}
-                                    </Pressable>
-                                    <View
-                                      style={{
-                                        marginHorizontal: 10,
-                                        marginVertical: 5,
-                                      }}
-                                    >
-                                      <LikeButton
-                                        onPress={() => {
-                                          favoriteHandler(
-                                            item?.defaultSku?.id,
-                                            item?.defaultSku?.productLists[0]
-                                              ?.type
-                                          );
-                                        }}
-                                        value={
-                                          item?.defaultSku?.productLists[0]
-                                            ?.type
-                                        }
-                                      />
-                                    </View>
-                                  </View>
-                                  <Pressable
-                                    style={{
-                                      margin: 5,
-                                      height: 30,
-                                    }}
-                                    onPress={() => {
-                                      productDetailHandler(
-                                        item?.defaultSku?.id
-                                      );
-                                    }}
-                                  >
-                                    <Text
-                                      style={{
-                                        color: "#006ba6",
-                                        fontWeight: "700",
-                                        fontSize: 10,
-                                        flexWrap: "wrap",
-                                        width: "100%",
-                                      }}
-                                    >
-                                      {item.defaultSku.name}
-                                    </Text>
-                                  </Pressable>
-                                  <View style={{ margin: 5 }}>
-                                    <View style={{ flexDirection: "row" }}>
-                                      <Text
-                                        style={{
-                                          fontWeight: "700",
-                                          fontSize: 9,
-                                        }}
-                                      >
-                                        NDC:
-                                      </Text>
-                                      <Text style={{ fontSize: 9 }}>
-                                        {item?.defaultSku?.nationalDrugCode}
-                                      </Text>
-                                    </View>
-                                    <View style={{ flexDirection: "row" }}>
-                                      <Text
-                                        style={{
-                                          fontWeight: "700",
-                                          fontSize: 9,
-                                        }}
-                                      >
-                                        ITEM:
-                                      </Text>
-                                      <Text style={{ fontSize: 9 }}>
-                                        {item?.defaultSku?.id}
-                                      </Text>
-                                    </View>
-                                    <View
-                                      style={{
-                                        marginVertical: 10,
-                                        flexDirection: "row",
-                                        justifyContent: "space-between",
-                                      }}
-                                    >
-                                      <View
-                                        style={{
-                                          alignItems: "center",
-                                          justifyContent: "center",
-                                        }}
-                                      >
-                                        <Text
-                                          style={{
-                                            fontWeight: "700",
-                                            fontSize: 12,
-                                          }}
-                                        >
-                                          $
-                                          {
-                                            item?.defaultSku?.retailPrice
-                                              ?.amount
-                                          }
-                                        </Text>
-                                      </View>
-                                      <View style={{ marginHorizontal: 10 }}>
-                                        <AddButton
-                                          onPress={() =>
-                                            addItemIntoCart(
-                                              item?.defaultSku?.id
-                                            )
-                                          }
-                                        />
-                                      </View>
-                                    </View>
-                                  </View>
-                                </View>
-                              </View>
-                            );
-                          })}
-                        </ScrollView>
-                      </View>
-                    )}
+                                See More
+                              </Text>
+                            </Pressable>
+                          </View>
+
+                          <HomeProduct
+                            products={topPurchaseProducts}
+                            accountId={userData?.selectedAccount?.id}
+                          />
+                        </View>
+                      )}
+                    </View>
                     <View
                       style={{ borderTopWidth: 4, borderColor: "#fafafa" }}
                     />
@@ -1023,6 +656,7 @@ export default function HomePage() {
                           style={{
                             flexDirection: "row",
                             justifyContent: "space-between",
+                            marginBottom: 10,
                           }}
                         >
                           <View>
@@ -1049,189 +683,10 @@ export default function HomePage() {
                           </Pressable>
                         </View>
 
-                        <ScrollView
-                          horizontal={true}
-                          showsHorizontalScrollIndicator={false}
-                          style={{
-                            height: "90%",
-                            flexDirection: "row",
-                            width: "100%",
-                            paddingHorizontal: 5,
-                          }}
-                        >
-                          {customerLikeYouProducts?.products?.map((item) => {
-                            return (
-                              <View
-                                style={{ justifyContent: "center" }}
-                                key={item?.defaultSku?.id}
-                              >
-                                <View
-                                  style={{
-                                    borderWidth: 0.3,
-                                    borderColor: "#ececec",
-                                    borderRadius: 7,
-                                    backgroundColor: "#fafafa",
-                                    width: 180,
-                                    height: 220,
-                                    marginHorizontal: 2,
-                                  }}
-                                >
-                                  <View
-                                    style={{
-                                      flexDirection: "row",
-                                      justifyContent: "center",
-                                    }}
-                                  >
-                                    <Pressable
-                                      onPress={() => {
-                                        productDetailHandler(
-                                          item?.defaultSku?.id
-                                        );
-                                      }}
-                                    >
-                                      {item?.mediaMap?.primary?.url ? (
-                                        <Image
-                                          style={{
-                                            borderRadius: 3,
-                                            marginVertical: 5,
-                                            width: 80,
-                                            borderRadius: 7,
-                                            height: 80,
-                                            justifyContent: "center",
-                                            alignSelf: "center",
-                                          }}
-                                          source={{
-                                            uri: `https://staging.andanet.com${item?.mediaMap?.primary?.url}`,
-                                          }}
-                                        />
-                                      ) : (
-                                        <Image
-                                          style={{
-                                            borderRadius: 3,
-                                            marginVertical: 5,
-                                            width: 80,
-                                            height: 80,
-                                            borderRadius: 7,
-                                            justifyContent: "center",
-                                            alignSelf: "center",
-                                          }}
-                                          source={require("../../assets/camera.png")}
-                                        />
-                                      )}
-                                    </Pressable>
-                                    <View
-                                      style={{
-                                        marginHorizontal: 10,
-                                        marginVertical: 5,
-                                      }}
-                                    >
-                                      <LikeButton
-                                        onPress={() => {
-                                          favoriteHandler(
-                                            item?.defaultSku?.id,
-                                            item?.defaultSku?.productLists[0]
-                                              ?.type
-                                          );
-                                        }}
-                                        value={
-                                          item?.defaultSku?.productLists[0]
-                                            ?.type
-                                        }
-                                      />
-                                    </View>
-                                  </View>
-                                  <Pressable
-                                    style={{
-                                      margin: 5,
-                                      height: 30,
-                                    }}
-                                    onPress={() => {
-                                      productDetailHandler(
-                                        item?.defaultSku?.id
-                                      );
-                                    }}
-                                  >
-                                    <Text
-                                      style={{
-                                        color: "#006ba6",
-                                        fontWeight: "700",
-                                        fontSize: 10,
-                                        flexWrap: "wrap",
-                                        width: "100%",
-                                      }}
-                                    >
-                                      {item.defaultSku.name}
-                                    </Text>
-                                  </Pressable>
-                                  <View style={{ margin: 5 }}>
-                                    <View style={{ flexDirection: "row" }}>
-                                      <Text
-                                        style={{
-                                          fontWeight: "700",
-                                          fontSize: 9,
-                                        }}
-                                      >
-                                        NDC:
-                                      </Text>
-                                      <Text style={{ fontSize: 9 }}>
-                                        {item?.defaultSku?.nationalDrugCode}
-                                      </Text>
-                                    </View>
-                                    <View style={{ flexDirection: "row" }}>
-                                      <Text
-                                        style={{
-                                          fontWeight: "700",
-                                          fontSize: 9,
-                                        }}
-                                      >
-                                        ITEM:
-                                      </Text>
-                                      <Text style={{ fontSize: 9 }}>
-                                        {item?.defaultSku?.id}
-                                      </Text>
-                                    </View>
-                                    <View
-                                      style={{
-                                        marginVertical: 10,
-                                        flexDirection: "row",
-                                        justifyContent: "space-between",
-                                      }}
-                                    >
-                                      <View
-                                        style={{
-                                          alignItems: "center",
-                                          justifyContent: "center",
-                                        }}
-                                      >
-                                        <Text
-                                          style={{
-                                            fontWeight: "700",
-                                            fontSize: 12,
-                                          }}
-                                        >
-                                          $
-                                          {
-                                            item?.defaultSku?.retailPrice
-                                              ?.amount
-                                          }
-                                        </Text>
-                                      </View>
-                                      <View style={{ marginHorizontal: 10 }}>
-                                        <AddButton
-                                          onPress={() =>
-                                            addItemIntoCart(
-                                              item?.defaultSku?.id
-                                            )
-                                          }
-                                        />
-                                      </View>
-                                    </View>
-                                  </View>
-                                </View>
-                              </View>
-                            );
-                          })}
-                        </ScrollView>
+                        <HomeProduct
+                          products={customerLikeYouProducts}
+                          accountId={userData?.selectedAccount?.id}
+                        />
                       </View>
                     )}
                     <View
@@ -1243,6 +698,7 @@ export default function HomePage() {
                           style={{
                             flexDirection: "row",
                             justifyContent: "space-between",
+                            marginBottom: 10,
                           }}
                         >
                           <View>
@@ -1268,190 +724,10 @@ export default function HomePage() {
                             </Text>
                           </Pressable>
                         </View>
-
-                        <ScrollView
-                          horizontal={true}
-                          showsHorizontalScrollIndicator={false}
-                          style={{
-                            height: "90%",
-                            flexDirection: "row",
-                            width: "100%",
-                            paddingHorizontal: 5,
-                          }}
-                        >
-                          {preNegotiatedItemsProducts?.products?.map((item) => {
-                            return (
-                              <View
-                                style={{ justifyContent: "center" }}
-                                key={item?.defaultSku?.id}
-                              >
-                                <View
-                                  style={{
-                                    borderWidth: 0.3,
-                                    borderColor: "#ececec",
-                                    borderRadius: 7,
-                                    backgroundColor: "#fafafa",
-                                    width: 180,
-                                    height: 220,
-                                    marginHorizontal: 2,
-                                  }}
-                                >
-                                  <View
-                                    style={{
-                                      flexDirection: "row",
-                                      justifyContent: "center",
-                                    }}
-                                  >
-                                    <Pressable
-                                      onPress={() => {
-                                        productDetailHandler(
-                                          item?.defaultSku?.id
-                                        );
-                                      }}
-                                    >
-                                      {item?.mediaMap?.primary?.url ? (
-                                        <Image
-                                          style={{
-                                            borderRadius: 3,
-                                            marginVertical: 5,
-                                            width: 80,
-                                            borderRadius: 7,
-                                            height: 80,
-                                            justifyContent: "center",
-                                            alignSelf: "center",
-                                          }}
-                                          source={{
-                                            uri: `https://staging.andanet.com${item?.mediaMap?.primary?.url}`,
-                                          }}
-                                        />
-                                      ) : (
-                                        <Image
-                                          style={{
-                                            borderRadius: 3,
-                                            marginVertical: 5,
-                                            width: 80,
-                                            height: 80,
-                                            borderRadius: 7,
-                                            justifyContent: "center",
-                                            alignSelf: "center",
-                                          }}
-                                          source={require("../../assets/camera.png")}
-                                        />
-                                      )}
-                                    </Pressable>
-                                    <View
-                                      style={{
-                                        marginHorizontal: 10,
-                                        marginVertical: 5,
-                                      }}
-                                    >
-                                      <LikeButton
-                                        onPress={() => {
-                                          favoriteHandler(
-                                            item?.defaultSku?.id,
-                                            item?.defaultSku?.productLists[0]
-                                              ?.type
-                                          );
-                                        }}
-                                        value={
-                                          item?.defaultSku?.productLists[0]
-                                            ?.type
-                                        }
-                                      />
-                                    </View>
-                                  </View>
-                                  <Pressable
-                                    style={{
-                                      margin: 5,
-                                      height: 30,
-                                    }}
-                                    onPress={() => {
-                                      productDetailHandler(
-                                        item?.defaultSku?.id
-                                      );
-                                    }}
-                                  >
-                                    <Text
-                                      style={{
-                                        color: "#006ba6",
-                                        fontWeight: "700",
-                                        fontSize: 10,
-                                        flexWrap: "wrap",
-                                        width: "100%",
-                                      }}
-                                    >
-                                      {item.defaultSku.name}
-                                    </Text>
-                                  </Pressable>
-                                  <View style={{ margin: 5 }}>
-                                    <View style={{ flexDirection: "row" }}>
-                                      <Text
-                                        style={{
-                                          fontWeight: "700",
-                                          fontSize: 9,
-                                        }}
-                                      >
-                                        NDC:
-                                      </Text>
-                                      <Text style={{ fontSize: 9 }}>
-                                        {item?.defaultSku?.nationalDrugCode}
-                                      </Text>
-                                    </View>
-                                    <View style={{ flexDirection: "row" }}>
-                                      <Text
-                                        style={{
-                                          fontWeight: "700",
-                                          fontSize: 9,
-                                        }}
-                                      >
-                                        ITEM:
-                                      </Text>
-                                      <Text style={{ fontSize: 9 }}>
-                                        {item?.defaultSku?.id}
-                                      </Text>
-                                    </View>
-                                    <View
-                                      style={{
-                                        marginVertical: 10,
-                                        flexDirection: "row",
-                                        justifyContent: "space-between",
-                                      }}
-                                    >
-                                      <View
-                                        style={{
-                                          alignItems: "center",
-                                          justifyContent: "center",
-                                        }}
-                                      >
-                                        <Text
-                                          style={{
-                                            fontWeight: "700",
-                                            fontSize: 12,
-                                          }}
-                                        >
-                                          $
-                                          {
-                                            item?.defaultSku?.retailPrice
-                                              ?.amount
-                                          }
-                                        </Text>
-                                      </View>
-                                      <View style={{ marginHorizontal: 10 }}>
-                                        <AddButton
-                                          onPress={() =>
-                                            addItemIntoCart(
-                                              item?.defaultSku?.id
-                                            )
-                                          }
-                                        />
-                                      </View>
-                                    </View>
-                                  </View>
-                                </View>
-                              </View>
-                            );
-                          })}
-                        </ScrollView>
+                        <HomeProduct
+                          products={preNegotiatedItemsProducts}
+                          accountId={userData?.selectedAccount?.id}
+                        />
                       </View>
                     )}
                     <View

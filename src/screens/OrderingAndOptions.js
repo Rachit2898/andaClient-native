@@ -12,12 +12,7 @@ const OrderingAndOptions = () => {
       style={{ flex: 1, backgroundColor: "#fff" }}
       edges={["right", "left"]}
     >
-      <Navbar />
       <View style={{ flex: 1, backgroundColor: "#fff" }}>
-        <View style={styles.prductListBlue}>
-          <Text style={styles.productText}>Ordering Options and Hours</Text>
-        </View>
-
         <ScrollView>
           <Component
             heading={"Order Your Way"}

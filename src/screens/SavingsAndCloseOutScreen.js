@@ -20,7 +20,7 @@ import {
   addFavorites,
   removeFavorites,
 } from "../../redux/features/productApi";
-import LikeButton from "../components/LikeButton";
+import LikeButton from "../components/Ui/LikeButton";
 import AddButton from "../components/Ui/AddButton";
 
 const SavingsScreen = (props) => {
