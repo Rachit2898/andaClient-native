@@ -75,10 +75,10 @@ const SignUpAccess = (props) => {
   return (
     <SafeAreaView
       style={{ backgroundColor: "#063e63", flex: 1 }}
-      edges={["right", "left", "top"]}
+      edges={["right", "left"]}
     >
       <View style={{ flex: 1, backgroundColor: "#fff" }}>
-        <View style={{ marginTop: 20 }}>
+        <View style={{ paddingVertical: 20 }}>
           <Pressable onPress={() => navigation.navigate("Login")}>
             <Image
               style={styles.image}
@@ -87,15 +87,15 @@ const SignUpAccess = (props) => {
           </Pressable>
           <View
             style={{
-              marginTop: 20,
+              marginTop: 10,
               justifyContent: "center",
               alignSelf: "center",
             }}
           >
             <Text
-              style={{ fontSize: 35, fontWeight: "bold", color: "#494c4c" }}
+              style={{ fontSize: 25, fontWeight: "bold", color: "#494c4c" }}
             >
-              Online User Registration
+              User Registration
             </Text>
           </View>
           <View
@@ -109,7 +109,6 @@ const SignUpAccess = (props) => {
               style={{
                 textAlign: "center",
                 color: "#494c4c",
-                fontWeight: "bold",
               }}
             >
               Complete the form below to register for online access. If your
@@ -117,107 +116,109 @@ const SignUpAccess = (props) => {
               for assistance registering new users.
             </Text>
           </View>
+        </View>
 
-          <ScrollView style={{ marginVertical: 20 }}>
-            <View style={{ flex: 1 }}>
-              <View>
-                <InputComponent
-                  eye={false}
-                  label="ANDA ACCOUNT NUMBER / SHIP-TO NUMBER*"
-                />
-              </View>
-              <View>
-                <InputComponent eye={false} label="FIRST NAME AND LAST NAME*" />
-              </View>
-              <View>
-                <InputComponent eye={false} label="EMAIL ADDRESS*" />
-              </View>
-              <View>
-                <InputComponent eye={false} label="STATE LICENSE NUMBER*" />
-              </View>
-              <View>
-                <InputComponent eye={false} label="USERNAME*" />
-              </View>
-              <View>
-                <InputComponent eye={true} label="PASSWORD*" />
-              </View>
-              <View>
-                <InputComponent eye={true} label="CONFIRM PASSWORD*" />
-              </View>
-              <View>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    marginTop: 20,
-                    alignSelf: "center",
-                  }}
+        <ScrollView>
+          <View>
+            <View>
+              <InputComponent
+                eye={false}
+                label="ANDA ACCOUNT NUMBER / SHIP-TO NUMBER*"
+              />
+            </View>
+            <View>
+              <InputComponent eye={false} label="FIRST NAME AND LAST NAME*" />
+            </View>
+            <View>
+              <InputComponent eye={false} label="EMAIL ADDRESS*" />
+            </View>
+            <View>
+              <InputComponent eye={false} label="STATE LICENSE NUMBER*" />
+            </View>
+            <View>
+              <InputComponent eye={false} label="USERNAME*" />
+            </View>
+            <View>
+              <InputComponent eye={true} label="PASSWORD*" />
+            </View>
+            <View>
+              <InputComponent eye={true} label="CONFIRM PASSWORD*" />
+            </View>
+            <View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  marginTop: 20,
+                  alignSelf: "center",
+                }}
+              >
+                <Pressable
+                  android_ripple={{ color: "#ccc" }}
+                  style={styles.loginBtn}
+                  // onPress={() => submitHandler()}
                 >
-                  <Pressable
-                    android_ripple={{ color: "#ccc" }}
-                    style={styles.loginBtn}
-                    // onPress={() => submitHandler()}
-                  >
-                    <Text style={styles.loginText}>SIGN IN</Text>
-                  </Pressable>
-                </View>
+                  <Text style={styles.loginText}>SIGN IN</Text>
+                </Pressable>
               </View>
             </View>
-          </ScrollView>
-        </View>
-      </View>
+          </View>
+        </ScrollView>
 
-      <View
-        style={{
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: "#063e63",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "row",
-        }}
-      >
-        <Text
+        <View
           style={{
-            color: "#fff",
-            fontSize: 10,
-            fontWeight: "800",
-            paddingBottom: 20,
-            paddingTop: 10,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "#063e63",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "row",
           }}
         >
-          Anda Inc. All Rights Reserved |{" "}
-        </Text>
-        <Text
-          style={{
-            color: "#fff",
-            fontSize: 10,
-            fontWeight: "800",
-            paddingBottom: 20,
-            paddingTop: 10,
-          }}
-          onPress={() =>
-            Linking.openURL("https://staging.andanet.com/content/terms-of-use")
-          }
-        >
-          Terms of Use |{" "}
-        </Text>
-        <Text
-          style={{
-            color: "#fff",
-            fontSize: 10,
-            fontWeight: "800",
-            paddingBottom: 20,
-            paddingTop: 10,
-          }}
-          onPress={() =>
-            Linking.openURL(
-              "https://staging.andanet.com/content/privacy-policy"
-            )
-          }
-        >
-          Privacy Policy
-        </Text>
+          <Text
+            style={{
+              color: "#fff",
+              fontSize: 10,
+              fontWeight: "800",
+              paddingBottom: 20,
+              paddingTop: 10,
+            }}
+          >
+            Anda Inc. All Rights Reserved |{" "}
+          </Text>
+          <Text
+            style={{
+              color: "#fff",
+              fontSize: 10,
+              fontWeight: "800",
+              paddingBottom: 20,
+              paddingTop: 10,
+            }}
+            onPress={() =>
+              Linking.openURL(
+                "https://staging.andanet.com/content/terms-of-use"
+              )
+            }
+          >
+            Terms of Use |{" "}
+          </Text>
+          <Text
+            style={{
+              color: "#fff",
+              fontSize: 10,
+              fontWeight: "800",
+              paddingBottom: 20,
+              paddingTop: 10,
+            }}
+            onPress={() =>
+              Linking.openURL(
+                "https://staging.andanet.com/content/privacy-policy"
+              )
+            }
+          >
+            Privacy Policy
+          </Text>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -252,8 +253,8 @@ const styles = StyleSheet.create({
     marginHorizontal: "5%",
   },
   image: {
-    width: 192,
-    height: 51,
+    width: 150,
+    height: 40,
     alignSelf: "center",
     justifyContent: "center",
     marginBottom: 20,

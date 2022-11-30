@@ -160,6 +160,7 @@ async function updateItem(credentials) {
 
 async function addItem(credentials) {
   const token = await getToken();
+  console.log(credentials);
   var url = "https://staging.andanet.com/api/cart/items";
   const response = await fetch(url, {
     method: "POST",

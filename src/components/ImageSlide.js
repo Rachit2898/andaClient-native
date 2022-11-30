@@ -13,7 +13,7 @@ const dataSource = [
 ];
 
 const ImageSlider = () => {
-  const [position, setPosition] = useState(0);
+  const [position, setPosition] = useState(1);
 
   useEffect(() => {
     const toggle = setInterval(() => {
@@ -23,9 +23,23 @@ const ImageSlider = () => {
     return () => clearInterval(toggle);
   }, [position]);
 
+  const setState = () => {
+    ({
+      interval: setInterval(() => {
+        setState({
+          position: position === dataSource.length ? 0 : position + 1,
+        });
+      }, 2000),
+    });
+  };
   return (
     <View style={{ borderRadius: 5 }}>
-      <Slideshow position={position} dataSource={dataSource} arrowSize={0} />
+      <Slideshow
+        position={position}
+        dataSource={dataSource}
+        arrowSize={14}
+        onPositionChanged={(position) => setState({ position })}
+      />
     </View>
   );
 };

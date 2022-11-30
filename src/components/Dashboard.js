@@ -112,10 +112,21 @@ const Dashboard = ({ size }) => {
     >
       <View style={{ flex: 1, backgroundColor: "#fff" }}>
         <View style={styles.closeButton}>
-          <View style={{ flexDirection: "row" }}>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+
+              alignItems: "center",
+            }}
+          >
             <Image
               source={require("../../assets/icon.png")}
-              style={{ height: 40, width: 40 }}
+              style={{
+                height: 40,
+                width: 40,
+                justifyContent: "center",
+              }}
             />
             <View style={{ marginHorizontal: 5, justifyContent: "center" }}>
               <Text style={{ fontSize: 14 }}>{userData?.username}</Text>
@@ -127,8 +138,7 @@ const Dashboard = ({ size }) => {
             style={{
               justifyContent: "center",
               alignSelf: "center",
-
-              padding: 5,
+              padding: 15,
             }}
           >
             <Image
@@ -468,7 +478,8 @@ const Dashboard = ({ size }) => {
                     }}
                     onPress={() => Linking.openURL(`tel:${18003312632}`)}
                   >
-                    Toll Free: 1-800-331-2632
+                    Toll Free:{" "}
+                    <Text style={{ color: "#006ba6" }}>1-800-331-2632</Text>
                   </Text>
                 </View>
                 <View>
@@ -481,7 +492,8 @@ const Dashboard = ({ size }) => {
                     }}
                     onPress={() => Linking.openURL(`tel:${18872632638}`)}
                   >
-                    Tech Support:1-887-263-2638
+                    Tech Support:{" "}
+                    <Text style={{ color: "#006ba6" }}>1-887-263-2638</Text>
                   </Text>
                 </View>
                 <View>
@@ -496,7 +508,8 @@ const Dashboard = ({ size }) => {
                       Linking.openURL(`mailto:${"info@andanet.com"}`)
                     }
                   >
-                    Email: info@andanet.com
+                    Email:{" "}
+                    <Text style={{ color: "#006ba6" }}>info@andanet.com</Text>
                   </Text>
                 </View>
                 <View style={{}}>
@@ -517,7 +530,7 @@ const Dashboard = ({ size }) => {
                       fontSize: 14,
                       paddingVertical: 5,
                       paddingHorizontal: 10,
-                      color: "grey",
+                      color: "#006ba6",
                     }}
                     onPress={() => Linking.openURL(`tel:${formattedNumber}`)}
                   >
@@ -653,7 +666,7 @@ const styles = StyleSheet.create({
   },
   prductListBlue: {
     backgroundColor: "#006ba6",
-    marginVertical: 5,
+
     paddingVertical: 5,
     justifyContent: "center",
   },

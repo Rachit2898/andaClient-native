@@ -106,7 +106,9 @@ const AndaContractItems = () => {
           }}
         >
           <View style={{ justifyContent: "center" }}>
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+            <Text
+              style={{ fontSize: 20, fontWeight: "bold", color: "#494c4c" }}
+            >
               Anda Contract Items
             </Text>
           </View>
@@ -178,6 +180,7 @@ const AndaContractItems = () => {
                         inventoryClassKey={item?.defaultSku?.inventoryClassKey}
                         orderLimit={item?.defaultSku?.dailyOrderLimit}
                         accountId={userData?.selectedAccount?.id}
+                        itemReturnable={item?.defaultSku?.returnable}
                       />
                     </View>
                   );

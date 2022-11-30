@@ -119,6 +119,16 @@ const Filter = ({ modalVisible, setModalVisible }) => {
     { value: "Size" },
     { value: "Price" },
   ];
+  const clearHandler = () => {
+    dispatch(
+      andaContractItems({
+        value: "",
+        currentPage: 1,
+        sortValues: "",
+      })
+    );
+    setsortingValue("");
+  };
 
   return (
     <View style={styles.modelContainer}>
@@ -178,6 +188,7 @@ const Filter = ({ modalVisible, setModalVisible }) => {
                       <Filters
                         label={item.label}
                         values={item.values}
+                        active={item.active}
                         MyFilter={
                           <View>
                             {item?.values?.map((value) => {
@@ -236,6 +247,47 @@ const Filter = ({ modalVisible, setModalVisible }) => {
                     </View>
                   );
                 })}
+                <View style={{ marginTop: 15, flexDirection: "row" }}>
+                  <Pressable
+                    style={{
+                      backgroundColor: "#ed8b00",
+                      paddingHorizontal: 10,
+                      paddingVertical: 5,
+                      borderRadius: 3,
+                    }}
+                    onPress={() => clearHandler()}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: "#fff",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      CLEAR ALL
+                    </Text>
+                  </Pressable>
+                  <Pressable
+                    style={{
+                      backgroundColor: "#006ba6",
+                      paddingHorizontal: 10,
+                      paddingVertical: 5,
+                      borderRadius: 3,
+                      marginHorizontal: 10,
+                    }}
+                    onPress={() => setModalVisible(false)}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: "#fff",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      DONE
+                    </Text>
+                  </Pressable>
+                </View>
               </View>
             </View>
           </View>
@@ -308,7 +360,7 @@ const styles = StyleSheet.create({
   headingSortingText: {
     paddingLeft: 10,
     fontWeight: "bold",
-    fontSize: 18,
+    fontSize: 16,
     color: "#494c4c",
   },
   headingAvalText: {
@@ -353,7 +405,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 30,
     width: 400,
-    borderBottomWidth: 2,
+    borderBottomWidth: 0.5,
     borderColor: "#005185",
   },
   sortingInput: {

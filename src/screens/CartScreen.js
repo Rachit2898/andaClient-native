@@ -94,6 +94,21 @@ const CartScreen = (props) => {
     }
   };
 
+  const deleteItemHandler = (id) => {
+    Alert.alert(
+      "Hold on!",
+      "Are you sure you want to delete this item from your cart?",
+      [
+        {
+          text: "NO",
+          onPress: () => null,
+          style: "NO",
+        },
+        { text: "YES", onPress: () => deleteCartHandler(id) },
+      ]
+    );
+  };
+
   return (
     <View>
       <View
@@ -420,7 +435,7 @@ const CartScreen = (props) => {
                 alignItems: "center",
               }}
               android_ripple={{ color: "#ccc" }}
-              onPress={() => deleteCartHandler(props.id)}
+              onPress={() => deleteItemHandler(props.id)}
             >
               <View>
                 <Text style={styles.emptyText}>DELETE</Text>

@@ -1,7 +1,12 @@
 import { StyleSheet, Text, View, Pressable, Image } from "react-native";
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const AddButton = (props) => {
+  const { addLoading } = useSelector((state) => ({
+    ...state.products,
+  }));
+
   const [isChecked, setChecked] = useState(false);
   const openHandler = () => {
     setChecked(true);
@@ -9,6 +14,7 @@ const AddButton = (props) => {
       props.onPress();
     }
   };
+
   return (
     <View>
       <Pressable

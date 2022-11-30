@@ -27,9 +27,6 @@ import {
   preNegotiatedItems,
   addItem,
   userInfo,
-  productDetails,
-  addFavorites,
-  removeFavorites,
   backInStock,
   productLists,
 } from "../../redux/features/productApi";
@@ -39,6 +36,8 @@ import ImageSlider from "./ImageSlide.js";
 import { getToken } from "../../utils";
 import AddButton from "./Ui/AddButton";
 import HomeProduct from "./Ui/HomeProduct";
+// import { SliderBox } from "react-native-image-slider-box";
+
 //import { SliderBox } from "react-native-image-slider-box";
 
 // const LikeButton = (props) => {
@@ -191,11 +190,6 @@ export default function HomePage() {
   const moveDot = (index) => {
     setSlideIndex(index);
   };
-  const images = [
-    require("../../assets/image1.jpeg"),
-    require("../../assets/image2.jpeg"),
-    require("../../assets/image3.jpeg"),
-  ];
 
   useEffect(() => {
     const day = getDifferenceInDays(date1, date2);
@@ -377,15 +371,7 @@ export default function HomePage() {
                 )}
               {loading && <Spinner />}
               <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
-                <ScrollView
-                  showsVerticalScrollIndicator={false}
-                  refreshControl={
-                    <RefreshControl
-                      refreshing={refreshing}
-                      onRefresh={onRefresh}
-                    />
-                  }
-                >
+                <ScrollView showsVerticalScrollIndicator={false}>
                   <View style={{ flex: 1 }}>
                     <View style={{ margin: 10 }}>
                       <Text style={{ fontWeight: "700", color: "#494c4c" }}>

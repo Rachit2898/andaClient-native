@@ -103,7 +103,9 @@ const ShortDate = () => {
           }}
         >
           <View style={{ justifyContent: "center" }}>
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+            <Text
+              style={{ fontSize: 20, fontWeight: "bold", color: "#494c4c" }}
+            >
               Short Dates
             </Text>
           </View>
@@ -185,6 +187,7 @@ const ShortDate = () => {
                           orderLimit={item?.defaultSku?.dailyOrderLimit}
                           accountId={userData?.selectedAccount?.id}
                           type={item?.defaultSku?.productLists[0]?.type}
+                          itemReturnable={item?.defaultSku?.returnable}
                         />
                       </View>
                     );

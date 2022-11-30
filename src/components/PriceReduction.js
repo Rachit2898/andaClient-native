@@ -105,7 +105,9 @@ const PriceReductionItems = () => {
           }}
         >
           <View style={{ justifyContent: "center" }}>
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+            <Text
+              style={{ fontSize: 20, fontWeight: "bold", color: "#494c4c" }}
+            >
               Price Reduction
             </Text>
           </View>
@@ -181,6 +183,7 @@ const PriceReductionItems = () => {
                           orderLimit={item?.defaultSku?.dailyOrderLimit}
                           accountId={userData?.selectedAccount?.id}
                           type={item?.defaultSku?.productLists[0]?.type}
+                          itemReturnable={item?.defaultSku?.returnable}
                         />
                       </View>
                     );
