@@ -184,6 +184,7 @@ const Inventory = () => {
                         orderLimit={item?.defaultSku?.dailyOrderLimit}
                         accountId={userData?.selectedAccount?.id}
                         type={item?.defaultSku?.productLists[0]?.type}
+                        itemReturnable={item?.defaultSku?.returnable}
                       />
                     </View>
                   );

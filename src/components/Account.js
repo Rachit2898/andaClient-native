@@ -105,7 +105,7 @@ function MyCheckbox({
 const Account = () => {
   const dispatch = useDispatch();
   const [value, setValue] = useState(false);
-  const [isChecked, setChecked] = useState(false);
+  const [isChecked, setChecked] = useState(true);
   const isFocused = useIsFocused();
   const [cmeaDate, setCmeaDate] = useState();
   const [cmeaCertificationDate, setCmeaCertificationDate] = useState();
@@ -219,6 +219,7 @@ const Account = () => {
               flexDirection: "row",
               alignItems: "center",
               paddingHorizontal: 10,
+              paddingVertical: 10,
               flex: 1,
             }}
           >
@@ -252,9 +253,21 @@ const Account = () => {
               style={{
                 borderTopWidth: 4,
                 borderColor: "#fafafa",
-                marginVertical: 10,
               }}
             />
+            <View
+              style={{
+                padding: 10,
+                borderBottomWidth: 0.3,
+                borderColor: "#006ba6",
+              }}
+            >
+              <Text
+                style={{ fontSize: 15, fontWeight: "bold", color: "#494c4c" }}
+              >
+                Change Username / Email
+              </Text>
+            </View>
             <View style={{ paddingHorizontal: 10 }}>
               <Text style={styles.labelContainer}>USERNAME*</Text>
               <View style={styles.inputView}>
@@ -272,46 +285,55 @@ const Account = () => {
                   placeholder={`${userData?.emailAddress}`}
                 />
               </View>
-              <View style={{ flexDirection: "row" }}>
-                <MyCheckbox
-                  style={styles.checkbox}
-                  checked={isChecked}
-                  onChange={checkHandler}
-                  onPress={() => {
-                    myCheckHandler("andanet");
-                  }}
-                  buttonStyle={styles.checkboxBase}
-                  activeButtonStyle={[isChecked ? styles.checkboxChecked : ""]}
-                />
-                <View
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <View style={{ flexDirection: "row" }}>
+                  <MyCheckbox
+                    style={styles.checkbox}
+                    checked={isChecked}
+                    onChange={checkHandler}
+                    onPress={() => {
+                      myCheckHandler("andanet");
+                    }}
+                    buttonStyle={styles.checkboxBase}
+                    activeButtonStyle={[
+                      isChecked ? styles.checkboxChecked : "",
+                    ]}
+                  />
+                  <View
+                    style={{
+                      justifyContent: "center",
+                      alignItems: "center",
+                      marginLeft: 10,
+                    }}
+                  >
+                    <Text style={{ color: "#494c4c" }}>
+                      Receive marketings emails
+                    </Text>
+                  </View>
+                </View>
+                <Pressable
                   style={{
+                    borderColor: "#006ba6",
+                    borderWidth: 1,
+                    width: 80,
+                    height: 35,
+                    borderRadius: 4,
                     justifyContent: "center",
                     alignItems: "center",
-                    marginLeft: 10,
+                    alignSelf: "flex-end",
                   }}
+                  android_ripple={{ color: "#ccc" }}
                 >
-                  <Text style={{ color: "#494c4c" }}>
-                    I would like to receive marketings emails
-                  </Text>
-                </View>
+                  <View>
+                    <Text style={styles.emptyText}>UPDATE</Text>
+                  </View>
+                </Pressable>
               </View>
-              <Pressable
-                style={{
-                  borderColor: "#006ba6",
-                  borderWidth: 1,
-                  width: 80,
-                  height: 35,
-                  borderRadius: 4,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  alignSelf: "flex-end",
-                }}
-                android_ripple={{ color: "#ccc" }}
-              >
-                <View>
-                  <Text style={styles.emptyText}>UPDATE</Text>
-                </View>
-              </Pressable>
             </View>
             <View
               style={{
@@ -320,14 +342,18 @@ const Account = () => {
                 marginVertical: 10,
               }}
             />
+
             <View
               style={{
-                padding: 10,
+                paddingHorizontal: 10,
                 borderBottomWidth: 0.3,
                 borderColor: "#006ba6",
+                paddingBottom: 10,
               }}
             >
-              <Text style={{ fontSize: 15, fontWeight: "bold" }}>
+              <Text
+                style={{ fontSize: 15, fontWeight: "bold", color: "#494c4c" }}
+              >
                 Change Password
               </Text>
             </View>
@@ -457,55 +483,64 @@ const Account = () => {
                 style={{
                   borderTopWidth: 4,
                   borderColor: "#fafafa",
-                  marginVertical: 10,
+                  marginTop: 10,
                 }}
               />
             </View>
             <View
               style={{
-                padding: 10,
+                paddingHorizontal: 10,
                 borderBottomWidth: 0.3,
                 borderColor: "#006ba6",
+                paddingBottom: 10,
               }}
             >
-              <Text style={{ fontSize: 15, fontWeight: "bold" }}>Account</Text>
+              <Text
+                style={{ fontSize: 15, fontWeight: "bold", color: "#494c4c" }}
+              >
+                Account
+              </Text>
             </View>
             <View style={{ padding: 10 }}>
               <View style={{ flexDirection: "row" }}>
-                <Text>Account Number:</Text>
-                <Text style={{ marginLeft: 5 }}>
+                <Text style={{ color: "#494c4c" }}>Account Number:</Text>
+                <Text style={{ marginLeft: 5, color: "#494c4c" }}>
                   {userData?.selectedAccount?.id}
                 </Text>
               </View>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
-                <Text>Billing Account Number:</Text>
-                <Text style={{ marginLeft: 5 }}>
+                <Text style={{ color: "#494c4c" }}>
+                  Billing Account Number:
+                </Text>
+                <Text style={{ marginLeft: 5, color: "#494c4c" }}>
                   {userData?.selectedAccount?.jdeNumber}
                 </Text>
               </View>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
-                <Text>DEA Number:</Text>
-                <Text style={{ marginLeft: 5 }}>
+                <Text style={{ color: "#494c4c" }}>DEA Number:</Text>
+                <Text style={{ marginLeft: 5, color: "#494c4c" }}>
                   {userData?.selectedAccount?.deaNumber}
                 </Text>
               </View>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
-                <Text>DEA Expiration:</Text>
-                <Text style={{ marginLeft: 5 }}>
+                <Text style={{ color: "#494c4c" }}>DEA Expiration:</Text>
+                <Text style={{ marginLeft: 5, color: "#494c4c" }}>
                   {Moment(userData?.selectedAccount?.deaExpiration).format(
                     "MM/DD/YYYY hh:mmA"
                   )}
                 </Text>
               </View>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
-                <Text>State License</Text>
-                <Text style={{ marginLeft: 5 }}>
+                <Text style={{ color: "#494c4c" }}>State License</Text>
+                <Text style={{ marginLeft: 5, color: "#494c4c" }}>
                   {userData?.selectedAccount?.accountDetail?.stateLicense}
                 </Text>
               </View>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
-                <Text>State License Expiration:</Text>
-                <Text style={{ marginLeft: 5 }}>
+                <Text style={{ color: "#494c4c" }}>
+                  State License Expiration:
+                </Text>
+                <Text style={{ marginLeft: 5, color: "#494c4c" }}>
                   {Moment(
                     userData?.selectedAccount?.accountDetail
                       ?.stateLicenseExpiration
@@ -513,8 +548,8 @@ const Account = () => {
                 </Text>
               </View>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
-                <Text>State Control License:</Text>
-                <Text style={{ marginLeft: 5 }}>
+                <Text style={{ color: "#494c4c" }}>State Control License:</Text>
+                <Text style={{ marginLeft: 5, color: "#494c4c" }}>
                   {
                     userData?.selectedAccount?.accountDetail
                       ?.stateControlLicense
@@ -522,8 +557,10 @@ const Account = () => {
                 </Text>
               </View>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
-                <Text>State Control License Expiration:</Text>
-                <Text style={{ marginLeft: 5 }}>
+                <Text style={{ color: "#494c4c" }}>
+                  State Control License Expiration:
+                </Text>
+                <Text style={{ marginLeft: 5, color: "#494c4c" }}>
                   {Moment(
                     userData?.selectedAccount?.accountDetail
                       ?.stateControlLicenseExpiration
@@ -531,29 +568,33 @@ const Account = () => {
                 </Text>
               </View>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
-                <Text>CMEA Certification Date:</Text>
-                <Text style={{ marginLeft: 5 }}>
+                <Text style={{ color: "#494c4c" }}>
+                  CMEA Certification Date:
+                </Text>
+                <Text style={{ marginLeft: 5, color: "#494c4c" }}>
                   {Moment(
                     userData?.selectedAccount?.cmeaCertificationDate
                   ).format("MM/DD/YYYY")}
                 </Text>
               </View>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
-                <Text>CMEA Certification Expiration:</Text>
-                <Text style={{ marginLeft: 5 }}>
+                <Text style={{ color: "#494c4c" }}>
+                  CMEA Certification Expiration:
+                </Text>
+                <Text style={{ marginLeft: 5, color: "#494c4c" }}>
                   {Moment(
                     userData?.selectedAccount?.cmeaCertificationExpiration
                   ).format("MM/DD/YYYY hh:mmA")}
                 </Text>
               </View>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
-                <Text>Sales Rep:</Text>
-                <Text style={{ marginLeft: 5 }}>
+                <Text style={{ color: "#494c4c" }}>Sales Rep:</Text>
+                <Text style={{ marginLeft: 5, color: "#494c4c" }}>
                   {userData?.selectedAccount?.accountDetail?.accountRep.name}
                 </Text>
               </View>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
-                <Text>Phone:</Text>
+                <Text style={{ color: "#494c4c" }}>Phone:</Text>
                 <Text
                   style={{ marginLeft: 5, color: "#006ba6" }}
                   onPress={() => Linking.openURL(`tel:${formattedNumber}`)}
@@ -567,7 +608,7 @@ const Account = () => {
                 </Text>
               </View>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
-                <Text>Sales Rep Email:</Text>
+                <Text style={{ color: "#494c4c" }}>Sales Rep Email:</Text>
                 <Text
                   onPress={() =>
                     Linking.openURL(
@@ -583,7 +624,7 @@ const Account = () => {
                 </Text>
               </View>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
-                <Text style={{ fontSize: 10 }}>
+                <Text style={{ fontSize: 10, color: "#494c4c" }}>
                   For changes to your account information, please call your
                   Sales Rep
                 </Text>
@@ -598,31 +639,36 @@ const Account = () => {
             />
             <View
               style={{
-                padding: 10,
+                paddingHorizontal: 10,
                 borderBottomWidth: 0.3,
                 borderColor: "#006ba6",
+                paddingBottom: 10,
               }}
             >
-              <Text style={{ fontSize: 15, fontWeight: "bold" }}>Location</Text>
+              <Text
+                style={{ fontSize: 15, fontWeight: "bold", color: "#494c4c" }}
+              >
+                Location
+              </Text>
             </View>
             <View style={{ padding: 10 }}>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
-                <Text>
+                <Text style={{ color: "#494c4c" }}>
                   {userData?.selectedAccount.addresses[0]?.companyName}
                 </Text>
               </View>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
-                <Text>
+                <Text style={{ color: "#494c4c" }}>
                   {userData?.selectedAccount.addresses[0]?.addressLine1}
                 </Text>
               </View>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
-                <Text>
+                <Text style={{ color: "#494c4c" }}>
                   {userData?.selectedAccount.addresses[0]?.addressLine2}
                 </Text>
               </View>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
-                <Text>
+                <Text style={{ color: "#494c4c" }}>
                   {userData?.selectedAccount.addresses[0]?.city},{" "}
                   {
                     userData?.selectedAccount.addresses[0]?.countrySubdivision
@@ -633,10 +679,10 @@ const Account = () => {
               </View>
               <View style={{ marginTop: 5 }}>
                 <View style={{ flexDirection: "row", marginTop: 5 }}>
-                  <Text>Phone:</Text>
+                  <Text style={{ color: "#494c4c" }}>Phone:</Text>
                   <Text
                     onPress={() => Linking.openURL(`tel:${phoneNumber}`)}
-                    style={{ marginLeft: 5 }}
+                    style={{ marginLeft: 5, color: "#494c4c" }}
                   >
                     {phoneNumber}
                   </Text>
@@ -647,11 +693,11 @@ const Account = () => {
                     marginTop: 5,
                   }}
                 >
-                  <Text>Phone:</Text>
+                  <Text style={{ color: "#494c4c" }}>Phone:</Text>
 
                   <Text
                     onPress={() => Linking.openURL(`tel:${phoneFaxNumber}`)}
-                    style={{ marginLeft: 5 }}
+                    style={{ marginLeft: 5, color: "#494c4c" }}
                   >
                     {phoneFaxNumber}
                   </Text>
@@ -693,6 +739,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     marginTop: 10,
     fontSize: 13,
+    color: "#494c4c",
   },
   checkboxBase: {
     width: 20,

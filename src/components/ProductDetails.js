@@ -21,6 +21,7 @@ import {
   updateValues,
 } from "../../redux/features/productApi";
 import TabBar from "./TabBar";
+import AddButton from "./Ui/AddButton";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -69,11 +70,11 @@ const ProductDetails = () => {
       {loading && <Spinner />}
       <View style={{ flex: 1 }}>
         <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
-          {!!searchedValue && (
+          {/* {!!searchedValue && (
             <Text style={styles.pageText}>
               Showing results for "{searchedValue}"
             </Text>
-          )}
+          )} */}
           <View>
             <ScrollView showsVerticalScrollIndicator={false}>
               <View style={{ height: 200, marginVertical: 20 }}>
@@ -305,29 +306,9 @@ const ProductDetails = () => {
                       </Pressable>
                     )}
                   </View>
-                  <Pressable
-                    style={{
-                      backgroundColor: "#ed8b00",
-                      width: 60,
-                      height: 25,
-                      borderRadius: 3,
-                      borderRadius: 4,
-                      alignItems: "center",
-                      justifyContent: "center",
-                      marginLeft: 15,
-                    }}
-                    onPress={() => addItemIntoCart(items?.id)}
-                  >
-                    <Text
-                      style={{
-                        color: "#fff",
-                        fontWeight: "bold",
-                        fontSize: 12,
-                      }}
-                    >
-                      ADD
-                    </Text>
-                  </Pressable>
+                  <View style={{ marginHorizontal: 10 }}>
+                    <AddButton onPress={() => addItemIntoCart(items?.id)} />
+                  </View>
                 </View>
                 {!!items.dailyOrderLimit && (
                   <View

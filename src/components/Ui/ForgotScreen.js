@@ -16,7 +16,7 @@ const ForgotScreen = (props) => {
   return (
     <SafeAreaView
       style={{ backgroundColor: "#063e63", flex: 1 }}
-      edges={["right", "left", "top"]}
+      edges={["right", "left"]}
     >
       <View style={{ backgroundColor: "#fff", flex: 1 }}>
         <View style={{ marginTop: 20 }}>
@@ -28,13 +28,13 @@ const ForgotScreen = (props) => {
           </Pressable>
           <View
             style={{
-              marginTop: 20,
+              marginTop: 15,
               justifyContent: "center",
               alignSelf: "center",
             }}
           >
             <Text
-              style={{ fontSize: 35, fontWeight: "bold", color: "#494c4c" }}
+              style={{ fontSize: 25, fontWeight: "bold", color: "#494c4c" }}
             >
               {props.heading}
             </Text>
@@ -44,13 +44,13 @@ const ForgotScreen = (props) => {
               marginTop: 20,
               justifyContent: "center",
               alignSelf: "center",
+              paddingHorizontal: 10,
             }}
           >
             <Text
               style={{
                 textAlign: "center",
                 color: "#494c4c",
-                fontWeight: "bold",
               }}
             >
               {props.message}
@@ -61,14 +61,14 @@ const ForgotScreen = (props) => {
               style={{
                 backgroundColor: "#063e63",
                 marginTop: 20,
-                paddingVertical: 20,
+                paddingVertical: 15,
               }}
             >
               <Text
                 style={{
                   fontWeight: "bold",
                   color: "#fff",
-                  fontSize: 20,
+                  fontSize: 15,
                   marginLeft: 20,
                 }}
               >
@@ -194,8 +194,8 @@ export default ForgotScreen;
 
 const styles = StyleSheet.create({
   image: {
-    width: 192,
-    height: 51,
+    width: 150,
+    height: 40,
     alignSelf: "center",
     justifyContent: "center",
     marginBottom: 20,

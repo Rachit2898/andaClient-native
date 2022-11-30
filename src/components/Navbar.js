@@ -18,38 +18,36 @@ import {
   productDetails,
 } from "../../redux/features/productApi";
 import { searchValues } from "../../redux/features/authUser.js";
+import _ from "lodash";
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const [openSearch, setOpenSearch] = useState(false);
-  const {
-    userInfoData,
-    cartInfoData,
-    cartLength,
-    searchItem,
-    searchProducstsData,
-  } = useSelector((state) => ({
+  const [searchValue, setSearchValue] = useState();
+  const { searchItem, searchProducstsData } = useSelector((state) => ({
     ...state.products,
   }));
   const searchItemHandler = async (item) => {
+    setSearchValue(item);
     setOpenSearch(true);
     dispatch(searchItems(item));
   };
   const searchProductHandler = async (item) => {
-    try {
-      dispatch(searchProducts(item));
-      dispatch(searchValues(item));
-      setOpenSearch(false);
-    } catch (e) {
-      Alert.alert(e.message);
+    if (item.length >= 3) {
+      try {
+        dispatch(searchProducts(item));
+        dispatch(searchValues(item));
+        setOpenSearch(false);
+      } catch (e) {
+        Alert.alert(e.message);
+      }
     }
   };
   const BarCodeHandler = () => {
     navigation.navigate("Barcode");
   };
-
   const productDetailHandler = async (Id) => {
     navigation.navigate("ProductDetails");
     dispatch(productDetails(Id));
@@ -72,26 +70,39 @@ const Navbar = () => {
   return (
     <View>
       <View style={styles.searchBox}>
-        <View
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            paddingHorizontal: 5,
-          }}
+        <Pressable
+          onPress={() => searchProductHandler(searchValue)}
+          // style={
+          //   searchValue?.length >= 3 ? styles.searchIconBlue : styles.searchIcon
+          // }
+          style={styles.searchIcon}
+          // disabled={searchValue?.length < 3}
         >
-          <Image
-            source={require("../../assets/search.png")}
-            style={{
-              width: 20,
-              height: 20,
-            }}
-          />
-        </View>
+          {searchValue?.length >= 3 ? (
+            <Image
+              source={require("../../assets/search-blue.png")}
+              style={{
+                width: 20,
+                height: 20,
+              }}
+            />
+          ) : (
+            <Image
+              source={require("../../assets/search.png")}
+              style={{
+                width: 20,
+                height: 20,
+              }}
+            />
+          )}
+        </Pressable>
         <TextInput
           style={styles.input}
           placeholder="Search by number, name or keyword"
           onChangeText={(value) => searchItemHandler(value)}
           onClear={(value) => searchItemHandler("")}
+          returnKeyType="search"
+          onSubmitEditing={() => searchProductHandler(searchValue)}
         />
         <Pressable
           style={{ justifyContent: "center", marginHorizontal: 5 }}
@@ -108,16 +119,19 @@ const Navbar = () => {
       </View>
       {searchItem.length > 0 && openSearch ? (
         <View style={{ borderBottomWidth: 0.3, borderColor: "#9b9b9b" }}>
-          {searchItem?.map((item) => {
+          {searchItem?.map((item, i) => {
             return (
               <View key={item}>
-                <Pressable
-                  style={styles.searchItemList}
-                  android_ripple={{ color: "#ccc" }}
-                  onPress={() => searchProductHandler(item)}
-                >
-                  <Text style={styles.search}>{item}</Text>
-                </Pressable>
+                {console.log(searchValue.length)}
+                {searchValue.length > 0 && (
+                  <Pressable
+                    style={styles.searchItemList}
+                    android_ripple={{ color: "#ccc" }}
+                    onPress={() => searchProductHandler(item)}
+                  >
+                    <Text style={styles.search}>{item}</Text>
+                  </Pressable>
+                )}
               </View>
             );
           })}
@@ -145,6 +159,7 @@ const styles = StyleSheet.create({
     color: "#494c4c",
     fontSize: 15,
     width: "80%",
+    marginHorizontal: 5,
   },
   search: {
     color: "#9b9b9b",
@@ -157,5 +172,18 @@ const styles = StyleSheet.create({
     borderTopWidth: 0.3,
     justifyContent: "center",
     marginVertical: 1,
+  },
+  searchIconBlue: {
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 5,
+    backgroundColor: "#006ba6",
+    borderRadius: 3,
+  },
+  searchIcon: {
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 5,
+    borderRadius: 3,
   },
 });

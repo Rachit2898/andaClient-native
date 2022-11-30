@@ -149,7 +149,6 @@ export const inventoryWatch = createAsyncThunk(
       var url = `https://staging.andanet.com/api/customer/product-list/${result[2]?.id}/search?${body?.value}page=${body?.currentPage}&searchMode=STANDARD`;
     }
 
-    console.log(url);
     const response = await fetch(url, {
       method: "GET",
       headers: {
@@ -237,7 +236,6 @@ export const preNegotiated = createAsyncThunk(
       var url = `https://staging.andanet.com/api/customer/upsell/Pre%20Negotiated%20Items?${body?.value}page=${body?.currentPage}&searchMode=STANDARD`;
     }
 
-    console.log(url);
     const response = await fetch(url, {
       method: "GET",
       headers: {
@@ -281,7 +279,6 @@ export const inventoryWatchList = createAsyncThunk(
     } else {
       var url = `https://staging.andanet.com/api/customer/product-list/${result[1]?.id}/search?${body?.value}page=${body?.currentPage}&searchMode=STANDARD`;
     }
-    console.log(url);
 
     const response = await fetch(url, {
       method: "GET",
@@ -434,7 +431,6 @@ export const searchItems = createAsyncThunk(
 export const searchProducts = createAsyncThunk(
   "urls/searchProducsts",
   async (searchItem) => {
-    console.log("Searching products", searchItem);
     const token = await getToken();
     var url = `https://staging.andanet.com/api/catalog/search?q=${searchItem}&suggesterUsed=true`;
     const response = await fetch(url, {
@@ -507,6 +503,7 @@ const productSlice = createSlice({
     andaContractItemsData: {},
     favResponse: {},
     productListsData: {},
+    addLoading: false,
   },
   extraReducers: {
     [productLists.pending]: (state, action) => {
@@ -588,14 +585,17 @@ const productSlice = createSlice({
     },
     [addItem.pending]: (state, action) => {
       state.loading = true;
+      state.addLoading = false;
     },
     [addItem.fulfilled]: (state, action) => {
       state.loading = false;
       state.cartLength = action.payload?.order?.orderItems?.length;
+      state.addLoading = true;
     },
     [addItem.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
+      state.addLoading = false;
     },
     [userInfo.pending]: (state, action) => {
       state.loading = true;

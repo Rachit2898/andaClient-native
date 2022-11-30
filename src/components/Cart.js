@@ -96,7 +96,7 @@ const Cart = () => {
       "Are you sure you want to remove all items from your cart?",
       [
         {
-          text: "Cancel",
+          text: "NO",
           onPress: () => null,
           style: "NO",
         },
@@ -341,15 +341,7 @@ const Cart = () => {
               </View>
               {loading && <Spinner />}
 
-              <ScrollView
-                showsVerticalScrollIndicator={false}
-                refreshControl={
-                  <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                  />
-                }
-              >
+              <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
                   {orderItems?.map((item) => {
                     return (
@@ -369,6 +361,7 @@ const Cart = () => {
                           orderLimit={item?.sku?.dailyOrderLimit}
                           type={item?.sku?.productLists[0]?.type}
                           message={item?.sku?.itemMessages[0]?.message}
+                          itemReturnable={item?.sku?.returnable}
                         />
                       </View>
                     );

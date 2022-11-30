@@ -7,7 +7,7 @@ import {
   CardStyleInterpolators,
 } from "@react-navigation/native-stack";
 import { useDispatch, useSelector } from "react-redux";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+
 import Cart from "./src/components/Cart";
 import CheckOut from "./src/components/CheckOut";
 import LoginScreen from "./src/components/Login";
@@ -50,7 +50,6 @@ import { getBioMatricsDetails, getToken } from "./utils";
 import { logout, authenticate } from "./redux/features/authUser";
 
 const Stack = createNativeStackNavigator();
-const Tab = createBottomTabNavigator();
 
 function LogOutStack() {
   return (
@@ -78,7 +77,11 @@ function LogOutStack() {
           backgroundColor: "white",
         }}
         options={{
-          headerShown: false,
+          headerShown: true,
+          title: null,
+          headerStyle: {
+            backgroundColor: "#063e63",
+          },
         }}
         component={ForgotPassword}
       />
@@ -88,7 +91,12 @@ function LogOutStack() {
           backgroundColor: "white",
         }}
         options={{
-          headerShown: false,
+          headerShown: true,
+          title: null,
+          headerStyle: {
+            backgroundColor: "#063e63",
+          },
+          headerTintColor: "#fff",
         }}
         component={ForgotUser}
       />
@@ -99,7 +107,12 @@ function LogOutStack() {
           backgroundColor: "white",
         }}
         options={{
-          headerShown: false,
+          headerShown: true,
+          title: null,
+          headerStyle: {
+            backgroundColor: "#063e63",
+          },
+          headerTintColor: "#fff",
         }}
         component={ResetPassword}
       />
@@ -109,7 +122,12 @@ function LogOutStack() {
           backgroundColor: "white",
         }}
         options={{
-          headerShown: false,
+          headerShown: true,
+          title: null,
+          headerStyle: {
+            backgroundColor: "#063e63",
+          },
+          headerTintColor: "#fff",
         }}
         component={SignUpAccess}
       />

@@ -53,7 +53,6 @@ const Filter = ({ modalVisible, setModalVisible }) => {
   const url = urlStructure.join("");
 
   useEffect(() => {
-    console.log("hello");
     dispatch(
       inventoryWatch({
         value: url,
@@ -101,7 +100,7 @@ const Filter = ({ modalVisible, setModalVisible }) => {
           ]}
           onPress={onCheckmarkPress}
         >
-          {checked && <Ionicons name="checkmark" size={20} color="white" />}
+          {checked && <Ionicons name="checkmark" size={15} color="white" />}
         </Pressable>
       </View>
     );
@@ -121,6 +120,16 @@ const Filter = ({ modalVisible, setModalVisible }) => {
     { value: "Price" },
   ];
 
+  const clearHandler = () => {
+    dispatch(
+      inventoryWatch({
+        value: "",
+        currentPage: 1,
+        sortValues: "",
+      })
+    );
+    setsortingValue("");
+  };
   return (
     <View style={styles.modelContainer}>
       <Modal
@@ -180,6 +189,7 @@ const Filter = ({ modalVisible, setModalVisible }) => {
                       <Filters
                         label={item.label}
                         values={item.values}
+                        active={item.active}
                         MyFilter={
                           <View>
                             {item?.values?.map((value) => {
@@ -190,6 +200,7 @@ const Filter = ({ modalVisible, setModalVisible }) => {
                                       style={{
                                         flexDirection: "row",
                                         marginTop: 5,
+                                        alignItems: "center",
                                       }}
                                     >
                                       <MyCheckbox
@@ -212,8 +223,8 @@ const Filter = ({ modalVisible, setModalVisible }) => {
                                       <Text
                                         style={{
                                           color: "#494c4c",
-                                          paddingTop: 6,
-                                          fontSize: 16,
+
+                                          fontSize: 14,
                                         }}
                                       >
                                         {value?.value}
@@ -221,10 +232,11 @@ const Filter = ({ modalVisible, setModalVisible }) => {
                                       <Text
                                         style={{
                                           color: "#494c4c",
-                                          paddingTop: 6,
-                                          fontSize: 16,
+
+                                          fontSize: 14,
                                         }}
                                       >
+                                        {" "}
                                         ({value?.quantity})
                                       </Text>
                                     </View>
@@ -238,6 +250,47 @@ const Filter = ({ modalVisible, setModalVisible }) => {
                     </View>
                   );
                 })}
+                <View style={{ marginTop: 15, flexDirection: "row" }}>
+                  <Pressable
+                    style={{
+                      backgroundColor: "#ed8b00",
+                      paddingHorizontal: 10,
+                      paddingVertical: 5,
+                      borderRadius: 3,
+                    }}
+                    onPress={() => clearHandler()}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: "#fff",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      CLEAR ALL
+                    </Text>
+                  </Pressable>
+                  <Pressable
+                    style={{
+                      backgroundColor: "#006ba6",
+                      paddingHorizontal: 10,
+                      paddingVertical: 5,
+                      borderRadius: 3,
+                      marginHorizontal: 10,
+                    }}
+                    onPress={() => setModalVisible(false)}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: "#fff",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      DONE
+                    </Text>
+                  </Pressable>
+                </View>
               </View>
             </View>
           </View>
@@ -272,34 +325,16 @@ const styles = StyleSheet.create({
     borderColor: "#209bd6",
     textAlign: "center",
   },
-  modalView: {
-    backgroundColor: "#fff",
-    height: 100,
-    paddingHorizontal: 10,
-    marginHorizontal: 10,
-    paddingVertical: 20,
-    zIndex: 1,
-    shadowColor: "#000",
-    textAlign: "center",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
 
   headingSrting: {
     marginVertical: 8,
   },
   headingAvailability: {
-    borderBottomWidth: 1,
+    borderBottomWidth: 10,
     borderBottomColor: "#f2f2f2",
     paddingTop: 20,
     paddingBottom: 10,
     width: 350,
-    marginLeft: -20,
   },
   heading: {
     alignItems: "center",
@@ -310,7 +345,7 @@ const styles = StyleSheet.create({
   headingSortingText: {
     paddingLeft: 10,
     fontWeight: "bold",
-    fontSize: 18,
+    fontSize: 16,
     color: "#494c4c",
   },
   headingAvalText: {
@@ -355,7 +390,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 30,
     width: 400,
-    borderBottomWidth: 2,
+    borderBottomWidth: 0.5,
     borderColor: "#005185",
   },
   sortingInput: {
@@ -366,8 +401,8 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   checkboxBase: {
-    width: 24,
-    height: 24,
+    width: 20,
+    height: 20,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 4,

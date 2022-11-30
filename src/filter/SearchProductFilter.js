@@ -171,6 +171,7 @@ const Filter = ({ modalVisible, setModalVisible }) => {
                       <Filters
                         label={item.label}
                         values={item.values}
+                        active={item.active}
                         MyFilter={
                           <View>
                             {item?.values?.map((value) => {
@@ -301,7 +302,7 @@ const styles = StyleSheet.create({
   headingSortingText: {
     paddingLeft: 10,
     fontWeight: "bold",
-    fontSize: 18,
+    fontSize: 16,
     color: "#494c4c",
   },
   headingAvalText: {
@@ -346,7 +347,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 30,
     width: 400,
-    borderBottomWidth: 2,
+    borderBottomWidth: 0.5,
     borderColor: "#005185",
   },
   sortingInput: {

@@ -5,6 +5,8 @@ import {
   Image,
   Pressable,
   ScrollView,
+  TextInput,
+  Alert,
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 import Spinner from "../components/Spinner";
@@ -42,7 +44,7 @@ const ProductScreen = (props) => {
 
   const addButton = (id) => {
     setCurrentIndex(id);
-    setCount(count + 1);
+    setCount(parseInt(count) + 1);
   };
 
   const removeButton = (id) => {
@@ -52,6 +54,10 @@ const ProductScreen = (props) => {
   async function addItemIntoCart(skuId) {
     const accountId = props.accountId;
     const quantity = count;
+    if (quantity <= 0) {
+      Alert.alert("Please enter quantity greater than 0");
+      return;
+    }
     try {
       dispatch(addItem({ accountId, skuId, quantity }));
     } catch (error) {
@@ -70,6 +76,14 @@ const ProductScreen = (props) => {
       dispatch(addFavorites({ id }));
     }
   };
+
+  const changeHandler = (id, value) => {
+    setCount(value);
+    setCurrentIndex(id);
+  };
+  const historyPage = false;
+  const returnAuthoizationsEnabled = false;
+  const contractFacetLabelChangeEnabled = true;
 
   return (
     <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
@@ -228,7 +242,7 @@ const ProductScreen = (props) => {
                 {props?.description}
               </Text>
               <View style={{ flexDirection: "row" }}>
-                {props.netPriceItem && (
+                {props.netPriceItem && !historyPage && (
                   <Image
                     source={{
                       uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_netprice_hover_2.png",
@@ -340,10 +354,10 @@ const ProductScreen = (props) => {
                     }}
                   />
                 )}
-                {props.rewardItem === "AB" && (
+                {props.rewardItem && !historyPage && (
                   <Image
                     source={{
-                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_ab_rated_hover.png",
+                      uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_rewards_hover.png",
                     }}
                     style={{
                       width: 20,
@@ -351,7 +365,43 @@ const ProductScreen = (props) => {
                     }}
                   />
                 )}
-                {props.priceType === "INDIRECT_CONTRACT" && (
+                {props.priceType === "INDIRECT_CONTRACT" &&
+                  !contractFacetLabelChangeEnabled && (
+                    <Image
+                      source={{
+                        uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_indirectContract_hover.png",
+                      }}
+                      style={{
+                        width: 20,
+                        height: 20,
+                      }}
+                    />
+                  )}
+                {props.priceType === "DIRECT_CONTRACT" &&
+                  contractFacetLabelChangeEnabled && (
+                    <Image
+                      source={{
+                        uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_anda_contract_hover.png",
+                      }}
+                      style={{
+                        width: 20,
+                        height: 20,
+                      }}
+                    />
+                  )}
+                {props.priceType === "DIRECT_CONTRACT" &&
+                  !contractFacetLabelChangeEnabled && (
+                    <Image
+                      source={{
+                        uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_directContract_hover.png",
+                      }}
+                      style={{
+                        width: 20,
+                        height: 20,
+                      }}
+                    />
+                  )}
+                {props.itemReturnable && returnAuthoizationsEnabled && (
                   <Image
                     source={{
                       uri: "https://staging.andanet.com/cmsstatic/images/icons/icon_anda_mfg_contract_hover.png",
@@ -420,19 +470,22 @@ const ProductScreen = (props) => {
               <View
                 style={{
                   alignSelf: "center",
-
-                  width: 30,
                 }}
               >
-                <Text
+                <TextInput
                   style={{
                     color: "#005185",
                     alignSelf: "center",
                     justifyContent: "center",
+                    textAlign: "center",
+
+                    width: 30,
                   }}
+                  onChangeText={(value) => changeHandler(props?.id, value)}
+                  keyboardType="number-pad"
                 >
                   {count}
-                </Text>
+                </TextInput>
               </View>
               {!!props.orderLimit ? (
                 <Pressable
@@ -483,7 +536,10 @@ const ProductScreen = (props) => {
                 </Pressable>
               )}
             </View>
-            <AddButton onPress={() => addItemIntoCart(props?.id)} />
+            <AddButton
+              onPress={() => addItemIntoCart(props?.id)}
+              count={count}
+            />
             {/* <Pressable
               style={{
                 backgroundColor: "#ed8b00",

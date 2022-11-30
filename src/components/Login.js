@@ -65,9 +65,10 @@ export default function LoginScreen() {
   const [show, setShow] = useState(true);
   const [isChecked, setChecked] = useState(false);
   const [credentialsError, setCredentialsError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
   const [loginError, setLoginError] = useState(false);
 
-  const { error } = useSelector((state) => ({
+  const { pushToken } = useSelector((state) => ({
     ...state.auth,
   }));
 
@@ -84,9 +85,14 @@ export default function LoginScreen() {
 
     const emailIsValid = email.includes("@");
     const passwordIsValid = password.length > 6;
-    if (!emailIsValid || !passwordIsValid) {
+    if (!email.length) {
       setCredentialsError(true);
       setIsAuthenticating(false);
+      return;
+    }
+    if (!password.length) {
+      setIsAuthenticating(false);
+      setPasswordError(true);
       return;
     }
 
@@ -107,6 +113,7 @@ export default function LoginScreen() {
       setLoginError(true);
       setCredentialsError(false);
       setIsAuthenticating(false);
+      setPasswordError(false);
       return;
     }
   }
@@ -122,11 +129,13 @@ export default function LoginScreen() {
     setPassword(value);
     setCredentialsError(false);
     setLoginError(false);
+    setPasswordError(false);
   };
   const emailHandler = (value) => {
     setEmail(value);
     setCredentialsError(false);
     setLoginError(false);
+    setPasswordError(false);
   };
 
   return (
@@ -183,7 +192,7 @@ export default function LoginScreen() {
                     backgroundColor: "#f8f8f8",
                   }}
                 >
-                  {credentialsError && (
+                  {loginError && (
                     <View style={styles.errorView}>
                       <Image
                         style={{ height: 19, width: 18 }}
@@ -202,14 +211,14 @@ export default function LoginScreen() {
                       onChangeText={(email) => emailHandler(email)}
                     />
                   </View>
-                  {loginError && (
+                  {credentialsError && (
                     <View style={styles.errorView}>
                       <Image
                         style={{ height: 19, width: 18 }}
                         source={require("../../assets/errorAlert.png")}
                       />
                       <Text style={{ color: "#990909", marginHorizontal: 10 }}>
-                        Invalid Username
+                        Username is required.
                       </Text>
                     </View>
                   )}
@@ -220,6 +229,7 @@ export default function LoginScreen() {
                       placeholderTextColor="#003f5c"
                       secureTextEntry={show}
                       onChangeText={(password) => passwordHandler(password)}
+                      placeholder={pushToken}
                     />
                     <Pressable
                       style={{
@@ -243,14 +253,14 @@ export default function LoginScreen() {
                       )}
                     </Pressable>
                   </View>
-                  {loginError && (
+                  {passwordError && (
                     <View style={styles.errorView}>
                       <Image
                         style={{ height: 19, width: 18 }}
                         source={require("../../assets/errorAlert.png")}
                       />
                       <Text style={{ color: "#990909", marginHorizontal: 10 }}>
-                        Invalid Password
+                        Password is required.
                       </Text>
                     </View>
                   )}

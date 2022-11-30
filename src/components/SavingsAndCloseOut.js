@@ -106,7 +106,9 @@ const SavingsAndCloseOut = () => {
           }}
         >
           <View style={{ justifyContent: "center" }}>
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+            <Text
+              style={{ fontSize: 20, fontWeight: "bold", color: "#494c4c" }}
+            >
               Savings And CloseOut
             </Text>
           </View>
@@ -181,6 +183,7 @@ const SavingsAndCloseOut = () => {
                           item?.defaultSku?.shortOrCloseOutDate
                         }
                         inventoryClassKey={item?.defaultSku?.inventoryClassKey}
+                        itemReturnable={item?.defaultSku?.returnable}
                       />
                     </View>
                   );

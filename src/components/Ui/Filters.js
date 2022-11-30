@@ -13,43 +13,47 @@ const Filters = (props) => {
 
   return (
     <View>
-      <View key={props.label}>
-        <Pressable
-          style={styles.headingAvailability}
-          onPress={() => {
-            openHandler();
-          }}
-        >
-          <View>
-            <Text style={styles.headingAvalText}>{props.label}</Text>
-          </View>
-          <View>
-            {filterOpen ? (
-              <Image
-                style={{ height: 20, width: 20 }}
-                source={require("../../../assets/down.png")}
-              />
-            ) : (
-              <Image
-                style={{ height: 20, width: 20 }}
-                source={require("../../../assets/right.png")}
-              />
-            )}
-          </View>
-        </Pressable>
-        {filterOpen && (
-          <View>
-            <View
-              style={{
-                flexDirection: "row",
-                marginTop: 5,
-              }}
-            >
-              <>{props.MyFilter}</>
+      {props.values?.length > 0 && (
+        <View key={props.label}>
+          <Pressable
+            style={styles.headingAvailability}
+            onPress={() => {
+              openHandler();
+            }}
+          >
+            <Text style={styles.headingAvalText}>
+              {props.label}
+              {props.active && <Text style={{ fontSize: 22 }}> &bull;</Text>}
+            </Text>
+
+            <View>
+              {filterOpen ? (
+                <Image
+                  style={{ height: 15, width: 15 }}
+                  source={require("../../../assets/down.png")}
+                />
+              ) : (
+                <Image
+                  style={{ height: 15, width: 15 }}
+                  source={require("../../../assets/right.png")}
+                />
+              )}
             </View>
-          </View>
-        )}
-      </View>
+          </Pressable>
+          {filterOpen && (
+            <View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  marginTop: 5,
+                }}
+              >
+                {props.MyFilter}
+              </View>
+            </View>
+          )}
+        </View>
+      )}
     </View>
   );
 };
@@ -109,7 +113,7 @@ const styles = StyleSheet.create({
   headingAvalText: {
     paddingLeft: 5,
     fontWeight: "bold",
-    fontSize: 18,
+    fontSize: 14,
     color: "#494c4c",
   },
 

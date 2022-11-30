@@ -51,6 +51,7 @@ const initialState = {
   changeUserPasswordData: {},
   changePasswordValue: false,
   cartName: "Home",
+  pushToken: "",
 };
 
 const authReducer = createSlice({
@@ -68,6 +69,9 @@ const authReducer = createSlice({
     },
     searchValues: (state, action) => {
       state.searchedValue = action.payload;
+    },
+    pushTokenApi: (state, action) => {
+      state.pushToken = action.payload;
     },
     authenticate: (state, action) => {
       state.loading = true;
@@ -243,5 +247,6 @@ export const {
   updateAndaContractItemsUrls,
   updateSearchProductUrls,
   updateCloseOutUrls,
+  pushTokenApi,
 } = authReducer.actions;
 export default authReducer.reducer;
