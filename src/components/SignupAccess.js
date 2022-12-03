@@ -11,6 +11,8 @@ import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ForgotScreen from "../components/Ui/ForgotScreen";
 import { useNavigation } from "@react-navigation/native";
+import { registerUser } from "../../redux/features/authUser";
+import { Provider, useDispatch, useSelector } from "react-redux";
 
 const InputComponent = (props) => {
   const [value, setValue] = useState(false);
@@ -32,12 +34,20 @@ const InputComponent = (props) => {
     <View>
       <Text style={styles.labelContainer}>{props.label}</Text>
       <View style={styles.inputView}>
-        <TextInput
-          style={styles.TextInput}
-          placeholderTextColor="#003f5c"
-          secureTextEntry={show}
-          onChangeText={props.onChangeText}
-        />
+        {props.passwordValue ? (
+          <TextInput
+            style={styles.TextInput}
+            placeholderTextColor="#003f5c"
+            secureTextEntry={show}
+            onChangeText={props.onChangeText}
+          />
+        ) : (
+          <TextInput
+            style={styles.TextInput}
+            placeholderTextColor="#003f5c"
+            onChangeText={props.onChangeText}
+          />
+        )}
         {props.eye && (
           <Pressable
             style={{
@@ -62,15 +72,149 @@ const InputComponent = (props) => {
           </Pressable>
         )}
       </View>
+      {props.error && (
+        <View style={styles.errorView}>
+          <Image
+            style={{ height: 19, width: 18 }}
+            source={require("../../assets/errorAlert.png")}
+          />
+          <Text style={{ color: "#990909", marginHorizontal: 10 }}>
+            {props.errorMessage}
+          </Text>
+        </View>
+      )}
     </View>
   );
 };
 
 const SignUpAccess = (props) => {
   const [password, setPassword] = useState();
+  const dispatch = useDispatch();
+  const [confirmPassword, setConfirmPassword] = useState();
+  const [accountNumber, setAccountNumber] = useState("");
+  const [license, setLicense] = useState("");
+  const [email, setEmail] = useState("");
+  const [userName, setUserName] = useState("");
+  const [nameLastName, setNameLastName] = useState("");
   const navigation = useNavigation();
+
+  const [isAccountNumberError, setIsAccountNumberError] = useState(false);
+  const [isPasswordError, setIsPasswordError] = useState(false);
+  const [isConfirmPasswordError, setIsConfirmPasswordError] = useState(false);
+  const [isLicenseError, setIsLicenseError] = useState(false);
+  const [isEmailError, setIsEmailError] = useState(false);
+  const [isUserNameError, setUserNameError] = useState(false);
+  const [isNameLastNameError, setIsNameLastNameError] = useState(false);
+
   const submitHandler = () => {
-    navigation.navigate("ResetPassword");
+    if (!accountNumber.length) {
+      setIsAccountNumberError(true);
+    }
+    if (!password?.length) {
+      setIsPasswordError(true);
+    }
+
+    if (!confirmPassword?.length) {
+      setIsConfirmPasswordError(true);
+    }
+    // if (!license.length) {
+    //   setIsLicenseError(true);
+    // }
+    if (!email.length) {
+      setIsEmailError(true);
+    }
+    if (!userName.length) {
+      setUserNameError(true);
+    }
+    if (!nameLastName.length) {
+      setIsNameLastNameError(true);
+    }
+    dispatch(
+      registerUser({
+        accountNumber: accountNumber,
+        password: password,
+        confirmPassword: confirmPassword,
+        license: license,
+        email: email,
+        userName: userName,
+        nameLastName: nameLastName,
+      })
+    );
+    // alert("You have been registered successfully.", [
+    //   { text: "OK", onPress: () => navigation.navigate("Login") },
+    // ]);
+  };
+  const accountNumberHandler = async (value) => {
+    setAccountNumber(value);
+    setIsAccountNumberError(false);
+    setIsPasswordError(false);
+    setIsConfirmPasswordError(false);
+    setIsLicenseError(false);
+    setIsEmailError(false);
+    setUserNameError(false);
+    setIsNameLastNameError(false);
+  };
+
+  const emailHandler = async (value) => {
+    setEmail(value);
+    setIsAccountNumberError(false);
+    setIsPasswordError(false);
+    setIsConfirmPasswordError(false);
+    setIsLicenseError(false);
+    setIsEmailError(false);
+    setUserNameError(false);
+    setIsNameLastNameError(false);
+  };
+  const licenseHandler = async (value) => {
+    setLicense(value);
+    setIsAccountNumberError(false);
+    setIsPasswordError(false);
+    setIsConfirmPasswordError(false);
+    setIsLicenseError(false);
+    setIsEmailError(false);
+    setUserNameError(false);
+    setIsNameLastNameError(false);
+  };
+  const userNameHandler = async (value) => {
+    setUserName(value);
+    setIsAccountNumberError(false);
+    setIsPasswordError(false);
+    setIsConfirmPasswordError(false);
+    setIsLicenseError(false);
+    setIsEmailError(false);
+    setUserNameError(false);
+    setIsNameLastNameError(false);
+  };
+  const passwordHandler = (value) => {
+    setPassword(value);
+    setIsAccountNumberError(false);
+    setIsPasswordError(false);
+    setIsConfirmPasswordError(false);
+    setIsLicenseError(false);
+    setIsEmailError(false);
+    setUserNameError(false);
+    setIsNameLastNameError(false);
+  };
+  const confirmPasswordHandler = (value) => {
+    setConfirmPassword(value);
+    setIsAccountNumberError(false);
+    setIsPasswordError(false);
+    setIsConfirmPasswordError(false);
+    setIsLicenseError(false);
+    setIsEmailError(false);
+    setUserNameError(false);
+    setIsNameLastNameError(false);
+  };
+
+  const accountNameHandler = (value) => {
+    setNameLastName(value);
+    setIsAccountNumberError(false);
+    setIsPasswordError(false);
+    setIsConfirmPasswordError(false);
+    setIsLicenseError(false);
+    setIsEmailError(false);
+    setUserNameError(false);
+    setIsNameLastNameError(false);
   };
   return (
     <SafeAreaView
@@ -124,25 +268,80 @@ const SignUpAccess = (props) => {
               <InputComponent
                 eye={false}
                 label="ANDA ACCOUNT NUMBER / SHIP-TO NUMBER*"
+                onChangeText={(value) => {
+                  accountNumberHandler(value);
+                }}
+                error={isAccountNumberError}
+                errorMessage={
+                  "Anda Account Number / Ship-To Number is required."
+                }
               />
             </View>
             <View>
-              <InputComponent eye={false} label="FIRST NAME AND LAST NAME*" />
+              <InputComponent
+                onChangeText={(value) => {
+                  accountNameHandler(value);
+                }}
+                eye={false}
+                label="FIRST NAME AND LAST NAME*"
+                error={isAccountNumberError}
+                errorMessage={" First Name and Last Name is required."}
+              />
             </View>
             <View>
-              <InputComponent eye={false} label="EMAIL ADDRESS*" />
+              <InputComponent
+                onChangeText={(value) => {
+                  emailHandler(value);
+                }}
+                eye={false}
+                label="EMAIL ADDRESS*"
+                error={isEmailError}
+                errorMessage={" Email Address is required."}
+              />
             </View>
             <View>
-              <InputComponent eye={false} label="STATE LICENSE NUMBER*" />
+              <InputComponent
+                onChangeText={(value) => {
+                  licenseHandler(value);
+                }}
+                eye={false}
+                label="STATE LICENSE NUMBER"
+              />
             </View>
             <View>
-              <InputComponent eye={false} label="USERNAME*" />
+              <InputComponent
+                onChangeText={(value) => {
+                  userNameHandler(value);
+                }}
+                eye={false}
+                label="USERNAME*"
+                error={isNameLastNameError}
+                errorMessage={"Username is required."}
+              />
             </View>
             <View>
-              <InputComponent eye={true} label="PASSWORD*" />
+              <InputComponent
+                onChangeText={(value) => {
+                  passwordHandler(value);
+                }}
+                eye={true}
+                label="PASSWORD*"
+                passwordValue={true}
+                error={isPasswordError}
+                errorMessage={"Password is required."}
+              />
             </View>
             <View>
-              <InputComponent eye={true} label="CONFIRM PASSWORD*" />
+              <InputComponent
+                onChangeText={(value) => {
+                  confirmPasswordHandler(value);
+                }}
+                eye={true}
+                label="CONFIRM PASSWORD*"
+                passwordValue={true}
+                error={isConfirmPasswordError}
+                errorMessage={"Confirm Password is required."}
+              />
             </View>
             <View>
               <View
@@ -155,9 +354,9 @@ const SignUpAccess = (props) => {
                 <Pressable
                   android_ripple={{ color: "#ccc" }}
                   style={styles.loginBtn}
-                  // onPress={() => submitHandler()}
+                  onPress={() => submitHandler()}
                 >
-                  <Text style={styles.loginText}>SIGN IN</Text>
+                  <Text style={styles.loginText}>REGISTER</Text>
                 </Pressable>
               </View>
             </View>
@@ -274,5 +473,18 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     alignItems: "center",
+  },
+  errorView: {
+    backgroundColor: "#f9caca",
+    borderWidth: 0.4,
+    borderColor: "#990909",
+    width: "90%",
+    height: 45,
+    marginTop: 10,
+    borderRadius: 3,
+    justifyContent: "center",
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "center",
   },
 });

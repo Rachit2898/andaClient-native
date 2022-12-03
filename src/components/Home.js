@@ -269,106 +269,110 @@ export default function HomePage() {
         <View style={{ flex: 1 }}>
           {loadingValue ? (
             <View style={{ backgroundColor: "#fff", flex: 1 }}>
-              {userData?.selectedAccount?.cmeaCertificationExpiration &&
-                cmeaDays > 0 &&
-                days > 0 && (
-                  <View
+              <View
+                style={{
+                  borderColor: "#ed8b00",
+                  borderWidth: 1,
+                  borderRadius: 5,
+                  margin: 10,
+                }}
+              >
+                <View
+                  style={{
+                    borderBottomColor: "#ed8b00",
+                    borderBottomWidth: 1,
+                  }}
+                >
+                  <Text
                     style={{
-                      borderColor: "#ed8b00",
-                      borderWidth: 1,
-                      borderRadius: 5,
-                      margin: 10,
+                      color: "#ed8b00",
+                      fontSize: 12,
+                      fontWeight: "bold",
+                      textAlign: "center",
                     }}
                   >
+                    Account Alerts
+                  </Text>
+                </View>
+                <View style={{ marginVertical: 10, paddingHorizontal: 5 }}>
+                  {days > 0 && days < 100 && (
                     <View
                       style={{
-                        borderBottomColor: "#ed8b00",
-                        borderBottomWidth: 1,
+                        flexDirection: "row",
+                        paddingHorizontal: 5,
+                        alignItems: "center",
                       }}
                     >
+                      <Image
+                        source={require("../../assets/alert.png")}
+                        style={{
+                          width: 15,
+                          height: 15,
+                        }}
+                      />
                       <Text
                         style={{
-                          color: "#ed8b00",
                           fontSize: 12,
-                          fontWeight: "bold",
-                          textAlign: "center",
+                          color: "#494c4c",
+                          textAlign: "left",
                         }}
                       >
-                        Account Alerts
+                        Your DEA license expires in {days - 1} days
                       </Text>
                     </View>
-                    <View style={{ marginVertical: 10, paddingHorizontal: 5 }}>
-                      {days > 0 && days < 100 && (
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            paddingHorizontal: 5,
-                            alignItems: "center",
-                          }}
-                        >
-                          <Image
-                            source={require("../../assets/alert.png")}
-                            style={{
-                              width: 15,
-                              height: 15,
-                            }}
-                          />
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              color: "#494c4c",
-                              textAlign: "left",
-                            }}
-                          >
-                            Your DEA license expires in {days - 1} days
-                          </Text>
-                        </View>
-                      )}
-                      <View
+                  )}
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      paddingHorizontal: 5,
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        flex: 1,
+                        width: "100%",
+                      }}
+                    >
+                      <Image
+                        source={require("../../assets/alert.png")}
                         style={{
-                          flexDirection: "row",
-                          paddingHorizontal: 5,
+                          width: 15,
+                          height: 15,
+                          justifyContent: "center",
+                        }}
+                      />
+
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: "#494c4c",
+                          justifyContent: "center",
                         }}
                       >
-                        <Text style={{ flex: 1, width: "100%" }}>
-                          <Image
-                            source={require("../../assets/alert.png")}
-                            style={{
-                              width: 15,
-                              height: 15,
-                            }}
-                          />
-
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              color: "#494c4c",
-                            }}
-                          >
-                            Your CMEA certificate expires in {cmeaDays - 1}{" "}
-                            days. Click
-                            <Text
-                              onPress={() =>
-                                Linking.openURL(
-                                  "https://www.deadiversion.usdoj.gov/meth/index.html#self_cert"
-                                )
-                              }
-                              style={{
-                                color: "#ed8b00",
-                                fontSize: 12,
-                                textAlign: "center",
-                              }}
-                            >
-                              {" "}
-                              here
-                            </Text>
-                            , or contact your sales representative for details.
-                          </Text>
+                        Your CMEA certificate expires in {cmeaDays} days. Click
+                        <Text
+                          onPress={() =>
+                            Linking.openURL(
+                              "https://www.deadiversion.usdoj.gov/meth/index.html#self_cert"
+                            )
+                          }
+                          style={{
+                            color: "#ed8b00",
+                            fontSize: 12,
+                            textAlign: "center",
+                          }}
+                        >
+                          {" "}
+                          here
                         </Text>
-                      </View>
-                    </View>
+                        , or contact your sales representative for details.
+                      </Text>
+                    </Text>
                   </View>
-                )}
+                </View>
+              </View>
+
               {loading && <Spinner />}
               <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
                 <ScrollView showsVerticalScrollIndicator={false}>

@@ -14,7 +14,7 @@ import Pagination from "./Pagination";
 import TabBar from "./TabBar";
 import Spinner from "./Spinner";
 import Filter from "../filter/InventoryWatchListFilter";
-import PreNegotiatedScreen from "../screens/InventoryWatchScreen";
+import PreNegotiatedScreen from "../screens/ProductScreen";
 import {
   inventoryWatchList,
   addItem,
@@ -36,6 +36,15 @@ const Inventory = () => {
   } = useSelector((state) => ({
     ...state.products,
   }));
+  var { inventoryWatchUrls, sortingUrl } = useSelector((state) => ({
+    ...state.auth,
+  }));
+  let urlStructure = inventoryWatchUrls?.map((url) => {
+    return `${url?.fieldName}=${encodeURIComponent(url?.item)}&`;
+  });
+
+  const url = urlStructure.join("");
+
   const onPressTouch = () => {
     scrollRef?.current?.scrollTo({
       y: 0,
@@ -45,15 +54,16 @@ const Inventory = () => {
   const data = inventoryWatchListData?.products;
 
   useEffect(() => {
-    dispatch(inventoryWatchList({ value: "", currentPage }));
+    dispatch(
+      inventoryWatchList({ value: url, currentPage, sortValues: sortingUrl })
+    );
     dispatch(userInfo());
-  }, [favResponse]);
+  }, [favResponse, inventoryWatchUrls, sortingUrl, currentPage]);
   const result = inventoryWatchListData;
   const userData = userInfoData;
 
   const apiCall = async (currentPage) => {
     setCurrentPage(currentPage);
-    dispatch(inventoryWatchList({ value: "", currentPage }));
     onPressTouch();
   };
 
@@ -149,7 +159,7 @@ const Inventory = () => {
           </Text>
         )}
         <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
-          {result?.totalResults > 0 ? (
+          {data?.length > 0 ? (
             <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false}>
               <View>
                 {data?.map((item, i) => {

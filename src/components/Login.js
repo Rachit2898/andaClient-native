@@ -229,7 +229,6 @@ export default function LoginScreen() {
                       placeholderTextColor="#003f5c"
                       secureTextEntry={show}
                       onChangeText={(password) => passwordHandler(password)}
-                      placeholder={pushToken}
                     />
                     <Pressable
                       style={{

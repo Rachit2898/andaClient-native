@@ -8,12 +8,16 @@ const AddButton = (props) => {
   }));
 
   const [isChecked, setChecked] = useState(false);
+  const [final, setFinal] = useState(false);
   const openHandler = () => {
-    setChecked(true);
-    {
-      props.onPress();
+    if (props.count > 0) {
+      setChecked(true);
     }
+    props.onPress();
   };
+  useEffect(() => {
+    setFinal(isChecked && addLoading);
+  }, [isChecked, addLoading]);
 
   return (
     <View>
@@ -39,7 +43,7 @@ const AddButton = (props) => {
         >
           ADD
         </Text>
-        {isChecked && (
+        {final && (
           <View>
             <Image
               style={{

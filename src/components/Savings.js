@@ -14,7 +14,7 @@ import Pagination from "./Pagination";
 import Spinner from "./Spinner";
 import TabBar from "./TabBar";
 import Filter from "../filter/SavingsFilter";
-import SavingsScreen from "../screens/SavingsScreen";
+import SavingsScreen from "../screens/ProductScreen";
 import { savings, addItem, userInfo } from "../../redux/features/productApi";
 
 const SavingsItems = () => {
@@ -28,6 +28,9 @@ const SavingsItems = () => {
       ...state.products,
     })
   );
+  var { savingUrls, sortingUrl } = useSelector((state) => ({
+    ...state.auth,
+  }));
   const onPressTouch = () => {
     scrollRef?.current?.scrollTo({
       y: 0,
@@ -35,17 +38,21 @@ const SavingsItems = () => {
     });
   };
   const data = savingsData?.products;
+  let urlStructure = savingUrls?.map((url) => {
+    return `${url?.fieldName}=${encodeURIComponent(url?.item)}&`;
+  });
+
+  const url = urlStructure.join("");
 
   useEffect(() => {
-    dispatch(savings({ value: "", currentPage }));
+    dispatch(savings({ value: url, currentPage, sortValues: sortingUrl }));
     dispatch(userInfo());
-  }, [favResponse]);
+  }, [favResponse, url, sortingUrl, currentPage]);
   const result = savingsData;
   const userData = userInfoData;
 
   const apiCall = async (currentPage) => {
     setCurrentPage(currentPage);
-    dispatch(savings({ value: "", currentPage }));
     onPressTouch();
   };
 
@@ -140,7 +147,7 @@ const SavingsItems = () => {
           </Text>
         )}
         <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
-          {result.totalResults > 1 ? (
+          {data?.length > 0 ? (
             <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false}>
               <View>
                 {data?.map((item, i) => {

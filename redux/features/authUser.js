@@ -1,7 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getToken } from "../../utils";
-import { login, changePassword } from "../../utils";
+import {
+  login,
+  changePassword,
+  forgot_Password,
+  reset_Password,
+  forgot_user,
+  register_user,
+} from "../../utils";
 import _ from "lodash";
 import jwt_decode from "jwt-decode";
 
@@ -20,6 +27,57 @@ export const changeUserPassword = createAsyncThunk(
     return result;
   }
 );
+//https://staging.andanet.com/api/authentication/reset-password
+export const forgotPassword = createAsyncThunk(
+  "forgotPassword",
+  async (body) => {
+    console.log({ body });
+    const credentials = {
+      fingerprint: "723003fa07ed65c62a48ae4e7975a60b",
+      recaptcha: body.token,
+      username: body.name,
+    };
+    const result = await forgot_Password(credentials);
+    return result;
+  }
+);
+export const registerUser = createAsyncThunk("registerUser", async (body) => {
+  console.log({ body });
+  const credentials = {
+    accountNumber: body.accountNumber,
+    confirmPassword: body.confirmPassword,
+    contactName: body.nameLastName,
+    email: body.email,
+    fingerprint: "723003fa07ed65c62a48ae4e7975a60b",
+    password: body.password,
+    stateLicense: body.license,
+    username: body.userName,
+  };
+  const result = await register_user(credentials);
+  return result;
+});
+export const resetPassword = createAsyncThunk("resetPassword", async (body) => {
+  console.log({ body });
+  const credentials = {
+    fingerprint: "723003fa07ed65c62a48ae4e7975a60b",
+    password: body.password,
+    token: body.token,
+  };
+  const result = await reset_Password(credentials);
+
+  return result;
+});
+export const forgotUser = createAsyncThunk("forgotUser", async (body) => {
+  console.log({ body });
+  const credentials = {
+    recaptcha: body.token,
+    emailAddress: body.email,
+  };
+  const result = await forgot_user(credentials);
+
+  return result;
+});
+
 export function containsObject(obj, list) {
   var i;
   for (i = 0; i < list.length; i++) {
@@ -52,6 +110,7 @@ const initialState = {
   changePasswordValue: false,
   cartName: "Home",
   pushToken: "",
+  message: "",
 };
 
 const authReducer = createSlice({
@@ -94,6 +153,7 @@ const authReducer = createSlice({
       }
     },
     updateIntventoryUrls: (state, action) => {
+      console.log("payload", action.payload, state.inventoryWatchUrls);
       if (containsObject(action.payload, state.inventoryWatchUrls)) {
         _.pull(
           state.inventoryWatchUrls,
@@ -200,6 +260,19 @@ const authReducer = createSlice({
     cartColor: (state, action) => {
       state.cartName = action.payload;
     },
+    removeUrls: (state, action) => {
+      state.inventoryWatchUrls = [];
+      state.customerLikeYouUrls = [];
+      state.preNegotiatedUrls = [];
+      state.favoritesUrls = [];
+      state.priceReductionUrls = [];
+      state.savingUrls = [];
+      state.closeOutUrls = [];
+      state.shortDateUrls = [];
+      state.searchProductUrls = [];
+      state.andaContractItemsUrls = [];
+      state.sortingUrl = "";
+    },
   },
   extraReducers: {
     [signin.pending]: (state, action) => {
@@ -229,6 +302,37 @@ const authReducer = createSlice({
       state.changePasswordValue = true;
       state.error = action.payload;
     },
+    [forgotPassword.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [forgotPassword.fulfilled]: (state, action) => {
+      state.loading = false;
+    },
+    [forgotPassword.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [resetPassword.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [resetPassword.fulfilled]: (state, action) => {
+      state.loading = false;
+    },
+    [resetPassword.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [forgotUser.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [forgotUser.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    },
+    [forgotUser.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
@@ -240,6 +344,7 @@ export const {
   updatePreNegotiatedUrls,
   updateFavoriteUrls,
   updatePriceReductionsUrls,
+  updateSavingUrls,
   setSorting,
   searchValues,
   fingers,
@@ -248,5 +353,6 @@ export const {
   updateSearchProductUrls,
   updateCloseOutUrls,
   pushTokenApi,
+  removeUrls,
 } = authReducer.actions;
 export default authReducer.reducer;

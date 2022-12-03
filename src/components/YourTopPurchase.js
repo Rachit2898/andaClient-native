@@ -33,6 +33,9 @@ const YourTopPurchase = () => {
     useSelector((state) => ({
       ...state.products,
     }));
+  var { inventoryWatchUrls, sortingUrl } = useSelector((state) => ({
+    ...state.auth,
+  }));
   const onPressTouch = () => {
     scrollRef?.current?.scrollTo({
       y: 0,
@@ -41,16 +44,23 @@ const YourTopPurchase = () => {
   };
   const data = inventoryWatchData?.products;
 
+  let urlStructure = inventoryWatchUrls?.map((url) => {
+    return `${url?.fieldName}=${encodeURIComponent(url?.item)}&`;
+  });
+
+  const url = urlStructure.join("");
+
   useEffect(() => {
-    dispatch(inventoryWatch({ value: "", currentPage }));
+    dispatch(
+      inventoryWatch({ value: url, currentPage, sortValues: sortingUrl })
+    );
     dispatch(userInfo());
-  }, [favResponse]);
+  }, [favResponse, url, sortingUrl, currentPage]);
   const result = inventoryWatchData;
   const userData = userInfoData;
 
   const apiCall = async (currentPage) => {
     setCurrentPage(currentPage);
-    dispatch(inventoryWatch({ value: "", currentPage }));
     onPressTouch();
   };
 
@@ -143,65 +153,64 @@ const YourTopPurchase = () => {
             Showing {pageFirst} - {pageLast} of {result.totalResults} results
           </Text>
         )}
-        <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
-          {result?.totalResults > 0 ? (
-            <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false}>
-              <View>
-                {data?.map((item, i) => {
-                  const values =
-                    item?.defaultSku?.availabilityDetail?.quantityAvailable;
-
-                  return (
-                    <View key={item?.defaultSku?.id}>
-                      <ProductScreen
-                        url={item?.mediaMap?.primary?.url}
-                        name={item?.defaultSku?.name}
-                        externalId={item?.defaultSku?.externalId}
-                        nationalDrugCode={item?.defaultSku?.nationalDrugCode}
-                        manufacturer={item?.defaultSku?.manufacturer}
-                        itemForm={item?.defaultSku?.itemForm}
-                        description={item?.defaultSku?.description}
-                        netPriceItem={item?.defaultSku?.netPriceItem}
-                        amount={item?.defaultSku?.salePrice?.amount}
-                        id={item?.defaultSku?.id}
-                        values={values}
-                        generic={item?.defaultSku?.generic}
-                        petFriendly={item?.defaultSku?.petFriendly}
-                        schedule={item?.defaultSku?.schedule}
-                        rxItem={item?.defaultSku?.rxItem}
-                        refrigerated={item?.defaultSku?.refrigerated}
-                        hazardousMaterial={item?.defaultSku?.hazardousMaterial}
-                        groundShip={item?.defaultSku?.groundShip}
-                        dropShipOnly={item?.defaultSku?.dropShipOnly}
-                        itemRating={item?.defaultSku?.itemRating}
-                        rewardItem={item?.defaultSku?.rewardItem}
-                        priceType={item?.defaultSku?.priceType}
-                        orderLimit={item?.defaultSku?.dailyOrderLimit}
-                        accountId={userData?.selectedAccount?.id}
-                        type={item?.defaultSku?.productLists[0]?.type}
-                        itemReturnable={item?.defaultSku?.returnable}
-                      />
-                    </View>
-                  );
-                })}
-              </View>
-              {result?.totalResults > 25 && (
-                <View style={styles.pagination}>
-                  <Pagination
-                    currentPage={currentPage}
-                    totalCount={result?.totalResults}
-                    pageSize={result?.pageSize}
-                    onPageChange={(page) => apiCall(page)}
-                  />
-                </View>
-              )}
-            </ScrollView>
-          ) : (
+        {data?.length > 0 ? (
+          <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false}>
             <View>
-              <Spinner />
+              {data?.map((item, i) => {
+                const values =
+                  item?.defaultSku?.availabilityDetail?.quantityAvailable;
+
+                return (
+                  <View key={item?.defaultSku?.id}>
+                    <ProductScreen
+                      url={item?.mediaMap?.primary?.url}
+                      name={item?.defaultSku?.name}
+                      externalId={item?.defaultSku?.externalId}
+                      nationalDrugCode={item?.defaultSku?.nationalDrugCode}
+                      manufacturer={item?.defaultSku?.manufacturer}
+                      itemForm={item?.defaultSku?.itemForm}
+                      description={item?.defaultSku?.description}
+                      netPriceItem={item?.defaultSku?.netPriceItem}
+                      amount={item?.defaultSku?.salePrice?.amount}
+                      id={item?.defaultSku?.id}
+                      values={values}
+                      generic={item?.defaultSku?.generic}
+                      petFriendly={item?.defaultSku?.petFriendly}
+                      schedule={item?.defaultSku?.schedule}
+                      rxItem={item?.defaultSku?.rxItem}
+                      refrigerated={item?.defaultSku?.refrigerated}
+                      hazardousMaterial={item?.defaultSku?.hazardousMaterial}
+                      groundShip={item?.defaultSku?.groundShip}
+                      dropShipOnly={item?.defaultSku?.dropShipOnly}
+                      itemRating={item?.defaultSku?.itemRating}
+                      rewardItem={item?.defaultSku?.rewardItem}
+                      priceType={item?.defaultSku?.priceType}
+                      orderLimit={item?.defaultSku?.dailyOrderLimit}
+                      accountId={userData?.selectedAccount?.id}
+                      type={item?.defaultSku?.productLists[0]?.type}
+                      itemReturnable={item?.defaultSku?.returnable}
+                    />
+                  </View>
+                );
+              })}
             </View>
-          )}
-        </View>
+            {result?.totalResults > 25 && (
+              <View style={styles.pagination}>
+                <Pagination
+                  currentPage={currentPage}
+                  totalCount={result?.totalResults}
+                  pageSize={result?.pageSize}
+                  onPageChange={(page) => apiCall(page)}
+                />
+              </View>
+            )}
+          </ScrollView>
+        ) : (
+          <View>
+            <Spinner />
+          </View>
+        )}
+
         <View style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
           <TabBar />
         </View>
@@ -216,7 +225,7 @@ const styles = StyleSheet.create({
   pagination: {
     marginBottom: 10,
   },
-  mainBoxLoading: { opacity: 0.2 },
+  mainBoxLoading: {},
   mainBox: { backgroundColor: "#fff", marginBottom: 200 },
   pageText: {
     color: "#494c4c",

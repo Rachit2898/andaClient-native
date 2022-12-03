@@ -23,25 +23,15 @@ import {
 } from "../../redux/features/productApi";
 import LikeButton from "../components/Ui/LikeButton";
 import AddButton from "../components/Ui/AddButton";
-
+import _ from "lodash";
 const ProductScreen = (props) => {
-  const scrollRef = useRef();
   const navigation = useNavigation();
-  const [itemValues, setItem] = useState([]);
   const dispatch = useDispatch();
-  const [modalVisible, setModalVisible] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
   const [count, setCount] = useState(1);
   const [currentIndex, setCurrentIndex] = useState(-1);
-  const { inventoryWatchData, userInfoData, addLoading, loading, favResponse } =
-    useSelector((state) => ({
-      ...state.products,
-    }));
-
-  const checkBoxHandler = (item) => {
-    setItem(item);
-  };
-
+  const { loading } = useSelector((state) => ({
+    ...state.products,
+  }));
   const addButton = (id) => {
     setCurrentIndex(id);
     setCount(parseInt(count) + 1);
@@ -89,17 +79,74 @@ const ProductScreen = (props) => {
     <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
       {loading && <Spinner />}
       <View style={{ flexDirection: "row" }}>
-        <Pressable
+        <View
           style={{
             justifyContent: "center",
             alignSelf: "center",
           }}
-          onPress={() => {
-            productDetailHandler(props.id);
-          }}
         >
-          {props.url ? (
-            <>
+          {props.priceReduced && (
+            <View
+              style={[
+                styles.bannerComponent,
+                {
+                  transform: [{ skewY: "-35deg" }],
+                },
+              ]}
+            >
+              <Text style={styles.bannerText}>&#36; Reduced</Text>
+            </View>
+          )}
+          {!_.isNil(props.shortOrCloseOutDate) &&
+            props.shortOrCloseOutDate !== "" &&
+            props.inventoryClassKey === "S" && (
+              <View
+                style={[
+                  styles.bannerComponent,
+                  {
+                    transform: [{ skewY: "-45deg" }],
+                  },
+                ]}
+              >
+                <Text style={styles.bannerText}>S/D</Text>
+              </View>
+            )}
+          {props.inventoryClassKey === "C" && (
+            <View
+              style={[
+                styles.bannerComponent,
+                {
+                  transform: [{ skewY: "-35deg" }],
+                },
+              ]}
+            >
+              <Text style={styles.bannerText}>C/O</Text>
+            </View>
+          )}
+          <Pressable
+            style={{
+              justifyContent: "center",
+              alignSelf: "center",
+            }}
+            onPress={() => {
+              productDetailHandler(props.id);
+            }}
+          >
+            {props.url ? (
+              <>
+                <Image
+                  style={{
+                    borderRadius: 3,
+                    marginVertical: 5,
+                    width: 80,
+                    height: 80,
+                  }}
+                  source={{
+                    uri: `https://staging.andanet.com${props?.url}`,
+                  }}
+                />
+              </>
+            ) : (
               <Image
                 style={{
                   borderRadius: 3,
@@ -107,23 +154,11 @@ const ProductScreen = (props) => {
                   width: 80,
                   height: 80,
                 }}
-                source={{
-                  uri: `https://staging.andanet.com${props?.url}`,
-                }}
+                source={require("../../assets/camera.png")}
               />
-            </>
-          ) : (
-            <Image
-              style={{
-                borderRadius: 3,
-                marginVertical: 5,
-                width: 80,
-                height: 80,
-              }}
-              source={require("../../assets/camera.png")}
-            />
-          )}
-        </Pressable>
+            )}
+          </Pressable>
+        </View>
         <LikeButton
           onPress={() => {
             favoriteHandler(props?.id, props.type);
@@ -540,37 +575,6 @@ const ProductScreen = (props) => {
               onPress={() => addItemIntoCart(props?.id)}
               count={count}
             />
-            {/* <Pressable
-              style={{
-                backgroundColor: "#ed8b00",
-                width: 60,
-                height: 25,
-                borderRadius: 3,
-                borderRadius: 4,
-                alignItems: "center",
-                justifyContent: "center",
-                flexDirection: "row",
-              }}
-            >
-              <Text
-                style={{
-                  color: "#fff",
-                  fontWeight: "bold",
-                  fontSize: 12,
-                }}
-              >
-                ADD
-              </Text>
-              <View>
-                <Image
-                  style={{
-                    width: 12,
-                    height: 12,
-                  }}
-                  source={require("../../assets/check.png")}
-                />
-              </View>
-            </Pressable> */}
           </View>
           {!!props.orderLimit && (
             <View
@@ -627,5 +631,18 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "space-between",
     opacity: 0.2,
+  },
+  bannerComponent: {
+    backgroundColor: "#ed8b00",
+    zIndex: 1,
+    height: 20,
+    marginHorizontal: 10,
+  },
+  bannerText: {
+    color: "#fff",
+    fontSize: 12,
+    textAlign: "center",
+    paddingHorizontal: 5,
+    paddingVertical: 2,
   },
 });

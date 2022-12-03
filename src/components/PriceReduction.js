@@ -14,7 +14,7 @@ import Pagination from "./Pagination";
 import TabBar from "./TabBar";
 import Spinner from "./Spinner";
 import Filter from "../filter/PriceReductionFilter";
-import PriceReductionScreen from "../screens/PriceReductionScreen";
+import PriceReductionScreen from "../screens/ProductScreen";
 import {
   priceReductionItems,
   addItem,
@@ -32,6 +32,10 @@ const PriceReductionItems = () => {
       ...state.products,
     }));
 
+  var { priceReductionUrls, sortingUrl } = useSelector((state) => ({
+    ...state.auth,
+  }));
+
   const onPressTouch = () => {
     scrollRef?.current?.scrollTo({
       y: 0,
@@ -39,17 +43,23 @@ const PriceReductionItems = () => {
     });
   };
   const data = priceReductionData?.products;
+  let urlStructure = priceReductionUrls?.map((url) => {
+    return `${url?.fieldName}=${encodeURIComponent(url?.item)}&`;
+  });
+
+  const url = urlStructure.join("");
 
   useEffect(() => {
-    dispatch(priceReductionItems({ value: "", currentPage }));
+    dispatch(
+      priceReductionItems({ value: url, currentPage, sortValues: sortingUrl })
+    );
     dispatch(userInfo());
-  }, [favResponse]);
+  }, [favResponse, url, sortingUrl, currentPage]);
   const result = priceReductionData;
   const userData = userInfoData;
 
   const apiCall = async (currentPage) => {
     setCurrentPage(currentPage);
-    dispatch(priceReductionItems({ value: "", currentPage }));
     onPressTouch();
   };
 
@@ -145,7 +155,7 @@ const PriceReductionItems = () => {
         )}
         {!!data ? (
           <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
-            {result.totalResults > 0 ? (
+            {data?.length > 0 ? (
               <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false}>
                 <View>
                   {data?.map((item) => {

@@ -14,7 +14,7 @@ import Pagination from "./Pagination";
 import Spinner from "./Spinner";
 import TabBar from "./TabBar";
 import Filter from "../filter/FavoritesFilter";
-import PreNegotiatedScreen from "../screens/FavoritesScreen";
+import PreNegotiatedScreen from "../screens/ProductScreen";
 import {
   favoritesApi,
   addItem,
@@ -33,6 +33,9 @@ const Favorites = () => {
       ...state.products,
     })
   );
+  var { favoritesUrls, sortingUrl } = useSelector((state) => ({
+    ...state.auth,
+  }));
   const onPressTouch = () => {
     scrollRef?.current?.scrollTo({
       y: 0,
@@ -40,17 +43,21 @@ const Favorites = () => {
     });
   };
   const data = favoritesData?.products;
+  let urlStructure = favoritesUrls?.map((url) => {
+    return `${url?.fieldName}=${encodeURIComponent(url?.item)}&`;
+  });
+
+  const url = urlStructure.join("");
 
   useEffect(() => {
-    dispatch(favoritesApi({ value: "", currentPage }));
+    dispatch(favoritesApi({ value: url, currentPage, sortValues: sortingUrl }));
     dispatch(userInfo());
-  }, [favResponse]);
+  }, [favResponse, url, sortingUrl, currentPage]);
   const result = favoritesData;
   const userData = userInfoData;
 
   const apiCall = async (currentPage) => {
     setCurrentPage(currentPage);
-    dispatch(favoritesApi({ value: "", currentPage }));
     onPressTouch();
   };
 
@@ -152,7 +159,7 @@ const Favorites = () => {
           </Text>
         )}
         <View style={styles.mainBox}>
-          {loadingValue > 0 ? (
+          {data?.length > 0 ? (
             <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false}>
               <View>
                 {data?.map((item, i) => {

@@ -14,7 +14,7 @@ import Pagination from "./Pagination";
 import Spinner from "./Spinner";
 import TabBar from "./TabBar";
 import Filter from "../filter/SearchProductFilter";
-import PreNegotiatedScreen from "../screens/SearchProductScreen";
+import PreNegotiatedScreen from "../screens/ProductScreen";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import {
   userInfo,
@@ -185,7 +185,7 @@ const SearchProduct = () => {
         )}
 
         <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
-          {result.totalResults ? (
+          {data?.length > 0 ? (
             <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false}>
               <View>
                 {data?.map((item, i) => {

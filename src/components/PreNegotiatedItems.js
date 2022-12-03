@@ -14,7 +14,7 @@ import Pagination from "./Pagination";
 import Spinner from "./Spinner";
 import TabBar from "./TabBar";
 import Filter from "../filter/PreNegotitedFilter";
-import PreNegotiatedScreen from "../screens/PreNegotiatedScreen";
+import PreNegotiatedScreen from "../screens/ProductScreen";
 import {
   preNegotiated,
   addItem,
@@ -32,6 +32,9 @@ const PreNegotiatedItems = () => {
       ...state.products,
     })
   );
+  var { preNegotiatedUrls, sortingUrl } = useSelector((state) => ({
+    ...state.auth,
+  }));
   const onPressTouch = () => {
     scrollRef?.current?.scrollTo({
       y: 0,
@@ -39,17 +42,23 @@ const PreNegotiatedItems = () => {
     });
   };
   const data = preNegotiatedData?.products;
+  let urlStructure = preNegotiatedUrls?.map((url) => {
+    return `${url?.fieldName}=${encodeURIComponent(url?.item)}&`;
+  });
+
+  const url = urlStructure.join("");
 
   useEffect(() => {
-    dispatch(preNegotiated({ value: "", currentPage }));
+    dispatch(
+      preNegotiated({ value: url, currentPage, sortValues: sortingUrl })
+    );
     dispatch(userInfo());
-  }, [favResponse]);
+  }, [favResponse, url, sortingUrl, currentPage]);
   const result = preNegotiatedData;
   const userData = userInfoData;
 
   const apiCall = async (currentPage) => {
     setCurrentPage(currentPage);
-    dispatch(preNegotiated({ value: "", currentPage }));
     onPressTouch();
   };
 
@@ -144,7 +153,7 @@ const PreNegotiatedItems = () => {
           </Text>
         )}
         <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
-          {result.totalResults > 0 ? (
+          {data?.length > 0 ? (
             <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false}>
               <View>
                 {data?.map((item, i) => {

@@ -531,40 +531,48 @@ const Account = () => {
                 </Text>
               </View>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
-                <Text style={{ color: "#494c4c" }}>State License</Text>
+                <Text style={{ color: "#494c4c" }}>State License:</Text>
                 <Text style={{ marginLeft: 5, color: "#494c4c" }}>
                   {userData?.selectedAccount?.accountDetail?.stateLicense}
                 </Text>
               </View>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
-                <Text style={{ color: "#494c4c" }}>
-                  State License Expiration:
-                </Text>
-                <Text style={{ marginLeft: 5, color: "#494c4c" }}>
-                  {Moment(
-                    userData?.selectedAccount?.accountDetail
-                      ?.stateLicenseExpiration
-                  ).format("MM/DD/YYYY hh:mmA")}
-                </Text>
-              </View>
-              <View style={{ flexDirection: "row", marginTop: 5 }}>
-                <Text style={{ color: "#494c4c" }}>State Control License:</Text>
-                <Text style={{ marginLeft: 5, color: "#494c4c" }}>
-                  {
-                    userData?.selectedAccount?.accountDetail
-                      ?.stateControlLicense
-                  }
+                <Text>
+                  <Text style={{ color: "#494c4c" }}>
+                    State License Expiration:
+                  </Text>
+                  <Text style={{ marginLeft: 5, color: "#494c4c" }}>
+                    {Moment(
+                      userData?.selectedAccount?.accountDetail
+                        ?.stateLicenseExpiration
+                    ).format("MM/DD/YYYY hh:mmA")}
+                  </Text>
                 </Text>
               </View>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
-                <Text style={{ color: "#494c4c" }}>
-                  State Control License Expiration:
+                <Text>
+                  <Text style={{ marginLeft: 5, color: "#494c4c" }}>
+                    State Control License:
+                  </Text>
+                  <Text style={{ color: "#494c4c" }}>
+                    {
+                      userData?.selectedAccount?.accountDetail
+                        ?.stateControlLicense
+                    }
+                  </Text>
                 </Text>
-                <Text style={{ marginLeft: 5, color: "#494c4c" }}>
-                  {Moment(
-                    userData?.selectedAccount?.accountDetail
-                      ?.stateControlLicenseExpiration
-                  ).format("MM/DD/YYYY hh:mmA")}
+              </View>
+              <View style={{ flexDirection: "row", marginTop: 5 }}>
+                <Text>
+                  <Text style={{ color: "#494c4c" }}>
+                    State Control License Expiration:
+                  </Text>
+                  <Text style={{ marginLeft: 5, color: "#494c4c" }}>
+                    {Moment(
+                      userData?.selectedAccount?.accountDetail
+                        ?.stateControlLicenseExpiration
+                    ).format("MM/DD/YYYY hh:mmA")}
+                  </Text>
                 </Text>
               </View>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
@@ -578,13 +586,15 @@ const Account = () => {
                 </Text>
               </View>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
-                <Text style={{ color: "#494c4c" }}>
-                  CMEA Certification Expiration:
-                </Text>
-                <Text style={{ marginLeft: 5, color: "#494c4c" }}>
-                  {Moment(
-                    userData?.selectedAccount?.cmeaCertificationExpiration
-                  ).format("MM/DD/YYYY hh:mmA")}
+                <Text>
+                  <Text style={{ color: "#494c4c" }}>
+                    CMEA Certification Expiration:
+                  </Text>
+                  <Text style={{ marginLeft: 5, color: "#494c4c" }}>
+                    {Moment(
+                      userData?.selectedAccount?.cmeaCertificationExpiration
+                    ).format("MM/DD/YYYY hh:mmA")}
+                  </Text>
                 </Text>
               </View>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
@@ -608,19 +618,21 @@ const Account = () => {
                 </Text>
               </View>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
-                <Text style={{ color: "#494c4c" }}>Sales Rep Email:</Text>
-                <Text
-                  onPress={() =>
-                    Linking.openURL(
-                      `mailto:${userData?.selectedAccount?.accountDetail?.accountRep.salesRepEmail}`
-                    )
-                  }
-                  style={{ marginLeft: 5, color: "#006ba6" }}
-                >
-                  {
-                    userData?.selectedAccount?.accountDetail?.accountRep
-                      .salesRepEmail
-                  }
+                <Text>
+                  <Text style={{ color: "#494c4c" }}>Sales Rep Email:</Text>
+                  <Text
+                    onPress={() =>
+                      Linking.openURL(
+                        `mailto:${userData?.selectedAccount?.accountDetail?.accountRep.salesRepEmail}`
+                      )
+                    }
+                    style={{ marginLeft: 5, color: "#006ba6" }}
+                  >
+                    {
+                      userData?.selectedAccount?.accountDetail?.accountRep
+                        .salesRepEmail
+                    }
+                  </Text>
                 </Text>
               </View>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
@@ -682,7 +694,7 @@ const Account = () => {
                   <Text style={{ color: "#494c4c" }}>Phone:</Text>
                   <Text
                     onPress={() => Linking.openURL(`tel:${phoneNumber}`)}
-                    style={{ marginLeft: 5, color: "#494c4c" }}
+                    style={{ marginLeft: 5, color: "#006ba6" }}
                   >
                     {phoneNumber}
                   </Text>
@@ -697,7 +709,7 @@ const Account = () => {
 
                   <Text
                     onPress={() => Linking.openURL(`tel:${phoneFaxNumber}`)}
-                    style={{ marginLeft: 5, color: "#494c4c" }}
+                    style={{ marginLeft: 5, color: "#006ba6" }}
                   >
                     {phoneFaxNumber}
                   </Text>

@@ -7,12 +7,64 @@ import {
   Pressable,
   Linking,
 } from "react-native";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 
+const InputComponent = (props) => {
+  const [value, setValue] = useState(false);
+  const [isChecked, setChecked] = useState(false);
+
+  const [show, setShow] = useState(true);
+  const [error, setError] = useState(false);
+  const [nullValue, setNullValue] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(-1);
+
+  const showPasswordHandler = (value) => {
+    setShow((pre) => !pre);
+    setShowPassword(value);
+  };
+  return (
+    <View>
+      <View style={styles.inputView}>
+        <TextInput
+          style={styles.TextInput}
+          placeholderTextColor="#9d9b9b"
+          secureTextEntry={show}
+          onChangeText={props.onChangeText}
+          placeholder={props.placeholder}
+        />
+        <Pressable
+          style={{
+            justifyContent: "center",
+            margin: 10,
+            paddingHorizontal: 10,
+            borderRadius: 3,
+          }}
+          onPress={() => showPasswordHandler(2)}
+        >
+          {show ? (
+            <Image
+              style={{ height: 15, width: 18 }}
+              source={require("../../../assets/eye-close.png")}
+            />
+          ) : (
+            <Image
+              style={{ height: 15, width: 18 }}
+              source={require("../../../assets/eye-open.png")}
+            />
+          )}
+        </Pressable>
+      </View>
+    </View>
+  );
+};
 const ForgotScreen = (props) => {
   const navigation = useNavigation();
+  const [show, setShow] = useState(true);
   return (
     <SafeAreaView
       style={{ backgroundColor: "#063e63", flex: 1 }}
@@ -76,34 +128,81 @@ const ForgotScreen = (props) => {
               </Text>
             </View>
           )}
+          {props.passwordMatchError && (
+            <View style={styles.errorView}>
+              <Image
+                style={{ height: 19, width: 18 }}
+                source={require("../../../assets/errorAlert.png")}
+              />
+              <Text style={{ color: "#990909", marginHorizontal: 10 }}>
+                {props.passwordMatchErrorMessage}
+              </Text>
+            </View>
+          )}
           {props.placeholder && (
             <View style={styles.inputView}>
               <TextInput
                 style={styles.TextInput}
                 placeholderTextColor="#9d9b9b"
                 placeholder={props.placeholder}
-                onChangeText={props.onChangeText}
+                onChangeText={props.onChangeTextFirst}
               />
+            </View>
+          )}
+          {props.error && (
+            <View style={styles.errorView}>
+              <Image
+                style={{ height: 19, width: 18 }}
+                source={require("../../../assets/errorAlert.png")}
+              />
+              <Text style={{ color: "#990909", marginHorizontal: 10 }}>
+                {props.errorMessage}
+              </Text>
+            </View>
+          )}
+          {props.validationError && (
+            <View style={styles.errorView}>
+              <Image
+                style={{ height: 19, width: 18 }}
+                source={require("../../../assets/errorAlert.png")}
+              />
+              <Text style={{ color: "#990909", marginHorizontal: 10 }}>
+                {props.validationErrorMessage}
+              </Text>
             </View>
           )}
           {props.placeholder2 && (
-            <View style={styles.inputView}>
-              <TextInput
-                style={styles.TextInput}
-                placeholderTextColor="#9d9b9b"
-                placeholder={props.placeholder2}
-                onChangeText={props.onChangeText}
+            <InputComponent
+              onChangeText={props.onChangeTextSecond}
+              placeholder={props.placeholder2}
+            />
+          )}
+          {props.passwordError && (
+            <View style={styles.errorView}>
+              <Image
+                style={{ height: 19, width: 18 }}
+                source={require("../../../assets/errorAlert.png")}
               />
+              <Text style={{ color: "#990909", marginHorizontal: 10 }}>
+                {props.passwordErrorMessage}
+              </Text>
             </View>
           )}
           {props.placeholder3 && (
-            <View style={styles.inputView}>
-              <TextInput
-                style={styles.TextInput}
-                placeholderTextColor="#9d9b9b"
-                placeholder={props.placeholder3}
-                onChangeText={props.onChangeText}
+            <InputComponent
+              placeholder={props.placeholder3}
+              onChangeText={props.onChangeTextThird}
+            />
+          )}
+          {props.confirmPasswordError && (
+            <View style={styles.errorView}>
+              <Image
+                style={{ height: 19, width: 18 }}
+                source={require("../../../assets/errorAlert.png")}
               />
+              <Text style={{ color: "#990909", marginHorizontal: 10 }}>
+                {props.confirmPasswordErrorMessage}
+              </Text>
             </View>
           )}
           {props.onPress && (
@@ -218,6 +317,19 @@ const styles = StyleSheet.create({
     padding: 2,
     marginTop: 20,
     justifyContent: "space-between", //Centered horizontally
+    alignSelf: "center",
+  },
+  errorView: {
+    backgroundColor: "#f9caca",
+    borderWidth: 0.4,
+    borderColor: "#990909",
+    width: "80%",
+    height: 45,
+    marginTop: 10,
+    borderRadius: 3,
+    justifyContent: "center",
+    flexDirection: "row",
+    alignItems: "center",
     alignSelf: "center",
   },
 });

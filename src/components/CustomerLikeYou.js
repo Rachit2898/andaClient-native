@@ -14,7 +14,7 @@ import Pagination from "./Pagination";
 import Spinner from "./Spinner";
 import TabBar from "./TabBar";
 import Filter from "../filter/CustomerLikeYouFilter";
-import ProductScreen from "../screens/CustomerLikeYouScreen";
+import ProductScreen from "../screens/ProductScreen";
 import {
   customerLikeYouSeeMore,
   addItem,
@@ -33,6 +33,9 @@ const CustomerLikeYou = () => {
     useSelector((state) => ({
       ...state.products,
     }));
+  var { customerLikeYouUrls, sortingUrl } = useSelector((state) => ({
+    ...state.auth,
+  }));
   const onPressTouch = () => {
     scrollRef?.current?.scrollTo({
       y: 0,
@@ -41,16 +44,26 @@ const CustomerLikeYou = () => {
   };
   const data = customerLikeYouSeeMoreData?.products;
 
+  let urlStructure = customerLikeYouUrls?.map((url) => {
+    return `${url?.fieldName}=${encodeURIComponent(url?.item)}&`;
+  });
+  const url = urlStructure.join("");
+
   useEffect(() => {
-    dispatch(customerLikeYouSeeMore({ value: "", currentPage }));
+    dispatch(
+      customerLikeYouSeeMore({
+        value: url,
+        currentPage,
+        sortValues: sortingUrl,
+      })
+    );
     dispatch(userInfo());
-  }, [favResponse]);
+  }, [favResponse, currentPage, sortingUrl, url]);
   const result = customerLikeYouSeeMoreData;
   const userData = userInfoData;
 
   const apiCall = async (currentPage) => {
     setCurrentPage(currentPage);
-    dispatch(customerLikeYouSeeMore({ value: "", currentPage }));
     onPressTouch();
   };
 
@@ -145,7 +158,7 @@ const CustomerLikeYou = () => {
           </Text>
         )}
         <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
-          {result.totalResults > 0 ? (
+          {data?.length > 0 ? (
             <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false}>
               <View>
                 {data?.map((item, i) => {
@@ -198,7 +211,7 @@ const CustomerLikeYou = () => {
               )}
             </ScrollView>
           ) : (
-            <View style={{ flex: 1 }}>
+            <View>
               <Spinner />
             </View>
           )}
@@ -215,7 +228,7 @@ export default CustomerLikeYou;
 
 const styles = StyleSheet.create({
   pagination: {
-    marginBottom: 100,
+    marginBottom: 20,
   },
   mainBoxLoading: { opacity: 0.2 },
   mainBox: { backgroundColor: "#fff", marginBottom: 200 },

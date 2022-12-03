@@ -14,7 +14,7 @@ import Pagination from "./Pagination";
 import Spinner from "./Spinner";
 import TabBar from "./TabBar";
 import Filter from "../filter/CloseOutsFilter";
-import SavingsScreen from "../screens/CloseOutScreen";
+import SavingsScreen from "../screens/ProductScreen";
 import { closeOut, addItem, userInfo } from "../../redux/features/productApi";
 
 const CloseOuts = () => {
@@ -28,6 +28,14 @@ const CloseOuts = () => {
       ...state.products,
     })
   );
+  var { closeOutUrls, sortingUrl } = useSelector((state) => ({
+    ...state.auth,
+  }));
+  let urlStructure = closeOutUrls?.map((url) => {
+    return `${url?.fieldName}=${encodeURIComponent(url?.item)}&`;
+  });
+
+  const url = urlStructure.join("");
   const onPressTouch = () => {
     scrollRef?.current?.scrollTo({
       y: 0,
@@ -37,15 +45,14 @@ const CloseOuts = () => {
   const data = closeOutData?.products;
 
   useEffect(() => {
-    dispatch(closeOut({ value: "", currentPage }));
+    dispatch(closeOut({ value: url, currentPage, sortValues: sortingUrl }));
     dispatch(userInfo());
-  }, [favResponse]);
+  }, [favResponse, url, sortingUrl, currentPage]);
   const result = closeOutData;
   const userData = userInfoData;
 
   const apiCall = async (currentPage) => {
     setCurrentPage(currentPage);
-    dispatch(closeOut({ value: "", currentPage }));
     onPressTouch();
   };
 
@@ -141,7 +148,7 @@ const CloseOuts = () => {
           </Text>
         )}
         <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
-          {result.totalResults > 0 ? (
+          {data?.length > 0 ? (
             <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false}>
               <View>
                 {data?.map((item, i) => {

@@ -67,6 +67,10 @@ const Navbar = () => {
   useEffect(() => {
     searchItemHandler("");
   }, [isFocused]);
+  const cleanSearchHandler = () => {
+    setSearchValue("");
+    setOpenSearch(false);
+  };
   return (
     <View>
       <View style={styles.searchBox}>
@@ -96,6 +100,7 @@ const Navbar = () => {
             />
           )}
         </Pressable>
+
         <TextInput
           style={styles.input}
           placeholder="Search by number, name or keyword"
@@ -103,7 +108,30 @@ const Navbar = () => {
           onClear={(value) => searchItemHandler("")}
           returnKeyType="search"
           onSubmitEditing={() => searchProductHandler(searchValue)}
+          value={searchValue}
         />
+        <View
+          style={{
+            justifyContent: "center",
+            width: "10%",
+            alignItems: "center",
+          }}
+        >
+          {searchValue?.length ? (
+            <Pressable onPress={() => cleanSearchHandler()}>
+              <Image
+                source={require("../../assets/close.png")}
+                style={{
+                  width: 15,
+                  height: 15,
+                }}
+              />
+            </Pressable>
+          ) : (
+            <></>
+          )}
+        </View>
+
         <Pressable
           style={{ justifyContent: "center", marginHorizontal: 5 }}
           onPress={() => BarCodeHandler()}
@@ -157,8 +185,8 @@ const styles = StyleSheet.create({
   },
   input: {
     color: "#494c4c",
-    fontSize: 15,
-    width: "80%",
+    fontSize: 12,
+    width: "70%",
     marginHorizontal: 5,
   },
   search: {
