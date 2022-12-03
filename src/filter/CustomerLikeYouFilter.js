@@ -17,6 +17,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import {
   updateCustomerLikeYouUrls,
   setSorting,
+  removeUrls,
 } from "../../redux/features/authUser";
 import { customerLikeYouSeeMore } from "../../redux/features/productApi";
 import Filters from "../components/Ui/Filters";
@@ -24,7 +25,7 @@ import Filters from "../components/Ui/Filters";
 const Filter = ({ modalVisible, setModalVisible }) => {
   const [response, setResponse] = useState();
   const [isChecked, setChecked] = useState(false);
-  const [loading, setLoading] = useState(false);
+
   const [sortingOpen, setsortingOpen] = useState(false);
   const [sortingValue, setsortingValue] = useState(null);
   const [sorting, setsorting] = useState([
@@ -33,51 +34,27 @@ const Filter = ({ modalVisible, setModalVisible }) => {
     { label: "Price", value: "retailPrice%20asc" },
   ]);
   const dispatch = useDispatch();
-  const [values, setValue] = useState(-1);
-  const { paginationLoading, customerLikeYouSeeMoreData } = useSelector(
-    (state) => ({
-      ...state.products,
-    })
-  );
-
-  var { customerLikeYouUrls } = useSelector((state) => ({
-    ...state.auth,
+  const { loading, customerLikeYouSeeMoreData } = useSelector((state) => ({
+    ...state.products,
   }));
-  const onsortingOpen = useCallback(() => {
-    setCompanyOpen(false);
-  }, []);
-  let urlStructure = customerLikeYouUrls?.map((url) => {
-    return `${url?.fieldName}=${encodeURIComponent(url?.item)}&`;
-  });
-
-  const url = urlStructure.join("");
-
-  useEffect(() => {
-    dispatch(
-      customerLikeYouSeeMore({
-        value: url,
-        currentPage: 1,
-        sortValues: sortingValue,
-      })
-    );
-    dispatch(setSorting(sortingValue));
-  }, [customerLikeYouUrls, sortingValue]);
-
   useEffect(() => {
     setResponse(customerLikeYouSeeMoreData);
-    setLoading(false);
   }, [customerLikeYouSeeMoreData]);
-
   const filterValues = response?.searchFacets;
-  var [currentFilter, setCurrentFilter] = useState();
-  const [showFilter, setShowFilter] = useState(false);
-
-  const showFilterHandler = (lable) => {
-    setCurrentFilter(lable);
-    setShowFilter((pre) => !pre);
-  };
-
   const onChange = () => {};
+  const checkHandler = () => {
+    setChecked(!isChecked);
+  };
+  useEffect(() => {
+    dispatch(setSorting(sortingValue));
+  }, [sortingValue]);
+  const myCheckHandler = (label, labelValue) => {
+    dispatch(updateCustomerLikeYouUrls({ fieldName: label, item: labelValue }));
+  };
+  const clearHandler = () => {
+    setsortingValue("");
+    dispatch(removeUrls());
+  };
   function MyCheckbox({
     checked,
     onPress,
@@ -105,31 +82,6 @@ const Filter = ({ modalVisible, setModalVisible }) => {
       </View>
     );
   }
-  const checkHandler = () => {
-    setChecked(!isChecked);
-  };
-  const myCheckHandler = (label, labelValue) => {
-    setValue(labelValue);
-    setLoading(true);
-    dispatch(updateCustomerLikeYouUrls({ fieldName: label, item: labelValue }));
-  };
-
-  const data = [
-    { value: "Item description" },
-    { value: "Size" },
-    { value: "Price" },
-  ];
-
-  const clearHandler = () => {
-    dispatch(
-      customerLikeYouSeeMore({
-        value: "",
-        currentPage: 1,
-        sortValues: "",
-      })
-    );
-    setsortingValue("");
-  };
 
   return (
     <View style={styles.modelContainer}>
@@ -148,7 +100,7 @@ const Filter = ({ modalVisible, setModalVisible }) => {
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
                 <View style={styles.closeButton}>
-                  {(loading || paginationLoading) && <Spinner />}
+                  {loading && <Spinner />}
                   <Pressable
                     style={{ alignItems: "flex-end" }}
                     onPress={() => setModalVisible(false)}
@@ -195,7 +147,7 @@ const Filter = ({ modalVisible, setModalVisible }) => {
                             {item?.values?.map((value) => {
                               return (
                                 <View key={value?.value}>
-                                  {value?.quantity && (
+                                  {value?.quantity ? (
                                     <View
                                       style={{
                                         flexDirection: "row",
@@ -238,6 +190,8 @@ const Filter = ({ modalVisible, setModalVisible }) => {
                                         ({value?.quantity})
                                       </Text>
                                     </View>
+                                  ) : (
+                                    <></>
                                   )}
                                 </View>
                               );

@@ -48,7 +48,7 @@ const CartScreen = (props) => {
 
   const addButton = (id) => {
     setCurrentIndex(id);
-    setCount(count + 1);
+    setCount(parseInt(count) + 1);
     setVisible(true);
   };
 
@@ -107,6 +107,10 @@ const CartScreen = (props) => {
         { text: "YES", onPress: () => deleteCartHandler(id) },
       ]
     );
+  };
+  const changeHandler = (id, value) => {
+    setCount(value);
+    setCurrentIndex(id);
   };
 
   return (
@@ -336,10 +340,22 @@ const CartScreen = (props) => {
               <View
                 style={{
                   alignSelf: "center",
-                  paddingHorizontal: 5,
                 }}
               >
-                <Text style={{ color: "#005185" }}>{count}</Text>
+                <TextInput
+                  style={{
+                    color: "#005185",
+                    alignSelf: "center",
+                    justifyContent: "center",
+                    textAlign: "center",
+
+                    width: 30,
+                  }}
+                  onChangeText={(value) => changeHandler(props?.id, value)}
+                  keyboardType="number-pad"
+                >
+                  {count}
+                </TextInput>
               </View>
               {!!props.orderLimit ? (
                 <Pressable

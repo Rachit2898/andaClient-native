@@ -14,7 +14,7 @@ import Pagination from "./Pagination";
 import Spinner from "./Spinner";
 import TabBar from "./TabBar";
 import Filter from "../filter/AndaContractFilter";
-import SavingsScreen from "../screens/AndaContractItemsScreen";
+import SavingsScreen from "../screens/ProductScreen";
 import {
   andaContractItems,
   addItem,
@@ -27,11 +27,13 @@ const AndaContractItems = () => {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const { andaContractItemsData, userInfoData, loading } = useSelector(
-    (state) => ({
+  const { andaContractItemsData, userInfoData, loading, favResponse } =
+    useSelector((state) => ({
       ...state.products,
-    })
-  );
+    }));
+  var { andaContractItemsUrls, sortingUrl } = useSelector((state) => ({
+    ...state.auth,
+  }));
   const onPressTouch = () => {
     scrollRef?.current?.scrollTo({
       y: 0,
@@ -39,17 +41,23 @@ const AndaContractItems = () => {
     });
   };
   const data = andaContractItemsData?.products;
+  let urlStructure = andaContractItemsUrls?.map((url) => {
+    return `${url?.fieldName}=${encodeURIComponent(url?.item)}&`;
+  });
+
+  const url = urlStructure.join("");
 
   useEffect(() => {
-    dispatch(andaContractItems({ value: "", currentPage }));
+    dispatch(
+      andaContractItems({ value: url, currentPage, sortValues: sortingUrl })
+    );
     dispatch(userInfo());
-  }, []);
+  }, [favResponse, url, sortingUrl, currentPage]);
   const result = andaContractItemsData;
   const userData = userInfoData;
 
   const apiCall = async (currentPage) => {
     setCurrentPage(currentPage);
-    dispatch(andaContractItems({ value: "", currentPage }));
     onPressTouch();
   };
 
@@ -145,7 +153,7 @@ const AndaContractItems = () => {
           </Text>
         )}
         <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
-          {result.totalResults > 0 ? (
+          {data?.length > 0 ? (
             <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false}>
               <View>
                 {data?.map((item, i) => {
@@ -153,7 +161,7 @@ const AndaContractItems = () => {
                     item?.defaultSku?.availabilityDetail?.quantityAvailable;
 
                   return (
-                    <View>
+                    <View key={item?.defaultSku?.id}>
                       <SavingsScreen
                         url={item?.mediaMap?.primary?.url}
                         name={item?.defaultSku?.name}

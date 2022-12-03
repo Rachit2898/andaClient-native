@@ -204,6 +204,7 @@ const HomeProduct = (props) => {
                     <View style={{ marginHorizontal: 10 }}>
                       <AddButton
                         onPress={() => addItemIntoCart(item?.defaultSku?.id)}
+                        count={1}
                       />
                     </View>
                   </View>

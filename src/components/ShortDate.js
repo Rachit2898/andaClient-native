@@ -14,7 +14,7 @@ import Pagination from "./Pagination";
 import TabBar from "./TabBar";
 import Spinner from "./Spinner";
 import Filter from "../filter/ShortDateFilter";
-import PriceReductionScreen from "../screens/ShortDateScreen";
+import PriceReductionScreen from "../screens/ProductScreen";
 import { shortDate, addItem, userInfo } from "../../redux/features/productApi";
 
 const ShortDate = () => {
@@ -29,6 +29,10 @@ const ShortDate = () => {
     })
   );
 
+  var { shortDateUrls, sortingUrl } = useSelector((state) => ({
+    ...state.auth,
+  }));
+
   const onPressTouch = () => {
     scrollRef?.current?.scrollTo({
       y: 0,
@@ -36,17 +40,21 @@ const ShortDate = () => {
     });
   };
   const data = shortDateData?.products;
+  let urlStructure = shortDateUrls?.map((url) => {
+    return `${url?.fieldName}=${encodeURIComponent(url?.item)}&`;
+  });
+
+  const url = urlStructure.join("");
 
   useEffect(() => {
-    dispatch(shortDate({ value: "", currentPage }));
+    dispatch(shortDate({ value: url, currentPage, sortValues: sortingUrl }));
     dispatch(userInfo());
-  }, [favResponse]);
+  }, [favResponse, url, sortingUrl, currentPage]);
   const result = shortDateData;
   const userData = userInfoData;
 
   const apiCall = async (currentPage) => {
     setCurrentPage(currentPage);
-    dispatch(shortDate({ value: "", currentPage }));
     onPressTouch();
   };
 
@@ -144,7 +152,7 @@ const ShortDate = () => {
         )}
         {!!data ? (
           <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
-            {result.totalResults > 0 ? (
+            {data?.length > 0 ? (
               <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false}>
                 <View>
                   {data?.map((item) => {

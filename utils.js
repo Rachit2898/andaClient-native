@@ -1,5 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState, useMemo } from "react";
+//https://staging.andanet.com/api/customer/validate/username
+//https://staging.andanet.com/api/customer
+//https://staging.andanet.com/verify/email
 async function authenticate(credentials) {
   var url = "https://staging.andanet.com/api/login";
 
@@ -31,7 +34,84 @@ export async function changePassword(credentials) {
   const data = response;
   return data;
 }
+//
+export async function forgot_Password(credentials) {
+  console.log(credentials);
+  const token = await getToken();
+  var url = "https://staging.andanet.com/api/authentication/forgot-password";
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+    body: JSON.stringify(credentials),
+  })
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error("Something went wrong");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  const myData = await response.json();
+  console.log({ myData });
+  return myData;
+}
 
+//https://staging.andanet.com/api/customer/account/register
+export async function forgot_user(credentials) {
+  var url = "https://staging.andanet.com/api/authentication/forgot-username";
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(credentials),
+  })
+    .then((data) => {
+      if (data.ok) {
+        return data.json();
+      }
+      return "error";
+    })
+    .catch((error) => {
+      return error;
+    });
+
+  const myData = await response;
+  return myData;
+}
+export async function register_user(credentials) {
+  var url = "https://staging.andanet.com/api/customer/account/register";
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(credentials),
+  }).then((data) => data);
+  const mydata = response;
+  console.log({ mydata });
+  return mydata;
+}
+export async function reset_Password(credentials) {
+  console.log({ credentials });
+
+  var url = "https://staging.andanet.com/api/authentication/reset-password";
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(credentials),
+  }).then((data) => data.json());
+  const myData = await response.json();
+  console.log({ myData });
+  return myData;
+}
 export async function productList() {
   const token = await getToken();
   var url = "https://staging.andanet.com/api/customer/product-list/lists";

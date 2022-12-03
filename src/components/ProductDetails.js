@@ -42,7 +42,7 @@ const ProductDetails = () => {
   const items = productDetailsData;
 
   const addButton = () => {
-    setCount(count + 1);
+    setCount(parseInt(count) + 1);
   };
   useEffect(() => {
     dispatch(userInfo());
@@ -61,6 +61,9 @@ const ProductDetails = () => {
       alert("Could not Update Product!!");
     }
   }
+  const changeHandler = (value) => {
+    setCount(value);
+  };
 
   return (
     <SafeAreaView
@@ -243,19 +246,22 @@ const ProductDetails = () => {
                     <View
                       style={{
                         alignSelf: "center",
-
-                        width: 30,
                       }}
                     >
-                      <Text
+                      <TextInput
                         style={{
                           color: "#005185",
                           alignSelf: "center",
                           justifyContent: "center",
+                          textAlign: "center",
+
+                          width: 30,
                         }}
+                        onChangeText={(value) => changeHandler(value)}
+                        keyboardType="number-pad"
                       >
                         {count}
-                      </Text>
+                      </TextInput>
                     </View>
                     {!!items.dailyOrderLimit ? (
                       <Pressable
