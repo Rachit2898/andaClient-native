@@ -29,6 +29,7 @@ import {
   userInfo,
   backInStock,
   productLists,
+  accountAlert,
 } from "../../redux/features/productApi";
 import { logout, authenticate } from "../../redux/features/authUser";
 import dataSlider from "./DataSlider.js";
@@ -36,58 +37,8 @@ import ImageSlider from "./ImageSlide.js";
 import { getToken } from "../../utils";
 import AddButton from "./Ui/AddButton";
 import HomeProduct from "./Ui/HomeProduct";
-// import { SliderBox } from "react-native-image-slider-box";
-
-//import { SliderBox } from "react-native-image-slider-box";
-
-// const LikeButton = (props) => {
-//   const liked = useSharedValue(0);
-
-//   const [value, setValue] = useState(false);
-
-//   const outlineStyle = useAnimatedStyle(() => {
-//     return {
-//       transform: [
-//         {
-//           scale: interpolate(liked.value, [1, 1], [1, 1], Extrapolate.CLAMP),
-//         },
-//       ],
-//     };
-//   });
-
-//   const fillStyle = useAnimatedStyle(() => {
-//     return {
-//       transform: [{ scale: liked.value }],
-//       opacity: liked.value,
-//     };
-//   });
-
-//   const LikeHandler = () => {
-//     liked.value = withSpring(liked.value ? false : true);
-//     props.onPress();
-//   };
-
-//   return (
-//     <>
-//       <Pressable onPress={() => LikeHandler()}>
-//         {console.log("values", props.value === "FAVORITE")}
-//         {props.value === "FAVORITE" ? (
-//           <Animated.View style={fillStyle}>
-//             <MaterialCommunityIcons name={"heart"} size={15} color={"red"} />
-//           </Animated.View>
-//         ) : (
-//           <Animated.View style={[StyleSheet.absoluteFillObject, outlineStyle]}>
-//             <MaterialCommunityIcons
-//               name={"heart-outline"}
-//               size={15}
-//               color={"grey"}
-//             />
-//           </Animated.View>
-//         )}
-//       </Pressable>
-//     </>
-//   );
-// };
+import _ from "lodash";
+import AccountAlertComponent from "./Ui/AlertComponent";
 
 export default function HomePage() {
   const dispatch = useDispatch();
@@ -113,6 +64,7 @@ export default function HomePage() {
     favResponse,
     backInStockData,
     userInfoData,
+    accountAlertData,
   } = useSelector((state) => ({
     ...state.products,
   }));
@@ -127,6 +79,12 @@ export default function HomePage() {
     dispatch(backInStock());
     dispatch(productLists());
   }, [favResponse]);
+  useEffect(() => {
+    dispatch(accountAlert());
+    setTimeout(() => {
+      setId(100);
+    }, 2000);
+  }, [id]);
 
   const inventoryOpen = async () => {
     navigation.navigate("TopPurchase");
@@ -221,7 +179,7 @@ export default function HomePage() {
 
   const date1 = new Date(preDate);
   const date2 = new Date(date);
-  const date3 = new Date(cmeaDate);
+  const date3 = new Date(cmeaDate); //2022-12-03T03:15:00Z
 
   const wait = (timeout) => {
     return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -274,105 +232,60 @@ export default function HomePage() {
                   borderColor: "#ed8b00",
                   borderWidth: 1,
                   borderRadius: 5,
-                  margin: 10,
+                  marginHorizontal: 10,
+                  marginBottom: 10,
+                  flexDirection: "column",
+                  justifyContent: "center",
                 }}
               >
-                <View
-                  style={{
-                    borderBottomColor: "#ed8b00",
-                    borderBottomWidth: 1,
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: "#ed8b00",
-                      fontSize: 12,
-                      fontWeight: "bold",
-                      textAlign: "center",
-                    }}
-                  >
-                    Account Alerts
-                  </Text>
-                </View>
-                <View style={{ marginVertical: 10, paddingHorizontal: 5 }}>
-                  {days > 0 && days < 100 && (
+                {!!accountAlertData?.length > 0 && (
+                  <View>
                     <View
                       style={{
-                        flexDirection: "row",
-                        paddingHorizontal: 5,
-                        alignItems: "center",
+                        borderBottomColor: "#ed8b00",
+                        borderBottomWidth: 1,
+                        flexDirection: "column",
                       }}
                     >
-                      <Image
-                        source={require("../../assets/alert.png")}
-                        style={{
-                          width: 15,
-                          height: 15,
-                        }}
-                      />
                       <Text
                         style={{
+                          color: "#ed8b00",
                           fontSize: 12,
-                          color: "#494c4c",
-                          textAlign: "left",
+                          fontWeight: "bold",
+                          textAlign: "center",
+                          marginVertical: 5,
                         }}
                       >
-                        Your DEA license expires in {days - 1} days
+                        Account Alerts
                       </Text>
                     </View>
-                  )}
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      paddingHorizontal: 5,
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        flex: 1,
-                        width: "100%",
-                      }}
-                    >
-                      <Image
-                        source={require("../../assets/alert.png")}
-                        style={{
-                          width: 15,
-                          height: 15,
-                          justifyContent: "center",
-                        }}
-                      />
 
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          color: "#494c4c",
-                          justifyContent: "center",
-                        }}
-                      >
-                        Your CMEA certificate expires in {cmeaDays} days. Click
-                        <Text
-                          onPress={() =>
-                            Linking.openURL(
-                              "https://www.deadiversion.usdoj.gov/meth/index.html#self_cert"
-                            )
-                          }
-                          style={{
-                            color: "#ed8b00",
-                            fontSize: 12,
-                            textAlign: "center",
-                          }}
-                        >
-                          {" "}
-                          here
-                        </Text>
-                        , or contact your sales representative for details.
-                      </Text>
-                    </Text>
+                    <View style={{ paddingVertical: 5 }}>
+                      {accountAlertData?.map((item) => {
+                        return (
+                          <AccountAlertComponent
+                            type={item?.accountAlertType}
+                            expired={item?.expired}
+                            daysUntilExpired={item?.daysUntilExpired}
+                            numOrders={item?.numOrders}
+                            numberOfReturns={item?.numberOfReturns}
+                            returnByDate={item?.returnByDate}
+                            approvedReturnsNotShipped={
+                              item?.approvedReturnsNotShipped
+                            }
+                            numberOfRecallNotifications={
+                              item?.numberOfRecallNotifications
+                            }
+                            certificatesExpired={item?.certificatesExpired}
+                            rebateType={item?.rebateType}
+                            upcomingRebateAmount={item?.upcomingRebateAmount}
+                          />
+                        );
+                      })}
+                    </View>
                   </View>
-                </View>
+                )}
               </View>
-
               {loading && <Spinner />}
               <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
                 <ScrollView showsVerticalScrollIndicator={false}>

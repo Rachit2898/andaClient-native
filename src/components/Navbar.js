@@ -40,6 +40,7 @@ const Navbar = () => {
         dispatch(searchProducts(item));
         dispatch(searchValues(item));
         setOpenSearch(false);
+        navigation.navigate("SearchProduct");
       } catch (e) {
         Alert.alert(e.message);
       }
@@ -48,21 +49,21 @@ const Navbar = () => {
   const BarCodeHandler = () => {
     navigation.navigate("Barcode");
   };
-  const productDetailHandler = async (Id) => {
-    navigation.navigate("ProductDetails");
-    dispatch(productDetails(Id));
-  };
+  // const productDetailHandler = async (Id) => {
+  //   navigation.navigate("ProductDetails");
+  //   dispatch(productDetails(Id));
+  // };
 
-  useEffect(() => {
-    if (searchProducstsData.totalResults === 1) {
-      productDetailHandler(searchProducstsData?.products[0]?.defaultSku?.id);
-      return;
-    }
-    if (searchProducstsData.totalResults > 1) {
-      navigation.navigate("SearchProduct");
-      return;
-    }
-  }, [searchProducstsData]);
+  // useEffect(() => {
+  //   if (searchProducstsData.totalResults === 1) {
+  //     productDetailHandler(searchProducstsData?.products[0]?.defaultSku?.id);
+  //     return;
+  //   }
+  //   if (searchProducstsData.totalResults > 1) {
+  //     navigation.navigate("SearchProduct");
+  //     return;
+  //   }
+  // }, [searchProducstsData]);
 
   useEffect(() => {
     searchItemHandler("");
@@ -71,6 +72,7 @@ const Navbar = () => {
     setSearchValue("");
     setOpenSearch(false);
   };
+
   return (
     <View>
       <View style={styles.searchBox}>
@@ -148,6 +150,20 @@ const Navbar = () => {
       {searchItem.length > 0 && openSearch ? (
         <View style={{ borderBottomWidth: 0.3, borderColor: "#9b9b9b" }}>
           {searchItem?.map((item, i) => {
+            let title = _.split(
+              _.toLower(item),
+              _.toLower(_.trim(searchValue))
+            );
+            title = _.flatMap(title, (t, i) => [
+              _.toUpper(t),
+              <Text
+                style={{ fontWeight: "bold", color: "#494c4c" }}
+                key={"1" + i}
+              >
+                {_.toUpper(searchValue)}
+              </Text>,
+            ]);
+            title.pop();
             return (
               <View key={item}>
                 {console.log(searchValue.length)}
@@ -157,7 +173,7 @@ const Navbar = () => {
                     android_ripple={{ color: "#ccc" }}
                     onPress={() => searchProductHandler(item)}
                   >
-                    <Text style={styles.search}>{item}</Text>
+                    <Text style={styles.search}>{title}</Text>
                   </Pressable>
                 )}
               </View>

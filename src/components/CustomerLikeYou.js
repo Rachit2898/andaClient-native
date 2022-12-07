@@ -158,7 +158,7 @@ const CustomerLikeYou = () => {
           </Text>
         )}
         <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
-          {data?.length > 0 ? (
+          {result?.totalResults > 0 ? (
             <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false}>
               <View>
                 {data?.map((item, i) => {

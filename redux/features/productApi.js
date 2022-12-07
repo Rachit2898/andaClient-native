@@ -144,7 +144,7 @@ export const inventoryWatch = createAsyncThunk(
     const token = await getToken();
     const result = await productList();
     var url = `https://staging.andanet.com/api/customer/product-list/${result[2]?.id}/search?sort=${body?.sortValues}&${body?.value}page=${body?.currentPage}&searchMode=STANDARD`;
-    console.log(url);
+
     const response = await fetch(url, {
       method: "GET",
       headers: {
@@ -162,7 +162,7 @@ export const customerLikeYouSeeMore = createAsyncThunk(
     const token = await getToken();
     const result = await productList();
     var url = `https://staging.andanet.com/api/customer/product-list/${result[3]?.id}/search?sort=${body?.sortValues}&${body?.value}page=${body?.currentPage}&searchMode=STANDARD`;
-    console.log(url);
+
     const response = await fetch(url, {
       method: "GET",
       headers: {
@@ -224,7 +224,6 @@ export const preNegotiated = createAsyncThunk(
     const token = await getToken();
 
     var url = `https://staging.andanet.com/api/customer/upsell/Pre%20Negotiated%20Items?sort=${body?.sortValues}&${body?.value}page=${body?.currentPage}&searchMode=STANDARD`;
-    console.log(url);
 
     const response = await fetch(url, {
       method: "GET",
@@ -242,7 +241,7 @@ export const favoritesApi = createAsyncThunk("urls/favorites", async (body) => {
   const token = await getToken();
   const result = await productList();
   var url = `https://staging.andanet.com/api/customer/product-list/${result[0]?.id}/search?sort=${body?.sortValues}&${body?.value}page=${body?.currentPage}&searchMode=STANDARD`;
-  console.log(url);
+
   const response = await fetch(url, {
     method: "GET",
     headers: {
@@ -261,7 +260,7 @@ export const inventoryWatchList = createAsyncThunk(
     const result = await productList();
 
     var url = `https://staging.andanet.com/api/customer/product-list/${result[1]?.id}/search?sort=${body?.sortValues}&${body?.value}page=${body?.currentPage}&searchMode=STANDARD`;
-    console.log(url);
+
     const response = await fetch(url, {
       method: "GET",
       headers: {
@@ -278,7 +277,7 @@ export const savings = createAsyncThunk("urls/savings", async (body) => {
   const token = await getToken();
 
   var url = `https://staging.andanet.com/api/catalog/search?sort=${body?.sortValues}&${body?.value}page=${body?.currentPage}&yourSavingsFilters=Price%20Specials&q=*&searchMode=STANDARD`;
-  console.log(url);
+
   const response = await fetch(url, {
     method: "GET",
     headers: {
@@ -311,7 +310,7 @@ export const savingsAndCloseOut = createAsyncThunk(
 export const closeOut = createAsyncThunk("urls/closeOut", async (body) => {
   const token = await getToken();
   var url = `https://staging.andanet.com/api/catalog/search?sort=${body?.sortValues}&${body?.value}page=${body?.currentPage}&yourSavingsFilters=Close%20Out&q=*&searchMode=STANDARD`;
-  console.log({ url });
+
   const response = await fetch(url, {
     method: "GET",
     headers: {
@@ -327,7 +326,7 @@ export const priceReductionItems = createAsyncThunk(
   async (body) => {
     const token = await getToken();
     var url = `https://staging.andanet.com/api/catalog/search?sort=${body?.sortValues}&${body?.value}page=${body?.currentPage}&yourSavingsFilters=Price%20Reductions&q=*&searchMode=STANDARD`;
-    console.log(url);
+
     const response = await fetch(url, {
       method: "GET",
       headers: {
@@ -344,7 +343,7 @@ export const shortDate = createAsyncThunk("urls/shortDate", async (body) => {
   const token = await getToken();
 
   var url = `https://staging.andanet.com/api/catalog/search?sort=${body?.sortValues}&${body?.value}page=${body?.currentPage}&yourSavingsFilters=Short%20Date&q=*&searchMode=STANDARD`;
-  console.log(url);
+
   const response = await fetch(url, {
     method: "GET",
     headers: {
@@ -409,13 +408,30 @@ export const searchProducts = createAsyncThunk(
     return myData;
   }
 );
-
+//
 export const andaContractItems = createAsyncThunk(
   "urls/shortDate",
   async (body) => {
     const token = await getToken();
     var url = `https://staging.andanet.com/api/catalog/search?sort=${body?.sortValues}&${body?.value}page=${body?.currentPage}&characteristicFacet=Anda%20Contract&q=*`;
-    console.log(url);
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
+    const myData = await response.json();
+    return myData;
+  }
+);
+export const accountAlert = createAsyncThunk(
+  "urls/accountAlert",
+  async (body) => {
+    const token = await getToken();
+    var url = "https://staging.andanet.com/api/customer/account/alerts";
+
     const response = await fetch(url, {
       method: "GET",
       headers: {
@@ -464,6 +480,7 @@ const productSlice = createSlice({
     favResponse: {},
     productListsData: {},
     addLoading: false,
+    accountAlertData: {},
   },
   extraReducers: {
     [productLists.pending]: (state, action) => {
@@ -522,11 +539,9 @@ const productSlice = createSlice({
       state.error = action.payload;
     },
     [inventoryWatch.pending]: (state, action) => {
-      console.log("pending");
       state.loading = true;
     },
     [inventoryWatch.fulfilled]: (state, action) => {
-      console.log("fulfilled", state.loading);
       state.loading = false;
       state.inventoryWatchData = action.payload;
     },
@@ -800,6 +815,17 @@ const productSlice = createSlice({
       state.savingsAndCloseOutData = action.payload;
     },
     [savingsAndCloseOut.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [accountAlert.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [accountAlert.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.accountAlertData = action.payload;
+    },
+    [accountAlert.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },

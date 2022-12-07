@@ -1,18 +1,31 @@
-import { StyleSheet, Text, View, Pressable, Alert } from "react-native";
-import React from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Pressable,
+  Alert,
+  Linking,
+} from "react-native";
+import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Navbar from "./Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { cartCheckOut } from "../../redux/features/productApi";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import TabBar from "./TabBar";
+import CartInfo from "../components/Ui/CartInfo";
+import CartScreen from "../screens/CartScreen";
+import { ScrollView } from "react-native-gesture-handler";
 
 const SubmitCart = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { cartLength, cartValidateInfo } = useSelector((state) => ({
-    ...state.products,
-  }));
+
+  const { cartLength, cartValidateInfo, userInfoData, cartInfoData, loading } =
+    useSelector((state) => ({
+      ...state.products,
+    }));
+  const userData = userInfoData;
   const checkOutHandler = async (orderId) => {
     try {
       dispatch(cartCheckOut(orderId));
@@ -25,12 +38,15 @@ const SubmitCart = () => {
     navigation.navigate("Cart");
   };
   const cartCount = cartValidateInfo?.order?.itemCount;
+
+  const data = cartInfoData?.orderItems;
+
   return (
     <SafeAreaView
       style={{ backgroundColor: "#fff", flex: 1 }}
       edges={["right", "left", "top"]}
     >
-      <View style={{ flex: 1, marginTop: -40 }}>
+      <View style={{ flex: 1 }}>
         <View
           style={{
             backgroundColor: "#fff",
@@ -51,72 +67,111 @@ const SubmitCart = () => {
                   <Text style={styles.editOrderText}>EDIT ORDER</Text>
                 </Pressable>
               </View>
-              <View style={styles.itemQuantityContainer}>
-                <View style={styles.itemResponseContainer}>
-                  <Text style={styles.itemText}>Items:</Text>
-                  <View style={styles.itemResponseTextContainer}>
-                    <Text style={styles.itemResponseText}>{cartLength}</Text>
-                  </View>
-                </View>
-                <View style={styles.itemResponseContainer}>
-                  <Text style={styles.itemText}>Item Quantities:</Text>
-                  <View style={styles.itemResponseTextContainer}>
-                    <Text style={styles.itemResponseText}>
-                      {cartValidateInfo?.order?.itemCount}
-                    </Text>
-                  </View>
-                </View>
-              </View>
-              <View style={styles.itemQuantityContainer}>
-                <View style={styles.itemResponseContainer}>
-                  <Text style={styles.itemSubTotal}>Items Subtotal:</Text>
-                  <View style={styles.itemResponseTextContainer}>
-                    <Text style={styles.itemSubTotal}>
-                      ${cartValidateInfo?.order?.subTotal?.amount}
-                    </Text>
-                  </View>
-                </View>
-                <View style={styles.itemResponseContainer}>
-                  <Text style={styles.itemSubTotal}>Shipping Fee:</Text>
-                  <View style={styles.itemResponseTextContainer}>
-                    {cartValidateInfo?.order?.totalShipping?.amount > 0 ? (
-                      <Text style={styles.itemSubTotal}>
-                        ${cartValidateInfo?.order?.totalShipping?.amount}
-                      </Text>
-                    ) : (
-                      <Text style={styles.itemSubTotalResponseText}>
-                        Waived
-                      </Text>
-                    )}
-                  </View>
-                </View>
-              </View>
-              <View style={styles.itemQuantityContainer}>
-                <View style={styles.itemResponseContainer}>
-                  <Text style={styles.itemEstimated}>Estimated Tax:</Text>
-                  <View style={styles.itemResponseTextContainer}>
-                    <Text style={styles.itemSubTax}>
-                      {" "}
-                      ${cartValidateInfo?.order?.totalTax?.amount}
-                    </Text>
-                  </View>
-                </View>
-                <View style={styles.itemResponseContainer}>
-                  <Text style={styles.itemTotal}>Order Total:</Text>
-                  <View style={styles.itemResponseTotalCostContainer}>
-                    <Text style={styles.itemTotalResponseText}>
-                      ${cartValidateInfo?.order?.total?.amount}
-                    </Text>
-                  </View>
-                </View>
-              </View>
+              <CartInfo />
               <Pressable
                 android_ripple={{ color: "#ccc" }}
                 style={styles.proceedButtonContainer}
                 onPress={() => checkOutHandler(cartValidateInfo?.order?.id)}
               >
-                <Text style={styles.proceedButton}>PROCEED TO CHECKOUT</Text>
+                <Text style={styles.proceedButton}>SUBMIT YOUR CART</Text>
               </Pressable>
+              <ScrollView showsVerticalScrollIndicator={false}>
+                <View>
+                  <View style={{ alignItems: "center", marginVertical: 10 }}>
+                    <Text style={{ textAlign: "center" }}>
+                      <Text style={{ color: "#494c4c" }}>
+                        By placing your order, you agree to Anda's{" "}
+                      </Text>
+                    </Text>
+                    <Text
+                      onPress={() =>
+                        Linking.openURL(
+                          "https://staging.andanet.com/content/terms-of-use"
+                        )
+                      }
+                      style={{ color: "#006ba6" }}
+                    >
+                      Terms & Conditions
+                    </Text>
+                  </View>
+
+                  <View
+                    style={{
+                      borderBottomWidth: 2,
+                      borderBottomColor: "#f2f2f2",
+                      paddingVertical: 5,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        textAlign: "center",
+                        fontWeight: "bold",
+                        color: "#494c4c",
+                        fontSize: 15,
+                      }}
+                    >
+                      Shipping Information
+                    </Text>
+                  </View>
+                  <View style={{ alignItems: "center" }}>
+                    <View style={{ padding: 10, alignItems: "center" }}>
+                      <View style={{ flexDirection: "row", marginTop: 5 }}>
+                        <Text style={{ color: "#494c4c", textAlign: "center" }}>
+                          {userData?.selectedAccount.addresses[0]?.companyName}
+                        </Text>
+                      </View>
+                      <View style={{ flexDirection: "row", marginTop: 5 }}>
+                        <Text style={{ color: "#494c4c" }}>
+                          {userData?.selectedAccount.addresses[0]?.addressLine1}
+                        </Text>
+                      </View>
+                      <View style={{ flexDirection: "row", marginTop: 5 }}>
+                        <Text style={{ color: "#494c4c" }}>
+                          {userData?.selectedAccount.addresses[0]?.addressLine2}
+                        </Text>
+                      </View>
+                      <View style={{ flexDirection: "row", marginTop: 5 }}>
+                        <Text style={{ color: "#494c4c" }}>
+                          {userData?.selectedAccount.addresses[0]?.city},{" "}
+                          {
+                            userData?.selectedAccount.addresses[0]
+                              ?.countrySubdivision?.abbreviation
+                          }{" "}
+                          {userData?.selectedAccount.addresses[0]?.postalCode}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                  <View
+                    style={loading ? styles.mainBoxLoading : styles.mainBox}
+                  >
+                    {data?.map((item) => {
+                      return (
+                        <View key={item.id}>
+                          <CartScreen
+                            url={item?.primaryMedia?.url}
+                            name={item?.sku?.name}
+                            nationalDrugCode={item?.sku?.nationalDrugCode}
+                            externalId={item?.sku?.externalId}
+                            manufacturer={item?.sku?.manufacturer}
+                            description={item?.sku?.description}
+                            itemForm={item?.sku?.itemForm}
+                            id={item?.id}
+                            amount={item?.salePrice.amount}
+                            quantity={item?.quantity}
+                            skuId={item?.sku?.id}
+                            orderLimit={item?.sku?.dailyOrderLimit}
+                            type={item?.sku?.productLists[0]?.type}
+                            message={item?.sku?.itemMessages}
+                            itemReturnable={item?.sku?.returnable}
+                            isCart={false}
+                          />
+                        </View>
+                      );
+                    })}
+                  </View>
+                </View>
+              </ScrollView>
             </View>
           )}
         </View>
@@ -131,6 +186,8 @@ const SubmitCart = () => {
 export default SubmitCart;
 
 const styles = StyleSheet.create({
+  mainBoxLoading: {},
+  mainBox: { backgroundColor: "#fff", marginBottom: 300 },
   editComponent: {
     alignItems: "flex-end",
   },
@@ -209,7 +266,6 @@ const styles = StyleSheet.create({
   },
   summaryContainer: {
     marginHorizontal: 10,
-    paddingVertical: 10,
     borderBottomWidth: 0.5,
     borderBottomColor: "#9b9b9b",
     flexDirection: "row",

@@ -87,7 +87,7 @@ const Filter = ({ modalVisible, setModalVisible }) => {
                   <Text style={styles.headingSortingText}>Sorting</Text>
                 </View>
 
-                <View style={{ zIndex: 10 }}>
+                <View style={{ zIndex: 10, marginHorizontal: 10 }}>
                   <DropDownPicker
                     style={styles.dropdown}
                     open={sortingOpen}
@@ -119,10 +119,17 @@ const Filter = ({ modalVisible, setModalVisible }) => {
                               return (
                                 <View key={value?.value}>
                                   {value?.quantity ? (
-                                    <View
+                                    <Pressable
                                       style={{
                                         flexDirection: "row",
                                         marginTop: 5,
+                                        alignItems: "center",
+                                      }}
+                                      onPress={() => {
+                                        myCheckHandler(
+                                          item?.fieldName,
+                                          value?.value
+                                        );
                                       }}
                                     >
                                       <MyCheckbox
@@ -160,7 +167,7 @@ const Filter = ({ modalVisible, setModalVisible }) => {
                                       >
                                         ({value?.quantity})
                                       </Text>
-                                    </View>
+                                    </Pressable>
                                   ) : (
                                     <></>
                                   )}
@@ -248,34 +255,14 @@ const styles = StyleSheet.create({
     borderColor: "#209bd6",
     textAlign: "center",
   },
-  modalView: {
-    backgroundColor: "#fff",
-    height: 100,
-    paddingHorizontal: 10,
-    marginHorizontal: 10,
-    paddingVertical: 20,
-    zIndex: 1,
-    shadowColor: "#000",
-    textAlign: "center",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
 
   headingSrting: {
     marginVertical: 8,
+    marginHorizontal: 10,
   },
   headingAvailability: {
     borderBottomWidth: 1,
     borderBottomColor: "#f2f2f2",
-    paddingTop: 20,
-    paddingBottom: 10,
-    width: 350,
-    marginLeft: -20,
   },
   heading: {
     alignItems: "center",
@@ -284,7 +271,6 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   headingSortingText: {
-    paddingLeft: 10,
     fontWeight: "bold",
     fontSize: 16,
     color: "#494c4c",
@@ -298,7 +284,7 @@ const styles = StyleSheet.create({
 
   modalView: {
     backgroundColor: "#fff",
-    padding: 35,
+    paddingVertical: 35,
     zIndex: 3000,
     zIndexInverse: 1000,
     alignItems: "center",
@@ -329,9 +315,10 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     paddingVertical: 10,
-    paddingHorizontal: 30,
     borderBottomWidth: 0.5,
     borderColor: "#005185",
+    paddingHorizontal: 20,
+    width: "100%",
   },
   sortingInput: {
     width: 300,

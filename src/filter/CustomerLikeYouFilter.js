@@ -27,7 +27,7 @@ const Filter = ({ modalVisible, setModalVisible }) => {
   const [isChecked, setChecked] = useState(false);
 
   const [sortingOpen, setsortingOpen] = useState(false);
-  const [sortingValue, setsortingValue] = useState(null);
+  const [sortingValue, setsortingValue] = useState("");
   const [sorting, setsorting] = useState([
     { label: "Item Description", value: "itemName%20asc" },
     { label: "Size", value: "packSize%20asc" },

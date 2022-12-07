@@ -28,42 +28,216 @@ import {
 import Navbar from "./Navbar";
 import TabBar from "./TabBar";
 import * as Notifications from "expo-notifications";
+import _ from "lodash";
+import CartInfo from "../components/Ui/CartInfo";
 
-function ClockModel(props) {
-  const [modalVisible, setShow] = useState(false);
+const ExpandComponent = (props) => {
+  const [open, setOpen] = useState(false);
+  const [standardItems, setStandardItems] = useState("");
+  const [cIIItems, setCIIItems] = useState("");
+  const [openCII, setCIIOpen] = useState(false);
+  const [newData, setNewData] = useState("");
+
+  const openHandler = (val) => {
+    props.onPress();
+    if (val === "Standard Items") {
+      setOpen((pre) => !pre);
+      setCIIOpen(false);
+    }
+    if (val === "CII Items") {
+      setOpen(false);
+      setCIIOpen((pre) => !pre);
+    }
+    if (val === "Items") {
+      setOpen((pre) => !pre);
+    }
+  };
+  const { cartInfoData } = useSelector((state) => ({
+    ...state.products,
+  }));
+  const cartData = cartInfoData;
+  const fulfillmentGroups = newData;
+
+  function isFgCsos(fg) {
+    return _.get(fg, "fulfillmentType.type") === "CSOS";
+  }
+
+  function getFriendlyFulfillmentType(order, fg) {
+    if (_.size(order?.fulfillmentGroups) > 1) {
+      return fg.fulfillmentType.friendlyName;
+    }
+
+    if (isFgCsos(fg)) {
+      return fg.fulfillmentType.friendlyName;
+    } else {
+      return "Items";
+    }
+  }
+  function getOrderItemsByFulfillmentGroup(order, fulfillmentGroup) {
+    // console.log("full", fulfillmentGroup.fulfillmentGroupItems);
+    let orderItemIds = _.map(
+      fulfillmentGroup?.fulfillmentGroupItems,
+
+      (fgItem) => fgItem.orderItemId
+      // console.log(fulfillmentGroup.fulfillmentGroupItems)
+    );
+    return _.filter(order.orderItems, (orderItem) =>
+      _.includes(orderItemIds, orderItem.id)
+    );
+  }
+  const getOrderItems = () => {
+    return getOrderItemsByFulfillmentGroup(cartData, standardItems);
+  };
+  const getOrderCIIItems = () => {
+    return getOrderItemsByFulfillmentGroup(cartData, cIIItems);
+  };
+
+  let orderItemsData = getOrderItems();
+  let getOrderCIIItemsData = getOrderCIIItems();
+
+  useEffect(() => {
+    if (fulfillmentGroups?.length > 1) {
+      setStandardItems(fulfillmentGroups[0]);
+      setCIIItems(fulfillmentGroups[1]);
+    } else {
+      setStandardItems(fulfillmentGroups[0]);
+      setCIIItems(fulfillmentGroups[0]);
+    }
+    if (props.fieldName == "Standard Items") {
+      setOpen(true);
+      setCIIOpen(false);
+    }
+    if (props.fieldName == "CII Items") {
+      setOpen(false);
+      setCIIOpen(true);
+    }
+    if (props.fieldName === "Items") {
+      setOpen(true);
+    }
+    {
+      const data = _.map(
+        _.orderBy(
+          cartData?.fulfillmentGroups,
+          ["fulfillmentType.friendlyName"],
+          ["desc"]
+        )
+      );
+      setNewData(data);
+    }
+  }, [cartData]);
+
   return (
-    <View style={{ justifyContent: "center", alignItems: "center" }}>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-          setShow(!modalVisible);
-        }}
-      >
-        <View
+    <View style={{ paddingHorizontal: 10 }}>
+      <View>
+        <Pressable
           style={{
-            width: "100%",
-            height: 200,
-            backgroundColor: "red",
-
-            justifyContent: "center",
-            alignItems: "center",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            margin: 10,
+            padding: 10,
+            backgroundColor: "#f2f1ed",
+            borderRadius: 3,
           }}
+          onPress={() => openHandler(props.fieldName)}
         >
-          <Text>Hello</Text>
-          <Pressable
-            style={[styles.button, styles.buttonClose]}
-            onPress={() => setShow(!modalVisible)}
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
           >
-            <Text style={styles.textStyle}>Hide Modal</Text>
-          </Pressable>
-        </View>
-      </Modal>
+            {open || openCII ? (
+              <View>
+                <Image
+                  source={require("../../assets/minus.png")}
+                  style={{
+                    width: 12,
+                    height: 12,
+                    alignSelf: "center",
+                  }}
+                />
+              </View>
+            ) : (
+              <View>
+                <Image
+                  source={require("../../assets/add.png")}
+                  style={{
+                    width: 12,
+                    height: 12,
+                    alignSelf: "center",
+                  }}
+                />
+              </View>
+            )}
+
+            <Text style={{ marginHorizontal: 10 }}>{props.fieldName}</Text>
+          </View>
+          <Text>
+            SubTotal:
+            <Text> ${props.amount}</Text>
+          </Text>
+        </Pressable>
+        {open && (
+          <View style={props.loading ? styles.mainBoxLoading : styles.mainBox}>
+            {orderItemsData?.map((item) => {
+              return (
+                <View key={item.id}>
+                  <CartScreen
+                    url={item?.primaryMedia?.url}
+                    name={item?.sku?.name}
+                    nationalDrugCode={item?.sku?.nationalDrugCode}
+                    externalId={item?.sku?.externalId}
+                    manufacturer={item?.sku?.manufacturer}
+                    description={item?.sku?.description}
+                    itemForm={item?.sku?.itemForm}
+                    id={item?.id}
+                    amount={item?.salePrice.amount}
+                    quantity={item?.quantity}
+                    skuId={item?.sku?.id}
+                    orderLimit={item?.sku?.dailyOrderLimit}
+                    type={item?.sku?.productLists[0]?.type}
+                    message={item?.sku?.itemMessages}
+                    itemReturnable={item?.sku?.returnable}
+                    isCart={true}
+                  />
+                </View>
+              );
+            })}
+          </View>
+        )}
+        {openCII && (
+          <View style={props.loading ? styles.mainBoxLoading : styles.mainBox}>
+            {getOrderCIIItemsData?.map((item) => {
+              return (
+                <View key={item.id}>
+                  <CartScreen
+                    url={item?.primaryMedia?.url}
+                    name={item?.sku?.name}
+                    nationalDrugCode={item?.sku?.nationalDrugCode}
+                    externalId={item?.sku?.externalId}
+                    manufacturer={item?.sku?.manufacturer}
+                    description={item?.sku?.description}
+                    itemForm={item?.sku?.itemForm}
+                    id={item?.id}
+                    amount={item?.salePrice.amount}
+                    quantity={item?.quantity}
+                    skuId={item?.sku?.id}
+                    orderLimit={item?.sku?.dailyOrderLimit}
+                    type={item?.sku?.productLists[0]?.type}
+                    message={item?.sku?.itemMessages}
+                    itemReturnable={item?.sku?.returnable}
+                    isCart={true}
+                  />
+                </View>
+              );
+            })}
+          </View>
+        )}
+      </View>
     </View>
   );
-}
+};
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -71,7 +245,17 @@ const Cart = () => {
   const [modalVisible, setShow] = useState(false);
   const navigation = useNavigation();
   const [currentIndex, setCurrentIndex] = useState(-1);
+  const [expandCII, setExpandCII] = useState(false);
+  const [expandStandard, setExpandStandard] = useState(false);
+  const [fulfillmentGroupsData, setFulfillmentGroupsData] = useState("");
+
+  const [fulfillmentGroupsStandardData, setFulfillmentGroupsStandardData] =
+    useState("");
+  const [fulfillmentGroupsCIIData, setFulfillmentGroupsCIIData] = useState("");
   const [count, setCount] = useState(1);
+  const [showDetails, setShowDetails] = useState(false);
+  const [borderWidth, setBorderWidth] = useState(5);
+  const [filterOpen, setFilterOpen] = useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
 
   const {
@@ -84,11 +268,16 @@ const Cart = () => {
     updateCart,
     deleteCart,
     favResponse,
+    cartValidateInfo,
   } = useSelector((state) => ({
     ...state.products,
   }));
   const cartData = cartInfoData;
   const orderItems = cartData?.orderItems;
+  const fulfillmentGroups = cartData?.fulfillmentGroups;
+  const minimumOrderItems =
+    cartData?.customer?.selectedAccount?.minimumOrderAmount;
+  console.log(minimumOrderItems);
 
   async function emptyCart(id) {
     Alert.alert(
@@ -103,54 +292,11 @@ const Cart = () => {
         { text: "YES", onPress: () => dispatch(emptyCartItems(id)) },
       ]
     );
-    // try {
-    //   dispatch(emptyCartItems(id));
-    // } catch (error) {
-    //   alert("Could Not Empty Cart!!");
-    // }
   }
 
   useEffect(() => {
     dispatch(cartInfo());
   }, [cartLength, updateCart, isFocused, favResponse]);
-
-  // useEffect(() => {
-  //   const subscription1 = Notifications.addNotificationReceivedListener(
-  //     (notification) => {
-  //       console.log("NOTIFICATION RECEIVED");
-  //       console.log(notification);
-  //       const userName = notification.request.content.data.userName;
-  //       console.log(userName);
-  //     }
-  //   );
-
-  //   const subscription2 = Notifications.addNotificationResponseReceivedListener(
-  //     (response) => {
-  //       console.log("NOTIFICATION RESPONSE RECEIVED");
-  //       console.log(response);
-  //       const userName = response.notification.request.content.data.userName;
-  //       console.log(userName);
-  //     }
-  //   );
-
-  //   return () => {
-  //     subscription1.remove();
-  //     subscription2.remove();
-  //   };
-  // }, [cartLength]);
-
-  function scheduleNotificationHandler() {
-    Notifications.scheduleNotificationAsync({
-      content: {
-        title: "Congratulations",
-        body: "Your Order Has Been Placed Successfully",
-        data: { userName: "Andanet" },
-      },
-      trigger: {
-        seconds: 5,
-      },
-    });
-  }
 
   async function SubmitCart() {
     try {
@@ -175,10 +321,78 @@ const Cart = () => {
     setShow((pre) => !pre);
     console.log(modalVisible);
   };
-  const onRequestClose = () => {
-    Alert.alert("Modal has been closed.");
-    setShow(!modalVisible);
+
+  const expnadHandler = (value) => {
+    if (value === "Standard Items") {
+      setFulfillmentGroupsStandardData(fulfillmentGroups[0]);
+      return;
+    }
+    if (value === "Items") {
+      setFulfillmentGroupsData(fulfillmentGroups[0]);
+      return;
+    }
+    if (value === "CII Items") {
+      if (fulfillmentGroups?.length > 1) {
+        setFulfillmentGroupsCIIData(fulfillmentGroups[1]);
+      } else {
+        setFulfillmentGroupsCIIData(fulfillmentGroups[0]);
+      }
+      return;
+    }
   };
+  let pricedFulfillmentGroups = _.orderBy(
+    _.filter(
+      cartData.fulfillmentGroups,
+      (fulfillmentGroup) => !_.isUndefined(fulfillmentGroup.merchandiseTotal)
+    ),
+    ["fulfillmentType.friendlyName"],
+    ["desc"]
+  );
+
+  function isFgCsos(fg) {
+    return _.get(fg, "fulfillmentType.type") === "CSOS";
+  }
+
+  function getFriendlyFulfillmentType(order, fg) {
+    if (_.size(order?.fulfillmentGroups) > 1) {
+      return fg.fulfillmentType.friendlyName;
+    }
+
+    if (isFgCsos(fg)) {
+      return fg.fulfillmentType.friendlyName;
+    } else {
+      return "Items";
+    }
+  }
+  function getOrderItemsByFulfillmentGroup(order, fulfillmentGroup) {
+    // console.log("full", fulfillmentGroup.fulfillmentGroupItems);
+    let orderItemIds = _.map(
+      fulfillmentGroup?.fulfillmentGroupItems,
+
+      (fgItem) => fgItem.orderItemId
+      // console.log(fulfillmentGroup.fulfillmentGroupItems)
+    );
+    return _.filter(order.orderItems, (orderItem) =>
+      _.includes(orderItemIds, orderItem.id)
+    );
+  }
+  const getOrderItems = () => {
+    return getOrderItemsByFulfillmentGroup(cartData, fulfillmentGroupsData);
+  };
+
+  let orderItemsData = getOrderItems();
+
+  useEffect(() => {
+    const percenTage = minimumOrderItems - subtotal;
+    if (percenTage >= minimumOrderItems) {
+      setBorderWidth(100);
+      return;
+    }
+    if (percenTage < 100) {
+      setBorderWidth(percenTage);
+      return;
+    }
+  }, [subtotal]);
 
   return (
     <SafeAreaView
@@ -294,14 +508,60 @@ const Cart = () => {
                 style={{
                   flexDirection: "row",
                   justifyContent: "space-between",
+                  alignItems: "center",
                   padding: 10,
                 }}
               >
-                <View>
-                  <Text style={styles.cartText}>
-                    Your Cart ({cartLength} item
-                    {emptyCartItems !== 1 ? "s" : ""})
-                  </Text>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignSelf: "center",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Pressable
+                    onPress={() => {
+                      setShowDetails((pre) => !pre);
+                    }}
+                    style={{ paddingHorizontal: 5 }}
+                  >
+                    {showDetails ? (
+                      <View>
+                        <Image
+                          source={require("../../assets/minus.png")}
+                          style={{
+                            width: 12,
+                            height: 12,
+                            alignSelf: "center",
+                          }}
+                        />
+                      </View>
+                    ) : (
+                      <View>
+                        <View>
+                          <Image
+                            source={require("../../assets/add.png")}
+                            style={{
+                              width: 12,
+                              height: 12,
+                              alignSelf: "center",
+                            }}
+                          />
+                        </View>
+                      </View>
+                    )}
+                  </Pressable>
+                  <Pressable
+                    onPress={() => {
+                      setShowDetails((pre) => !pre);
+                    }}
+                  >
+                    <Text style={styles.cartText}>
+                      Your Cart ({cartLength} item
+                      {emptyCartItems !== 1 ? "s" : ""})
+                    </Text>
+                  </Pressable>
                 </View>
                 <Pressable
                   onPress={() => {
@@ -316,10 +576,97 @@ const Cart = () => {
                     }}
                   />
                 </Pressable>
+
                 <View>
                   <Text style={styles.cartText}> Sub Total: ${subtotal}</Text>
                 </View>
               </View>
+              {showDetails && (
+                <View style={{ justifyContent: "center" }}>
+                  <Image
+                    source={require("../../assets/delivery-truck.png")}
+                    style={{
+                      width: 50,
+                      height: 40,
+                      alignSelf: "center",
+                    }}
+                  />
+                  <View
+                    style={{
+                      marginHorizontal: "20%",
+                      borderRadius: 3,
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <View
+                      style={{
+                        hieght: 10,
+                        width: `${borderWidth < 0 ? 100 : 100 - borderWidth}%`,
+                        borderWidth: 5,
+                        borderColor: "#b7dd79",
+                      }}
+                    />
+                    {borderWidth > 2 && (
+                      <View
+                        style={{
+                          hieght: 10,
+                          width: `${borderWidth}%`,
+                          borderWidth: 5,
+                          borderColor: "#9b9b9b",
+                        }}
+                      />
+                    )}
+                  </View>
+
+                  {borderWidth < 0 ? (
+                    <View
+                      style={{
+                        justifyContent: "center",
+                        alignSelf: "center",
+                        marginTop: 10,
+                        color: "#494c4c",
+                      }}
+                    >
+                      <Text>WOOHOO! Free Shipping!</Text>
+                    </View>
+                  ) : (
+                    <View>
+                      <View
+                        style={{
+                          justifyContent: "center",
+                          alignSelf: "center",
+                          marginTop: 10,
+                          color: "#494c4c",
+                        }}
+                      >
+                        <Text>
+                          ${borderWidth.toFixed(2)} away from free shipping
+                        </Text>
+                      </View>
+
+                      <View
+                        style={{
+                          justifyContent: "center",
+                          alignSelf: "center",
+                          marginTop: 10,
+                        }}
+                      >
+                        <Text style={{ color: "#9b9b9b" }}>
+                          FREE SHIPPING AT ${minimumOrderItems}
+                        </Text>
+                      </View>
+                    </View>
+                  )}
+                  <View style={{ marginVertical: 5 }}>
+                    <View style={{ marginVertical: 5 }}>
+                      <Text style={styles.orderText}>Order Summary</Text>
+                    </View>
+                    <CartInfo />
+                  </View>
+                </View>
+              )}
+
               <Pressable
                 android_ripple={{ color: "#ccc" }}
                 style={styles.proceedButtonContainer}
@@ -340,34 +687,107 @@ const Cart = () => {
                 </Pressable>
               </View>
               {loading && <Spinner />}
+              <ScrollView>
+                {_.map(pricedFulfillmentGroups, (fulfillmentGroup) => {
+                  const fieldName = getFriendlyFulfillmentType(
+                    cartData,
+                    fulfillmentGroup
+                  );
+                  return (
+                    <View>
+                      {/* <Pressable
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        margin: 10,
+                        padding: 10,
+                        backgroundColor: "#f2f1ed",
+                        borderRadius: 3,
+                      }}
+                      onPress={() => expnadHandler(fieldName)}
+                    >
+                      <Text>{fieldName}</Text>
+                      <Text>
+                        SubTotal:
+                        <Text>
+                          {" "}
+                          ${fulfillmentGroup?.merchandiseTotal?.amount}
+                        </Text>
+                      </Text>
+                    </Pressable> */}
 
-              <ScrollView showsVerticalScrollIndicator={false}>
-                <View style={loading ? styles.mainBoxLoading : styles.mainBox}>
-                  {orderItems?.map((item) => {
-                    return (
-                      <View key={item.id}>
-                        <CartScreen
-                          url={item?.primaryMedia?.url}
-                          name={item?.sku?.name}
-                          nationalDrugCode={item?.sku?.nationalDrugCode}
-                          externalId={item?.sku?.externalId}
-                          manufacturer={item?.sku?.manufacturer}
-                          description={item?.sku?.description}
-                          itemForm={item?.sku?.itemForm}
-                          id={item?.id}
-                          amount={item?.salePrice.amount}
-                          quantity={item?.quantity}
-                          skuId={item?.sku?.id}
-                          orderLimit={item?.sku?.dailyOrderLimit}
-                          type={item?.sku?.productLists[0]?.type}
-                          message={item?.sku?.itemMessages[0]?.message}
-                          itemReturnable={item?.sku?.returnable}
-                        />
-                      </View>
-                    );
-                  })}
-                </View>
+                      <ExpandComponent
+                        fieldName={fieldName}
+                        amount={fulfillmentGroup?.merchandiseTotal?.amount}
+                        orderItemsData={orderItemsData}
+                        loading={loading}
+                        onPress={() => expnadHandler(fieldName)}
+                      />
+                    </View>
+                  );
+                })}
               </ScrollView>
+
+              {/* <ScrollView showsVerticalScrollIndicator={false}>
+                {!expandStandard && (
+                  <View
+                    style={loading ? styles.mainBoxLoading : styles.mainBox}
+                  >
+                    {orderItemsData?.map((item) => {
+                      return (
+                        <View key={item.id}>
+                          <CartScreen
+                            url={item?.primaryMedia?.url}
+                            name={item?.sku?.name}
+                            nationalDrugCode={item?.sku?.nationalDrugCode}
+                            externalId={item?.sku?.externalId}
+                            manufacturer={item?.sku?.manufacturer}
+                            description={item?.sku?.description}
+                            itemForm={item?.sku?.itemForm}
+                            id={item?.id}
+                            amount={item?.salePrice.amount}
+                            quantity={item?.quantity}
+                            skuId={item?.sku?.id}
+                            orderLimit={item?.sku?.dailyOrderLimit}
+                            type={item?.sku?.productLists[0]?.type}
+                            message={item?.sku?.itemMessages}
+                            itemReturnable={item?.sku?.returnable}
+                          />
+                        </View>
+                      );
+                    })}
+                  </View>
+                )}
+                {expandCII && (
+                  <View
+                    style={loading ? styles.mainBoxLoading : styles.mainBox}
+                  >
+                    {orderItemsData?.map((item) => {
+                      return (
+                        <View key={item.id}>
+                          <CartScreen
+                            url={item?.primaryMedia?.url}
+                            name={item?.sku?.name}
+                            nationalDrugCode={item?.sku?.nationalDrugCode}
+                            externalId={item?.sku?.externalId}
+                            manufacturer={item?.sku?.manufacturer}
+                            description={item?.sku?.description}
+                            itemForm={item?.sku?.itemForm}
+                            id={item?.id}
+                            amount={item?.salePrice.amount}
+                            quantity={item?.quantity}
+                            skuId={item?.sku?.id}
+                            orderLimit={item?.sku?.dailyOrderLimit}
+                            type={item?.sku?.productLists[0]?.type}
+                            message={item?.sku?.itemMessages}
+                            itemReturnable={item?.sku?.returnable}
+                          />
+                        </View>
+                      );
+                    })}
+                  </View>
+                )}
+              </ScrollView> */}
             </View>
           ) : (
             <View style={styles.emptyCart}>
@@ -442,5 +862,11 @@ const styles = StyleSheet.create({
   emptyCartText: {
     fontWeight: "bold",
     fontSize: 15,
+  },
+  orderText: {
+    fontSize: 15,
+    fontWeight: "800",
+    color: "#494c4c",
+    marginHorizontal: 10,
   },
 });

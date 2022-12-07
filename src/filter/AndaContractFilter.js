@@ -126,10 +126,17 @@ const Filter = ({ modalVisible, setModalVisible }) => {
                               return (
                                 <View key={value?.value}>
                                   {value?.quantity ? (
-                                    <View
+                                    <Pressable
                                       style={{
                                         flexDirection: "row",
                                         marginTop: 5,
+                                        alignItems: "center",
+                                      }}
+                                      onPress={() => {
+                                        myCheckHandler(
+                                          item?.fieldName,
+                                          value?.value
+                                        );
                                       }}
                                     >
                                       <MyCheckbox
@@ -167,7 +174,7 @@ const Filter = ({ modalVisible, setModalVisible }) => {
                                       >
                                         ({value?.quantity})
                                       </Text>
-                                    </View>
+                                    </Pressable>
                                   ) : (
                                     <></>
                                   )}

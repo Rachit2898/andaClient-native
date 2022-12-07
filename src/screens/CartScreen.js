@@ -284,251 +284,270 @@ const CartScreen = (props) => {
             <View
               style={{
                 marginVertical: 12,
+                flexDirection: "row",
+                justifyContent: "space-between",
               }}
             >
-              <Text style={{ fontWeight: "700" }}>${props.amount}</Text>
+              <Text style={{ fontWeight: "700", color: "#494c4c" }}>
+                ${props.amount}
+              </Text>
+              {props.isCart ? (
+                <></>
+              ) : (
+                <View style={{ alignItems: "center" }}>
+                  <Text style={{ color: "#494c4c", fontWeight: "700" }}>
+                    QTY:{count}
+                  </Text>
+                </View>
+              )}
             </View>
           </View>
         </View>
-
-        <View>
-          <View
-            style={{
-              justifyContent: "space-around",
-              flexDirection: "row",
-              paddingVertical: 10,
-              paddingLeft: "23%",
-              paddingRight: "10%",
-            }}
-          >
+        {props.isCart ? (
+          <View>
             <View
               style={{
-                backgroundColor: "#fff",
-                width: 70,
-                height: 25,
-                borderRadius: 3,
-                borderRadius: 4,
-                justifyContent: "space-between",
+                justifyContent: "space-around",
                 flexDirection: "row",
-                borderWidth: 1,
-                borderColor: "#878787",
+                paddingVertical: 10,
+                paddingLeft: "23%",
+                paddingRight: "10%",
               }}
             >
-              <Pressable
-                style={{
-                  borderRightWidth: 1,
-                  borderColor: "#878787",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  paddingHorizontal: 5,
-                  backgroundColor: "#cfcccc",
-                }}
-                onPress={() => {
-                  removeButton(props.id);
-                }}
-                disabled={count === 1}
-              >
-                <Text
-                  style={{
-                    fontWeight: "bold",
-                    fontSize: 15,
-                  }}
-                >
-                  -
-                </Text>
-              </Pressable>
               <View
                 style={{
-                  alignSelf: "center",
+                  backgroundColor: "#fff",
+                  width: 70,
+                  height: 25,
+                  borderRadius: 3,
+                  borderRadius: 4,
+                  justifyContent: "space-between",
+                  flexDirection: "row",
+                  borderWidth: 1,
+                  borderColor: "#878787",
                 }}
               >
-                <TextInput
+                <Pressable
                   style={{
-                    color: "#005185",
+                    borderRightWidth: 1,
+                    borderColor: "#878787",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    paddingHorizontal: 5,
+                    backgroundColor: "#cfcccc",
+                  }}
+                  onPress={() => {
+                    removeButton(props.id);
+                  }}
+                  disabled={count === 1}
+                >
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: 15,
+                    }}
+                  >
+                    -
+                  </Text>
+                </Pressable>
+                <View
+                  style={{
                     alignSelf: "center",
-                    justifyContent: "center",
-                    textAlign: "center",
+                  }}
+                >
+                  <TextInput
+                    style={{
+                      color: "#005185",
+                      alignSelf: "center",
+                      justifyContent: "center",
+                      textAlign: "center",
 
-                    width: 30,
-                  }}
-                  onChangeText={(value) => changeHandler(props?.id, value)}
-                  keyboardType="number-pad"
-                >
-                  {count}
-                </TextInput>
-              </View>
-              {!!props.orderLimit ? (
-                <Pressable
-                  style={{
-                    borderLeftWidth: 1,
-                    borderColor: "#878787",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    paddingHorizontal: 5,
-                    backgroundColor: "#cfcccc",
-                  }}
-                  onPress={() => {
-                    addButton(props?.id);
-                  }}
-                  disabled={count === props.orderLimit}
-                >
-                  <Text
-                    style={{
-                      fontWeight: "bold",
-                      fontSize: 15,
+                      width: 30,
                     }}
+                    onChangeText={(value) => changeHandler(props?.id, value)}
+                    keyboardType="number-pad"
                   >
-                    +
-                  </Text>
-                </Pressable>
-              ) : (
-                <Pressable
-                  style={{
-                    borderLeftWidth: 1,
-                    borderColor: "#878787",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    paddingHorizontal: 5,
-                    backgroundColor: "#cfcccc",
-                  }}
-                  onPress={() => {
-                    addButton(props?.id);
-                  }}
-                >
-                  <Text
+                    {count}
+                  </TextInput>
+                </View>
+                {!!props.orderLimit ? (
+                  <Pressable
                     style={{
-                      fontWeight: "bold",
-                      fontSize: 15,
+                      borderLeftWidth: 1,
+                      borderColor: "#878787",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      paddingHorizontal: 5,
+                      backgroundColor: "#cfcccc",
                     }}
+                    onPress={() => {
+                      addButton(props?.id);
+                    }}
+                    disabled={count === props.orderLimit}
                   >
-                    +
-                  </Text>
-                </Pressable>
-              )}
-            </View>
-            <View
-              style={{
-                width: 60,
-                height: 25,
-                borderRadius: 4,
-              }}
-            >
-              {currentIndex == props.id && visible && (
-                <Pressable
-                  style={{
-                    backgroundColor: "#ed8b00",
-                    width: 60,
-                    height: 25,
-                    borderRadius: 4,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                  android_ripple={{ color: "#ccc" }}
-                  onPress={() => updateCartHandler(props.id)}
-                >
-                  <View>
                     <Text
                       style={{
-                        color: "#fff",
-                        fontSize: 10,
                         fontWeight: "bold",
+                        fontSize: 15,
                       }}
                     >
-                      UPDATE
+                      +
                     </Text>
-                  </View>
-                </Pressable>
-              )}
-            </View>
-            <Pressable
-              style={{
-                borderColor: "#006ba6",
-                borderWidth: 1,
-                width: 60,
-                height: 25,
-                borderRadius: 4,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-              android_ripple={{ color: "#ccc" }}
-              onPress={() => deleteItemHandler(props.id)}
-            >
-              <View>
-                <Text style={styles.emptyText}>DELETE</Text>
+                  </Pressable>
+                ) : (
+                  <Pressable
+                    style={{
+                      borderLeftWidth: 1,
+                      borderColor: "#878787",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      paddingHorizontal: 5,
+                      backgroundColor: "#cfcccc",
+                    }}
+                    onPress={() => {
+                      addButton(props?.id);
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: 15,
+                      }}
+                    >
+                      +
+                    </Text>
+                  </Pressable>
+                )}
               </View>
-            </Pressable>
-          </View>
-          {!!props.orderLimit && (
-            <View
-              style={{
-                height: 20,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              {count === props.orderLimit && currentIndex === props?.id && (
-                <Text style={{ fontSize: 12, color: "#bd1c1c" }}>
-                  You Can Add Only {props.orderLimit} Items
+              <View
+                style={{
+                  width: 60,
+                  height: 25,
+                  borderRadius: 4,
+                }}
+              >
+                {currentIndex == props.id && visible && (
+                  <Pressable
+                    style={{
+                      backgroundColor: "#ed8b00",
+                      width: 60,
+                      height: 25,
+                      borderRadius: 4,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                    android_ripple={{ color: "#ccc" }}
+                    onPress={() => updateCartHandler(props.id)}
+                  >
+                    <View>
+                      <Text
+                        style={{
+                          color: "#fff",
+                          fontSize: 10,
+                          fontWeight: "bold",
+                        }}
+                      >
+                        UPDATE
+                      </Text>
+                    </View>
+                  </Pressable>
+                )}
+              </View>
+              <Pressable
+                style={{
+                  borderColor: "#006ba6",
+                  borderWidth: 1,
+                  width: 60,
+                  height: 25,
+                  borderRadius: 4,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                android_ripple={{ color: "#ccc" }}
+                onPress={() => deleteItemHandler(props.id)}
+              >
+                <View>
+                  <Text style={styles.emptyText}>DELETE</Text>
+                </View>
+              </Pressable>
+            </View>
+            {!!props.orderLimit && (
+              <View
+                style={{
+                  height: 20,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                {count === props.orderLimit && currentIndex === props?.id && (
+                  <Text style={{ fontSize: 12, color: "#bd1c1c" }}>
+                    You Can Add Only {props.orderLimit} Items
+                  </Text>
+                )}
+              </View>
+            )}
+            {!!props.orderLimit && (
+              <View
+                style={{
+                  flexDirection: "row",
+                  paddingHorizontal: 5,
+                  alignItems: "center",
+                }}
+              >
+                <Image
+                  source={require("../../assets/alert.png")}
+                  style={{
+                    width: 15,
+                    height: 15,
+                  }}
+                />
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: "#ed8b00",
+                    textAlign: "left",
+                    marginLeft: 5,
+                  }}
+                >
+                  Daily Order Limit: {props.orderLimit}
                 </Text>
-              )}
-            </View>
-          )}
-          {!!props.orderLimit && (
-            <View
-              style={{
-                flexDirection: "row",
-                paddingHorizontal: 5,
-                alignItems: "center",
-              }}
-            >
-              <Image
-                source={require("../../assets/alert.png")}
-                style={{
-                  width: 15,
-                  height: 15,
-                }}
-              />
-              <Text
-                style={{
-                  fontSize: 12,
-                  color: "#ed8b00",
-                  textAlign: "left",
-                  marginLeft: 5,
-                }}
-              >
-                Daily Order Limit: {props.orderLimit}
-              </Text>
-            </View>
-          )}
+              </View>
+            )}
 
-          {!!props.message && (
-            <View
-              style={{
-                flexDirection: "row",
-                paddingHorizontal: 5,
-                alignItems: "center",
-              }}
-            >
-              <Image
-                source={require("../../assets/alert.png")}
-                style={{
-                  width: 15,
-                  height: 15,
-                }}
-              />
-              <Text
-                style={{
-                  fontSize: 12,
-                  color: "#ed8b00",
-                  textAlign: "left",
-                  marginLeft: 5,
-                }}
-              >
-                {props.message}
-              </Text>
-            </View>
-          )}
-        </View>
+            {props?.message?.map((item) => {
+              return (
+                <View
+                  key={item?.key}
+                  style={{
+                    flexDirection: "row",
+                    paddingHorizontal: 5,
+                    alignItems: "center",
+                  }}
+                >
+                  <Image
+                    source={require("../../assets/alert.png")}
+                    style={{
+                      width: 15,
+                      height: 15,
+                    }}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      color: "#ed8b00",
+                      textAlign: "left",
+                      margin: 5,
+                    }}
+                  >
+                    {item?.message}
+                  </Text>
+                </View>
+              );
+            })}
+          </View>
+        ) : (
+          <></>
+        )}
       </View>
     </View>
   );
