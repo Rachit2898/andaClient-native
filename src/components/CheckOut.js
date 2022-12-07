@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
 import { checkOutConfirmation } from "../../redux/features/productApi";
 import TabBar from "./TabBar";
+import CartInfo from "../components/Ui/CartInfo";
 const CheckOut = () => {
   const dispatch = useDispatch();
 
@@ -48,71 +49,14 @@ const CheckOut = () => {
                     fontSize: 15,
                     fontWeight: "800",
                     marginVertical: 30,
+                    textAlign: "center",
                   }}
                 >
                   Your Order Number is: {checkOutData?.orderNumber}
                 </Text>
               </View>
               <View>
-                <View style={styles.itemQuantityContainer}>
-                  <View style={styles.itemResponseContainer}>
-                    <Text style={styles.itemText}>Items:</Text>
-                    <View style={styles.itemResponseTextContainer}>
-                      <Text style={styles.itemResponseText}>{itemLength}</Text>
-                    </View>
-                  </View>
-                  <View style={styles.itemResponseContainer}>
-                    <Text style={styles.itemText}>Item Quantities:</Text>
-                    <View style={styles.itemResponseTextContainer}>
-                      <Text style={styles.itemResponseText}>
-                        {cartValidateInfo?.order?.itemCount}
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-                <View style={styles.itemQuantityContainer}>
-                  <View style={styles.itemResponseContainer}>
-                    <Text style={styles.itemSubTotal}>Items Subtotal:</Text>
-                    <View style={styles.itemResponseTextContainer}>
-                      <Text style={styles.itemSubTotal}>
-                        ${cartValidateInfo?.order?.subTotal?.amount}
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={styles.itemResponseContainer}>
-                    <Text style={styles.itemSubTotal}>Shipping Fee:</Text>
-                    <View style={styles.itemResponseTextContainer}>
-                      {cartValidateInfo?.order?.totalShipping?.amount > 0 ? (
-                        <Text style={styles.itemSubTotal}>
-                          ${cartValidateInfo?.order?.totalShipping?.amount}
-                        </Text>
-                      ) : (
-                        <Text style={styles.itemSubTotalResponseText}>
-                          Waived
-                        </Text>
-                      )}
-                    </View>
-                  </View>
-                </View>
-                <View style={styles.itemQuantityContainer}>
-                  <View style={styles.itemResponseContainer}>
-                    <Text style={styles.itemEstimated}>Estimated Tax:</Text>
-                    <View style={styles.itemResponseTextContainer}>
-                      <Text style={styles.itemSubTax}>
-                        {" "}
-                        ${cartValidateInfo?.order?.totalTax?.amount}
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={styles.itemResponseContainer}>
-                    <Text style={styles.itemTotal}>Order Total:</Text>
-                    <View style={styles.itemResponseTotalCostContainer}>
-                      <Text style={styles.itemTotalResponseText}>
-                        ${cartValidateInfo?.order?.total?.amount}
-                      </Text>
-                    </View>
-                  </View>
-                </View>
+                <CartInfo />
               </View>
             </View>
           )}
@@ -132,13 +76,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: 20,
     textAlign: "center",
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.5,
     paddingBottom: 10,
     marginHorizontal: 10,
   },
   thankYouText: {
     fontSize: 20,
     fontWeight: "800",
+    color: "#494c4c",
   },
   summaryContainer: {
     alignItems: "center",
@@ -148,6 +93,8 @@ const styles = StyleSheet.create({
   summaryText: {
     fontSize: 15,
     fontWeight: "800",
+    color: "#494c4c",
+    textAlign: "center",
   },
   editComponent: {
     alignItems: "flex-end",

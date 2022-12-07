@@ -18,6 +18,7 @@ import {
   addFavorites,
   removeFavorites,
 } from "../../../redux/features/productApi";
+import _ from "lodash";
 
 const HomeProduct = (props) => {
   const dispatch = useDispatch();
@@ -130,6 +131,7 @@ const HomeProduct = (props) => {
                     />
                   </View>
                 </View>
+
                 <Pressable
                   style={{
                     margin: 5,
@@ -201,12 +203,22 @@ const HomeProduct = (props) => {
                         ${item?.defaultSku?.retailPrice?.amount}
                       </Text>
                     </View>
-                    <View style={{ marginHorizontal: 10 }}>
-                      <AddButton
-                        onPress={() => addItemIntoCart(item?.defaultSku?.id)}
-                        count={1}
-                      />
-                    </View>
+
+                    {_.isNil(item?.defaultSku?.retailPrice) ||
+                    item?.defaultSku?.priceLocked ? (
+                      <View>
+                        <Text style={{ fontSize: 10 }}>
+                          Temporarily Unavailable
+                        </Text>
+                      </View>
+                    ) : (
+                      <View style={{ marginHorizontal: 10 }}>
+                        <AddButton
+                          onPress={() => addItemIntoCart(item?.defaultSku?.id)}
+                          count={1}
+                        />
+                      </View>
+                    )}
                   </View>
                 </View>
               </View>

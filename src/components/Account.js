@@ -16,6 +16,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import Spinner from "./Spinner";
 import TabBar from "./TabBar";
 import Moment from "moment";
+import _ from "lodash";
 
 import {
   userInfo,
@@ -145,6 +146,8 @@ const Account = () => {
     setChecked(!isChecked);
   };
 
+  const cmeaExp = userInfoData?.selectedAccount?.cmeaCertificationRequired;
+
   const myCheckHandler = async (andanet) => {
     setValue(true);
   };
@@ -206,6 +209,14 @@ const Account = () => {
       );
     }
   }, [userData]);
+  function daysUntilCmeaExpiration(account) {
+    return _.isNil(account.cmeaCertificationExpiration)
+      ? Number.MAX_VALUE
+      : moment(account.cmeaCertificationExpiration)
+          .endOf("d")
+          .diff(moment(), "d");
+  }
+  let cmeaExpirationDays = daysUntilCmeaExpiration(userData);
 
   return (
     <SafeAreaView
@@ -369,7 +380,7 @@ const Account = () => {
                     source={require("../../assets/errorAlert.png")}
                   />
                   <Text style={{ color: "#990909", marginHorizontal: 10 }}>
-                    password does not match
+                    Passwords do not match.
                   </Text>
                 </View>
               )}
@@ -395,7 +406,7 @@ const Account = () => {
                     source={require("../../assets/errorAlert.png")}
                   />
                   <Text style={{ color: "#990909", marginHorizontal: 10 }}>
-                    password does not match
+                    Passwords do not match.
                   </Text>
                 </View>
               )}
@@ -421,7 +432,7 @@ const Account = () => {
                     source={require("../../assets/errorAlert.png")}
                   />
                   <Text style={{ color: "#990909", marginHorizontal: 10 }}>
-                    password does not match
+                    Passwords do not match.
                   </Text>
                 </View>
               )}
@@ -433,17 +444,6 @@ const Account = () => {
                   />
                   <Text style={{ color: "#990909", marginHorizontal: 10 }}>
                     Fields Cannot Be Empty!!
-                  </Text>
-                </View>
-              )}
-              {error && (
-                <View style={styles.errorView}>
-                  <Image
-                    style={{ height: 19, width: 18 }}
-                    source={require("../../assets/errorAlert.png")}
-                  />
-                  <Text style={{ color: "#990909", marginHorizontal: 10 }}>
-                    password does not match
                   </Text>
                 </View>
               )}
@@ -716,6 +716,54 @@ const Account = () => {
                 </View>
               </View>
             </View>
+            {cmeaExp && (
+              <View
+                style={{
+                  flexDirection: "row",
+                  paddingHorizontal: 5,
+                  alignItems: "center",
+                }}
+              >
+                <Text>
+                  <View style={{ flexDirection: "row" }}>
+                    <Image
+                      source={require("../../assets/alert.png")}
+                      style={{
+                        width: 15,
+                        height: 15,
+                        marginTop: 5,
+                      }}
+                    />
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: "#ed8b00",
+
+                        margin: 5,
+                      }}
+                    >
+                      Your CMEA certificate{" "}
+                      {cmeaExpirationDays >= 0 ? "is expiring" : "has expired"}
+                      .CMEA certification is required to purchase scheduled
+                      listed chemical products.&nbsp; For further information,
+                      please click
+                      <Text
+                        style={{ color: "#006ba6" }}
+                        onPress={() =>
+                          Linking.openURL(
+                            "https://www.deadiversion.usdoj.gov/meth/index.html#self_cert"
+                          )
+                        }
+                      >
+                        {" "}
+                        here
+                      </Text>
+                      , or contact your sales representative.
+                    </Text>
+                  </View>
+                </Text>
+              </View>
+            )}
           </View>
         </ScrollView>
         <View style={{ left: 0, right: 0, bottom: 0 }}>

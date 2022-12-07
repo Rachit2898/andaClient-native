@@ -86,7 +86,7 @@ const Filter = ({ modalVisible, setModalVisible }) => {
                   <Text style={styles.headingSortingText}>Sorting</Text>
                 </View>
 
-                <View style={{ zIndex: 10 }}>
+                <View style={{ zIndex: 10, marginHorizontal: 10 }}>
                   <DropDownPicker
                     style={styles.dropdown}
                     open={sortingOpen}
@@ -253,7 +253,6 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   headingSortingText: {
-    paddingLeft: 10,
     fontWeight: "bold",
     fontSize: 16,
     color: "#494c4c",
@@ -267,7 +266,7 @@ const styles = StyleSheet.create({
 
   modalView: {
     backgroundColor: "#fff",
-    padding: 35,
+    paddingVertical: 35,
     zIndex: 3000,
     zIndexInverse: 1000,
     alignItems: "center",
@@ -298,10 +297,10 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     paddingVertical: 10,
-    paddingHorizontal: 30,
-    width: 400,
     borderBottomWidth: 0.5,
     borderColor: "#005185",
+    paddingHorizontal: 20,
+    width: "100%",
   },
   sortingInput: {
     width: 300,
